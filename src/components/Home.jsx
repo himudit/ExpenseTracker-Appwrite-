@@ -11,15 +11,14 @@ function Home() {
     getData.then(
       function (res) {
         setUserDetails(res);
-        // console.log(userDetails);
       }
     )
   }, userDetails);
 
   return (
-    <div className="flex flex-col items-center justify-between min-h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 ml-12">
       {/* expenses */}
-      <div className='caret-white'>Dashboard</div>
+      <div className='caret-black'>Dashboard</div>
       {/* logic for profile and good morining */}
       <div className='caret-black'>Good Morning {userDetails ? userDetails.name : "Nothing"}</div>
       <div className="flex w-full space-x-4 p-4">
@@ -47,8 +46,11 @@ function Home() {
           />
         </div>
       </div>
-      <div className="bg-white p-10 rounded-lg shadow-md flex-grow w-full m-4">
-        Large Box
+      <div className="bg-black p-10 rounded-lg shadow-md flex-grow w-full m-4">
+       Graphs
+      </div>
+      <div className="bg-black p-10 rounded-lg shadow-md flex-grow w-full m-4">
+        Category
       </div>
     </div>
   );
