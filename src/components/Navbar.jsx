@@ -9,7 +9,7 @@ import Logo from '../assets/Logo.jpg';
 function Navbar() {
   return (
     <>
-      <div className="fixed top-0 left-0 h-full w-20 bg-dark-white flex flex-col items-center py-4">
+      <div className="fixed top-0 left-0 h-full w-25 bg-dark-white flex flex-col items-center py-4 border-r-2 border-black-500">
         {/* logo */}
         <div className="mb-8 flex flex-col items-center">
           <img
@@ -18,7 +18,7 @@ function Navbar() {
             alt="Logo"
           />
           {/* Responsive text below the logo */}
-          <div className="w-7 mt-4 text-base sm:text-lg md:text-xl lg:text-2xl xl:text-s font-bold text-center">
+          <div className="mt-4 ml-4 text-base sm:text-s md:text-s lg:text-s xl:text-s font-bold">
             ExpenseMate
           </div>
         </div>
