@@ -140,7 +140,7 @@ function Profile() {
                 {/* Profile Picture */}
                 <div className="absolute top-1 md:top-3 md:right-[10rem] lg:top-10 lg:right-[43rem]">
                   <img
-                    src={profilePictureUrl || images}
+                    src={profilePictureUrl}
                     alt="Profile"
                     style={{ height: '13rem', width: '12.5rem' }} // Adjust values as needed
                     className="rounded-full cursor-pointer"
