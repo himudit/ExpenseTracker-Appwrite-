@@ -103,22 +103,22 @@ function Profile() {
     getUser();
   }, []);
 
-  useEffect(() => {
-    const fetchHistory = async () => {
-      if (!userId) return;
+  // useEffect(() => {
+  //   const fetchHistory = async () => {
+  //     if (!userId) return;
 
-      try {
-        const response = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection2Id, [
-          Query.equal('user_id', userId)
-        ]);
-        setHistory(response.documents);
-      } catch (error) {
-        console.error('Failed to fetch History :', error);
-      }
-    };
+  //     try {
+  //       const response = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection2Id, [
+  //         Query.equal('user_id', userId)
+  //       ]);
+  //       setHistory(response.documents);
+  //     } catch (error) {
+  //       console.error('Failed to fetch History :', error);
+  //     }
+  //   };
 
-    fetchHistory();
-  }, [userId]);
+  //   fetchHistory();
+  // }, [userId]);
 
 
   // Logic for slider
