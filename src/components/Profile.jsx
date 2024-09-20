@@ -4,7 +4,6 @@ import { useNavigate, Link } from 'react-router-dom'
 import { Query } from 'appwrite';
 import conf from '../conf/conf';
 import { v4 as uuidv4 } from 'uuid';
-// import images from '../assets/img1.jpg';
 
 function Profile() {
   const navigate = useNavigate()
@@ -15,6 +14,7 @@ function Profile() {
     e.preventDefault();
     setSubmittedDish(dish);
   };
+
   // avatar
   const [profilePictureUrl, setProfilePictureUrl] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
@@ -37,27 +37,52 @@ function Profile() {
     )
   }, [])
 
-
   const handleUpload = async () => {
     if (selectedFile) {
-      try {
+      const response = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection3Id, [
+        Query.equal('user_id', userDetails.$id),
+      ]);
+
+      if (response.total > 0) {
+        const document = response.documents[0];
+        const documentId = document.$id;
         const fileId = uuidv4();
-        // Upload the file
+        const oldImageId = response.documents[0].image_id;
+        await storage.deleteFile(conf.appwriteBucketId, oldImageId);
+
         await storage.createFile(conf.appwriteBucketId, fileId, selectedFile);
-        
+
         const documentData = {
           user_id: String(userDetails.$id),
           image_id: String(fileId),
         };
-        const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection3Id, uuidv4(), documentData);
+        const updatedDocument = await databases.updateDocument(
+          conf.appwriteDatabaseId,
+          conf.appwriteCollection3Id,
+          documentId,
+          { image_id: String(fileId), }
+        );
+        console.log('Document updated successfully:', updatedDocument);
+      } else {
+        try {
+          const fileId = uuidv4();
+          // Upload the file
+          await storage.createFile(conf.appwriteBucketId, fileId, selectedFile);
 
-        // Get the file URL
-        const fileUrl = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/view?project=${conf.appwriteProjectId}&mode=admin`;
+          const documentData = {
+            user_id: String(userDetails.$id),
+            image_id: String(fileId),
+          };
+          const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection3Id, uuidv4(), documentData);
 
-        console.log(fileUrl);
-        setProfilePictureUrl(fileUrl);
-      } catch (error) {
-        console.error('Error uploading file:', error);
+          // Get the file URL
+          const fileUrl = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/view?project=${conf.appwriteProjectId}&mode=admin`;
+
+          console.log(fileUrl);
+          setProfilePictureUrl(fileUrl);
+        } catch (error) {
+          console.error('Error uploading file:', error);
+        }
       }
     }
   };
@@ -88,7 +113,6 @@ function Profile() {
 
   // getting the data from collection(history)
   const [userId, setUserId] = useState(null);
-  const [history, setHistory] = useState([]);
 
   useEffect(() => {
     const getUser = async () => {
@@ -103,32 +127,6 @@ function Profile() {
     getUser();
   }, []);
 
-  // useEffect(() => {
-  //   const fetchHistory = async () => {
-  //     if (!userId) return;
-
-  //     try {
-  //       const response = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection2Id, [
-  //         Query.equal('user_id', userId)
-  //       ]);
-  //       setHistory(response.documents);
-  //     } catch (error) {
-  //       console.error('Failed to fetch History :', error);
-  //     }
-  //   };
-
-  //   fetchHistory();
-  // }, [userId]);
-
-
-  // Logic for slider
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? history.length - 1 : prevIndex - 1));
-  };
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === history.length - 1 ? 0 : prevIndex + 1));
-  };
 
   return (
     <>
@@ -182,36 +180,6 @@ function Profile() {
           </Link>
         </p>
       )}
-
-      {/* slider */}
-      {/* <div className="flex flex-col items-center justify-center h-screen space-y-8">
-        <div className="relative w-full max-w-2xl mx-auto h-96">
-          {history.map((recipe, index) => (
-            <div
-              key={recipe.$id}
-              className={`absolute inset-0 transition-opacity duration-1000 ${index === currentIndex ? 'opacity-100' : 'opacity-0'}`}
-            >
-              <img src={recipe.img_src} alt={`Slide ${index + 1}`} className="w-full h-full object-cover" />
-            </div>
-          ))} */}
-
-      {/* Previous Button */}
-      {/* <button
-            onClick={prevSlide}
-            className="absolute top-1/2 left-4 transform -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 focus:outline-none"
-          >
-            &#10094;
-          </button> */}
-
-      {/* Next Button */}
-      {/* <button
-            onClick={nextSlide}
-            className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 focus:outline-none"
-          >
-            &#10095;
-          </button>
-        </div>
-      </div> */}
 
     </>
   )

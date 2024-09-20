@@ -1,20 +1,27 @@
 import React, { useEffect, useState } from 'react'
 import { databases, account, storage } from '../appwrite/appwriteConfig';
+import { v4 as uuidv4 } from 'uuid';
+import { Query } from 'appwrite';
+import conf from '../conf/conf';
 
 function Home() {
-  const [userDetails, setUserDetails] = useState({});
+  const [userId, setUserId] = useState(null);
+  const [userDetails, setUserDetails] = useState()
   const [budget, setBudget] = useState("Enter Budget First");
   const [expenses, setExpenses] = useState(0);
   const [profilePictureUrl, setProfilePictureUrl] = useState(null);
 
   useEffect(() => {
-    const getData = account.get();
+    const getData = account.get()
     getData.then(
-      function (res) {
-        setUserDetails(res);
+      function (response) {
+        setUserDetails(response)
+      },
+      function (error) {
+        console.log(error);
       }
     )
-  }, userDetails);
+  }, [])
 
   useEffect(() => {
     const fetchProfilePictureUrl = async () => {
