@@ -8,7 +8,7 @@ import { useNavigate, Link } from 'react-router-dom'
 function Home() {
   const [userId, setUserId] = useState(null);
   const [userDetails, setUserDetails] = useState()
-  const [budget, setBudget] = useState("Enter Budget First");
+  const [budget, setBudget] = useState();
   const [expenses, setExpenses] = useState(0);
   const [profilePictureUrl, setProfilePictureUrl] = useState(null);
 
@@ -40,7 +40,7 @@ function Home() {
 
   return (
     <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 ml-[7rem]">
-      {/* expenses */}
+
       <div className='flex w-full h-[3rem] space-x-4 p-4 border-b-2 border-black-500'>
         <div className='caret-black font-bold'>Dashboard</div>
         {/* Profile Picture */}
@@ -52,37 +52,36 @@ function Home() {
           />
         </div>
       </div>
-      {/* logic for profile and good morining */}
+      {/* logic for profile and good morning */}
       <div className='caret-black'>Good Morning {userDetails ? userDetails.name : "Nothing"}</div>
       <div className="flex w-full space-x-4 p-4">
-        <div className="bg-blue-200 p-6 rounded-lg shadow-md flex-1">
+        <div className="bg-blue-200 text-white p-6 rounded-lg shadow-md flex-1">
           Total Income
           <span className="mr-2"></span>
           <input
             type="text"
             value={budget}
-            placeholder="Enter Budget"
-            className="w-full p-2 border border-gray-300 rounded-lg"
+            className="w-full p-2 border text-black border-gray-300 rounded-lg"
           />
         </div>
-        <div className="bg-purple-200 p-6 rounded-lg shadow-md flex-1">
+        <div className="bg-purple-200 p-6  text-white rounded-lg shadow-md flex-1">
           Total Expense
           <span className="mr-2"></span>
           <input
             type="text"
             value={expenses}
             placeholder=""
-            className="w-full p-2 border border-gray-300 rounded-lg"
+            className="w-full p-2 border text-black border-gray-300 rounded-lg"
           />
         </div>
-        <div className="bg-green-200 p-6 rounded-lg shadow-md flex-1">
+        <div className="bg-green-200  text-white p-6 rounded-lg shadow-md flex-1">
           Remaining Balance
           <span className="mr-2"></span>
           <input
             type="text"
             // value={}
             placeholder=""
-            className="w-full p-2 border border-gray-300 rounded-lg"
+            className="w-full p-2 border  text-black border-gray-300 rounded-lg"
           />
         </div>
       </div>

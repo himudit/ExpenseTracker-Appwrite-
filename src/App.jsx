@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Profile from './components/Profile.jsx'
 import Home from './components/Home.jsx'
+import Expense from './components/Expense.jsx'
 
 function App() {
   const router = createBrowserRouter(
@@ -16,6 +17,7 @@ function App() {
         <Route path='signup' element={<Signup />} />
         <Route path='home' element={<Home />} />
         <Route path='profile' element={<Profile />} />
+        <Route path='expense' element={<Expense />} />
       </Route>
     )
   );
