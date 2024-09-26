@@ -1,44 +1,46 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane } from '@fortawesome/free-solid-svg-icons';
+import LottieAnimation from './LottieAnimation';
 
 function Expense() {
-    const [category, setCategory] = useState(null);
-    const [isOpen, setIsOpen] = useState(false);  // State to track whether the div is open
-    const divRef = useRef(null);  // Create a reference for the new div
+    const divRef = useRef(null);
 
+    // for amount
     const [amount, setAmount] = useState(0);
-
-    // Function to handle icon click and toggle the div
-    const handleIconClick = () => {
-        setIsOpen(!isOpen);  // Toggle the div state
+    const handleInputChange = (event) => {
+        const value = event.target.value;
+        if (amount === 0) {
+            setAmount('');
+        } else {
+            setAmount(value);
+        }
     };
 
+    // for category selection
     const [selectedCategory, setSelectedCategory] = useState({ icon: null, text: '' });
-
-    // Function to handle category click
     const settingCategory = (icon, text) => {
         setSelectedCategory({ icon, text });
     };
 
-    // useEffect to handle outside click and close the div
+    // for arrow icon
+    const [isOpen, setIsOpen] = useState(false);
     useEffect(() => {
         const handleClickOutside = (event) => {
-            // If the div is open and the click is outside the div, close it
             if (divRef.current && !divRef.current.contains(event.target)) {
                 setIsOpen(false);
             }
         };
-
-        // Add event listener to detect outside clicks
         document.addEventListener('mousedown', handleClickOutside);
-
         return () => {
-            // Cleanup the event listener when the component unmounts
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+    const handleIconClick = () => {
+        setIsOpen(!isOpen);
+    };
 
+    // for Date
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth() + 1;
@@ -63,7 +65,8 @@ function Expense() {
                         <div className="text-sm font-medium text-gray-700 mb-1">
                             <div className="flex text-[0.7rem]">Amount</div>
                             <div className="flex">
-                                <div className='text-[1.5rem]'><FontAwesomeIcon icon={faIndianRupee} /><input type='text' value={amount}></input></div>
+                                <div className='text-[1.5rem]'><FontAwesomeIcon icon={faIndianRupee} />
+                                <input type='text' onChange={handleInputChange} value={amount}></input></div>
                             </div>
                         </div>
                     </div>
@@ -112,6 +115,7 @@ function Expense() {
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Other Details</label>
                         <textarea className="w-full px-3 py-2 border rounded-md" rows="3"></textarea>
+                        {/* <LottieAnimation /> */}
                     </div>
                 </div>
             </div>
