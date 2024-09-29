@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane } from '@fortawesome/free-solid-svg-icons';
 import LottieAnimation from './LottieAnimation';
-
+import { account, databases } from '../appwrite/appwriteConfig';
+import { v4 as uuidv4 } from 'uuid'
+import conf from '../conf/conf'
 function Expense() {
     const divRef = useRef(null);
 
@@ -50,6 +52,46 @@ function Expense() {
     const seconds = now.getSeconds();
     const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
     const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    const formattedDateTime = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}
+    ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    // for getting Account
+    const [userId, setUserId] = useState(null);
+
+    useEffect(() => {
+        const getUser = async () => {
+            try {
+                const response = await account.get();
+                setUserId(response.$id);
+                console.log(userId);
+            } catch (error) {
+                console.error('Failed to get user:', error);
+            }
+        };
+        getUser();
+    }, []);
+
+    // adding new expense in collection2
+    const addNewExpense = () => {
+        if (!userId) return;
+
+        const expense = {
+            user_id: String(userId),
+            ExpenseAmount: Number(amount),
+            Category: String(selectedCategory.text),
+            Date: String(formattedDateTime),
+        }
+        const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
+        promise.then(
+            function (response) {
+                console.log(response);
+            },
+            function (error) {
+                console.log(error)
+            }
+        );
+    }
+
 
     return (
         <div className="flex justify-center h-screen ml-[7rem]">
@@ -66,7 +108,7 @@ function Expense() {
                             <div className="flex text-[0.7rem]">Amount</div>
                             <div className="flex">
                                 <div className='text-[1.5rem]'><FontAwesomeIcon icon={faIndianRupee} />
-                                <input type='text' onChange={handleInputChange} value={amount}></input></div>
+                                    <input type='text' onChange={handleInputChange} value={amount}></input></div>
                             </div>
                         </div>
                     </div>
@@ -117,6 +159,10 @@ function Expense() {
                         <textarea className="w-full px-3 py-2 border rounded-md" rows="3"></textarea>
                         {/* <LottieAnimation /> */}
                     </div>
+                </div>
+
+                <div className='m-t-[10rem]'>
+                    <div className='m-t-[10rem] cursor-pointer' onClick={addNewExpense}>Submit</div>
                 </div>
             </div>
         </div>

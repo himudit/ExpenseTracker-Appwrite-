@@ -7,8 +7,11 @@ const conf = {
 
     // appwriteCollectionId: String(import.meta.env.VITE_APPWRITE_COLLECTION_ID),
 
-    // appwriteCollection2Id: String(import.meta.env.VITE_APPWRITE_COLLECTION2_ID),
+    appwriteCollection2Id: String(import.meta.env.VITE_APPWRITE_COLLECTION2_ID),
+
     appwriteCollection3Id: String(import.meta.env.VITE_APPWRITE_COLLECTION3_ID),
+
+    // appwriteCollection4Id: String(import.meta.env.VITE_APPWRITE_COLLECTION4_ID),
 
     appwriteBucketId: String(import.meta.env.VITE_APPWRITE_BUCKET_ID)
 }
