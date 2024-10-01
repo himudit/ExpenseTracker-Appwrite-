@@ -6,6 +6,7 @@ import { account, databases } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid'
 import conf from '../conf/conf'
 import { Query } from 'appwrite';
+// library.add(faIndianRupee);
 
 function Expense() {
     const divRef = useRef(null);
@@ -22,7 +23,7 @@ function Expense() {
     };
 
     // for category selection
-    const [selectedCategory, setSelectedCategory] = useState({ icon: null, text: '' });
+    const [selectedCategory, setSelectedCategory] = useState({ icon: faEllipsis, text: '' });
     const settingCategory = (icon, text) => {
         setSelectedCategory({ icon, text });
     };
@@ -65,7 +66,6 @@ function Expense() {
             try {
                 const response = await account.get();
                 setUserId(response.$id);
-                console.log(userId);
             } catch (error) {
                 console.error('Failed to get user:', error);
             }
@@ -74,80 +74,78 @@ function Expense() {
     }, []);
 
     // adding new expense in collection2
-    const addNewExpense = () => {
+    const addNewExpense = async () => {
         if (!userId) return;
-        const expense = {
-            userid: String(userId),
-            ExpenseAmount: Number(amount),
-            Category: String(selectedCategory.text),
-            Date: String(formattedDateTime),
-        }
-        const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
-        promise.then(
-            function (response) {
-                console.log(response);
-                // Query to check if a userid exists already
-                const res = databases.listDocuments(
-                    conf.appwriteDatabaseId,
-                    conf.appwriteCollection4Id,
-                    [
-                        Query.equal('userid', userId)
-                    ]
-                ).then(res => {
-                    if (res.total > 0) {
-                        console.log('Entry exists');
-                        const item = selectedCategory.text;
-                        const document = res.documents[0];
-                        const documentId = document.$id;
-                        if (selectedCategory.text === 'Food & Dining') {
-                            const updatedData = {
-                                FoodDining: expense.ExpenseAmount
-                            };
-                            databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
-                        } else {
-                            const updatedData = {
-                                item: (expense.ExpenseAmount),
-                            };
-                            databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
-                        }
-                    } else {
-                        // make new
-                        console.log('Entry does not exist');
-                        const data = {
-                            userid: String(userId),
-                            others: Number(0),
-                            FoodDining: Number(0),
-                            Shopping: Number(0),
-                            Travelling: Number(0),
-                            Entertainment: Number(0),
-                            Medical: Number(0),
-                            Bills: Number(0),
-                            Rent: Number(0),
-                            Taxes: Number(0),
-                            Investments: Number(0),
-                        }
-                        if (selectedCategory.text === 'Food & Dining') {
-                            data['FoodDining'] = expense.ExpenseAmount;
-                        } else {
-                            if (expense.Category in data) {
-                                data[expense.Category] = expense.ExpenseAmount;
-                            }
-                        }
-                        try {
-                            const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, uuidv4(), data);
-                            console.log(promise);
-                        } catch (err) {
-                            console.log(err);
-                        }
-                    }
-                }).catch(error => {
-                    console.error(error); // Handle error
-                });
-            },
-            function (error) {
-                console.log(error)
+        console.log('User ID being queried:', userId);
+        // checking collection4
+        const res = await databases.listDocuments(
+            conf.appwriteDatabaseId,
+            conf.appwriteCollection4Id,
+            [
+                Query.equal('userid', userId)
+            ]
+        )
+
+        if (res.total > 0) {
+            console.log('Entry exists');
+            // for collection 2
+            const expense = {
+                userid: String(userId),
+                ExpenseAmount: Number(amount),
+                Category: String(selectedCategory.text),
+                Date: String(formattedDateTime),
             }
-        );
+            const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
+            promise.then(() => {
+                const item = selectedCategory.text;
+                const document = res.documents[0];
+                const documentId = document.$id;
+                if (selectedCategory.text === 'Food & Dining') {
+                    const updatedData = {
+                        FoodDining: Number(amount),
+                    };
+                    const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
+                } else {
+                    const updatedData = {
+                        [selectedCategory.text]: Number(amount),
+                    };
+                    const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
+                }
+            })
+        } else {
+            console.log('Entry does not exist');
+            // for collection 2
+            const expense = {
+                userid: String(userId),
+                ExpenseAmount: Number(amount),
+                Category: String(selectedCategory.text),
+                Date: String(formattedDateTime),
+            }
+            const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
+
+            // for collection4
+            const data = {
+                userid: String(userId),
+                others: Number(0),
+                FoodDining: Number(0),
+                Shopping: Number(0),
+                Travelling: Number(0),
+                Entertainment: Number(0),
+                Medical: Number(0),
+                Bills: Number(0),
+                Rent: Number(0),
+                Taxes: Number(0),
+                Investments: Number(0),
+            }
+            if (selectedCategory.text === 'Food & Dining') {
+                data['FoodDining'] = expense.ExpenseAmount;
+            } else {
+                if (expense.Category in data) {
+                    data[expense.Category] = expense.ExpenseAmount;
+                }
+            }
+            const promise4 = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, uuidv4(), data);
+        }
     }
 
     return (
@@ -165,7 +163,7 @@ function Expense() {
                             <div className="flex text-[0.7rem]">Amount</div>
                             <div className="flex">
                                 <div className='text-[1.5rem]'><FontAwesomeIcon icon={faIndianRupee} />
-                                    <input type='text' onChange={handleInputChange} value={amount}></input></div>
+                                    <input type='number' onChange={handleInputChange} value={amount}></input></div>
                             </div>
                         </div>
                     </div>
@@ -184,7 +182,7 @@ function Expense() {
                             {/* Conditionally render the new div if isOpen is true */}
                             {isOpen && (
                                 <div ref={divRef} className="grid grid-cols-3 gap-4 p-4 h-[13rem] bg-gray-200 rounded shadow-md mt-2">
-                                    <div onClick={() => settingCategory(faEllipsis, 'Others')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faEllipsis} /> </div>Others</div>
+                                    <div onClick={() => settingCategory(faEllipsis, 'others')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faEllipsis} /> </div>Others</div>
                                     <div onClick={() => settingCategory(faPizzaSlice, 'Food & Dining')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faPizzaSlice} /> </div>Food & Dining</div>
                                     <div onClick={() => settingCategory(faCartShopping, 'Shopping')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faCartShopping} /></div>Shopping</div>
                                     <div onClick={() => settingCategory(faPlane, 'Travelling')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faPlane} /></div>Travelling</div>
