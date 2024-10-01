@@ -76,7 +76,6 @@ function Expense() {
     // adding new expense in collection2
     const addNewExpense = () => {
         if (!userId) return;
-
         const expense = {
             userid: String(userId),
             ExpenseAmount: Number(amount),
@@ -88,16 +87,29 @@ function Expense() {
             function (response) {
                 console.log(response);
                 // Query to check if a userid exists already
-                databases.listDocuments(
+                const res = databases.listDocuments(
                     conf.appwriteDatabaseId,
                     conf.appwriteCollection4Id,
                     [
                         Query.equal('userid', userId)
                     ]
-                ).then(response => {
-                    if (response.total > 0) {
-                        // update
+                ).then(res => {
+                    if (res.total > 0) {
                         console.log('Entry exists');
+                        const item = selectedCategory.text;
+                        const document = res.documents[0];
+                        const documentId = document.$id;
+                        if (selectedCategory.text === 'Food & Dining') {
+                            const updatedData = {
+                                FoodDining: expense.ExpenseAmount
+                            };
+                            databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
+                        } else {
+                            const updatedData = {
+                                item: (expense.ExpenseAmount),
+                            };
+                            databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
+                        }
                     } else {
                         // make new
                         console.log('Entry does not exist');
@@ -122,7 +134,7 @@ function Expense() {
                             }
                         }
                         try {
-                            const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, uuidv4(), data)
+                            const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, uuidv4(), data);
                             console.log(promise);
                         } catch (err) {
                             console.log(err);
