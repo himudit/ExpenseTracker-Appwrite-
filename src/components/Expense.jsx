@@ -6,7 +6,6 @@ import { account, databases } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid'
 import conf from '../conf/conf'
 import { Query } from 'appwrite';
-// library.add(faIndianRupee);
 
 function Expense() {
     const divRef = useRef(null);
@@ -23,7 +22,7 @@ function Expense() {
     };
 
     // for category selection
-    const [selectedCategory, setSelectedCategory] = useState({ icon: faEllipsis, text: '' });
+    const [selectedCategory, setSelectedCategory] = useState({ icon: faEllipsis, text: 'Others' });
     const settingCategory = (icon, text) => {
         setSelectedCategory({ icon, text });
     };
@@ -101,13 +100,15 @@ function Expense() {
                 const document = res.documents[0];
                 const documentId = document.$id;
                 if (selectedCategory.text === 'Food & Dining') {
+                    const value = document.FoodDining;
                     const updatedData = {
-                        FoodDining: Number(amount),
+                        FoodDining: value + Number(amount),
                     };
                     const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
                 } else {
+                    const value = document[selectedCategory.text];
                     const updatedData = {
-                        [selectedCategory.text]: Number(amount),
+                        [selectedCategory.text]: value + Number(amount),
                     };
                     const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
                 }
