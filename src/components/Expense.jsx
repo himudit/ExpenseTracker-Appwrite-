@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import LottieAnimation from './LottieAnimation';
 import { account, databases } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid'
@@ -150,8 +150,10 @@ function Expense() {
     }
 
     return (
-        <div className="flex justify-center h-screen ml-[7rem]">
-            <div className="w-full max-w-md bg-white rounded-lg shadow-md flex flex-col">
+        <div className="flex flex-wrap justify-center h-screen ml-[7rem]">
+
+            {/* first div */}
+            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col mr-6">
                 <div className="p-4 border-b">
                     <div className="flex justify-between items-center">
                         <div className="text-sm font-medium text-gray-600">{formattedDate}</div>
@@ -209,16 +211,23 @@ function Expense() {
                             </div>
                         </div>
                     </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Other Details</label>
-                        <textarea className="w-full px-3 py-2 border rounded-md" rows="3"></textarea>
-                        {/* <LottieAnimation /> */}
+                    {/* <LottieAnimation /> */}
+                </div>
+                <div className='m-2'>
+                    <div className='p-3 cursor-pointer bg-blue-500 text-white rounded-md' onClick={addNewExpense}>
+                        Submit
                     </div>
                 </div>
 
-                <div className='m-t-[10rem]'>
-                    <div className='m-t-[10rem] cursor-pointer' onClick={addNewExpense}>Submit</div>
+            </div>
+
+            {/* another div */}
+            <div className="w-full  h-[90%]  max-w-md bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4">
+                {/* Outer div */}
+                <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4">
+                    Add Reciept
+                    <FontAwesomeIcon className='w-[10%] h-[10%] cursor-pointer' icon={faCirclePlus}/>
+                    
                 </div>
             </div>
         </div>
