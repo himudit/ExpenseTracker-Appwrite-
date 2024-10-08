@@ -6,6 +6,7 @@ import { account, databases } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid'
 import conf from '../conf/conf'
 import { Query } from 'appwrite';
+import LottieLoader from './LottieLoader';
 
 function Expense() {
     const divRef = useRef(null);
@@ -211,12 +212,16 @@ function Expense() {
                             </div>
                         </div>
                     </div>
-                    {/* <LottieAnimation /> */}
+                    <LottieAnimation />
+                    <LottieLoader />
                 </div>
-                <div className='m-2'>
+                <div className='flex m-2'>
                     <div className='p-3 cursor-pointer bg-blue-500 text-white rounded-md' onClick={addNewExpense}>
-                        Submit
+                        Cancel Expense
                     </div>
+                    <div className='p-3 cursor-pointer bg-blue-500 text-white rounded-md' onClick={addNewExpense}>
+                        Submit Expense
+                    </div>7
                 </div>
 
             </div>
@@ -224,10 +229,10 @@ function Expense() {
             {/* another div */}
             <div className="w-full  h-[90%]  max-w-md bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4">
                 {/* Outer div */}
-                <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4">
+                <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4 hover:border-cyan-400">
                     Add Reciept
-                    <FontAwesomeIcon className='w-[10%] h-[10%] cursor-pointer' icon={faCirclePlus}/>
-                    
+                    <FontAwesomeIcon className='w-[10%] h-[10%] cursor-pointer' icon={faCirclePlus} />
+
                 </div>
             </div>
         </div>
