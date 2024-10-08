@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
 import LottieAnimation from './LottieAnimation';
-import { account, databases } from '../appwrite/appwriteConfig';
+import { account, databases, storage } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid'
 import conf from '../conf/conf'
 import { Query } from 'appwrite';
@@ -73,6 +73,14 @@ function Expense() {
         getUser();
     }, []);
 
+    // for bucket2
+    const [recieptUrl, setRecieptUrl] = useState(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+    };
+    const fileId = uuidv4();
+    
     // adding new expense in collection2
     const addNewExpense = async () => {
         if (!userId) return;
@@ -85,15 +93,19 @@ function Expense() {
                 Query.equal('userid', userId)
             ]
         )
-
         if (res.total > 0) {
             console.log('Entry exists');
+
+            // for bucket 2
+            await storage.createFile(conf.appwriteBucket2Id, fileId, selectedFile);
+
             // for collection 2
             const expense = {
                 userid: String(userId),
                 ExpenseAmount: Number(amount),
                 Category: String(selectedCategory.text),
                 Date: String(formattedDateTime),
+                ReceiptId: fileId
             }
             const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
             promise.then(() => {
@@ -116,12 +128,17 @@ function Expense() {
             })
         } else {
             console.log('Entry does not exist');
+
+            // for bucket 2
+            await storage.createFile(conf.appwriteBucket2Id, fileId, selectedFile);
+
             // for collection 2
             const expense = {
                 userid: String(userId),
                 ExpenseAmount: Number(amount),
                 Category: String(selectedCategory.text),
                 Date: String(formattedDateTime),
+                ReceiptId: fileId
             }
             const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
 
@@ -232,7 +249,11 @@ function Expense() {
                 <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4 hover:border-cyan-400">
                     Add Reciept
                     <FontAwesomeIcon className='w-[10%] h-[10%] cursor-pointer' icon={faCirclePlus} />
-
+                    <input
+                        type="file"
+                        onChange={handleFileChange}
+                        className="mt-2"
+                    />
                 </div>
             </div>
         </div>
