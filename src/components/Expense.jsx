@@ -11,6 +11,10 @@ import LottieLoader from './LottieLoader';
 function Expense() {
     const divRef = useRef(null);
 
+    // for animation
+    const [animation1, setanimation1] = useState(false);
+    const [animation2, setanimation2] = useState(false);
+
     // for amount
     const [amount, setAmount] = useState(0);
     const handleInputChange = (event) => {
@@ -80,11 +84,14 @@ function Expense() {
         setSelectedFile(e.target.files[0]);
     };
     const fileId = uuidv4();
-    
+
     // adding new expense in collection2
     const addNewExpense = async () => {
         if (!userId) return;
         console.log('User ID being queried:', userId);
+        setanimation1(true);
+
+
         // checking collection4
         const res = await databases.listDocuments(
             conf.appwriteDatabaseId,
@@ -118,12 +125,24 @@ function Expense() {
                         FoodDining: value + Number(amount),
                     };
                     const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
+                    promise.then(() => {
+                        console.log("Done");
+                        setanimation1(false);
+                        setanimation2(true);
+                    })
+
                 } else {
                     const value = document[selectedCategory.text];
                     const updatedData = {
                         [selectedCategory.text]: value + Number(amount),
                     };
                     const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
+
+                    promise4.then(() => {
+                        console.log("Done");
+                        setanimation1(false);
+                        setanimation2(true);
+                    })
                 }
             })
         } else {
@@ -164,6 +183,11 @@ function Expense() {
                 }
             }
             const promise4 = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, uuidv4(), data);
+            promise4.then(() => {
+                console.log("Done");
+                setanimation1(false);
+                setanimation2(true);
+            })
         }
     }
 
@@ -220,7 +244,7 @@ function Expense() {
                         </div>
                     </div>
 
-                    <div className="mb-4">
+                    {/* <div className="mb-4">
                         <div className="text-sm font-medium text-gray-700 mb-1">
                             <div className="flex text-[0.7rem]">Payment mode</div>
                             <div className="flex justify-between">
@@ -228,9 +252,10 @@ function Expense() {
                                 <div className='cursor-pointer'><FontAwesomeIcon icon={faChevronRight} /></div>
                             </div>
                         </div>
-                    </div>
-                    <LottieAnimation />
-                    <LottieLoader />
+                    </div> */}
+                    
+                    {animation1 && <LottieLoader />}
+                    {animation2 && <LottieAnimation />}
                 </div>
                 <div className='flex m-2'>
                     <div className='p-3 cursor-pointer bg-blue-500 text-white rounded-md' onClick={addNewExpense}>
@@ -238,7 +263,7 @@ function Expense() {
                     </div>
                     <div className='p-3 cursor-pointer bg-blue-500 text-white rounded-md' onClick={addNewExpense}>
                         Submit Expense
-                    </div>7
+                    </div>
                 </div>
 
             </div>

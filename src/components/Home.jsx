@@ -3,14 +3,16 @@ import { databases, account, storage } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid';
 import { Query } from 'appwrite';
 import conf from '../conf/conf';
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, Navigate } from 'react-router-dom'
 
 function Home() {
+  const navigate = useNavigate();
+
   const [userId, setUserId] = useState(null);
   const [userDetails, setUserDetails] = useState()
   const [budget, setBudget] = useState();
   const [expenses, setExpenses] = useState(0);
-  const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+  const [profilePictureUrl, setProfilePictureUrl] = useState('/image.png');
 
   useEffect(() => {
     const getData = account.get()
@@ -44,10 +46,10 @@ function Home() {
       <div className='flex w-full h-[3rem] space-x-4 p-4 border-b-2 border-black-500'>
         <div className='caret-black font-bold'>Dashboard</div>
         {/* Profile Picture */}
-        <div className="absolute top-1 right-[4rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20">
+        <div className="absolute top-1 right-[4rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20" onClick={() => navigate('/profile')}>
           <img
             src={profilePictureUrl}
-            alt="Profile" onClick={useNavigate('/home')}
+            alt="Profile"
             className="h-14 w-14 md:h-12 md:w-12 lg:h-14 lg:w-14 rounded-full cursor-pointer"
           />
         </div>

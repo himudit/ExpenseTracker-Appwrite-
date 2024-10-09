@@ -16,7 +16,7 @@ function Profile() {
   };
 
   // avatar
-  const [profilePictureUrl, setProfilePictureUrl] = useState(null);
+  const [profilePictureUrl, setProfilePictureUrl] = useState('/image.png');
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileChange = (e) => {
