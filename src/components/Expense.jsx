@@ -27,7 +27,7 @@ function Expense() {
     };
 
     // for category selection
-    const [selectedCategory, setSelectedCategory] = useState({ icon: faEllipsis, text: 'Others' });
+    const [selectedCategory, setSelectedCategory] = useState({ icon: faEllipsis, text: 'others' });
     const settingCategory = (icon, text) => {
         setSelectedCategory({ icon, text });
     };
@@ -78,12 +78,20 @@ function Expense() {
     }, []);
 
     // for bucket2
+    const [fileName, setFileName] = useState(null);
+    const fileInputRef = useRef(null);
+    const fileId = uuidv4();
     const [recieptUrl, setRecieptUrl] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
-    const handleFileChange = (e) => {
-        setSelectedFile(e.target.files[0]);
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setFileName(file.name); // Set the file name to display it
+        }
     };
-    const fileId = uuidv4();
+    const handleIconClickFile = () => {
+        fileInputRef.current.click(); // Trigger the file input click
+    };
 
     // adding new expense in collection2
     const addNewExpense = async () => {
@@ -192,10 +200,10 @@ function Expense() {
     }
 
     return (
-        <div className="flex flex-wrap justify-center h-screen ml-[7rem]">
+        <div className="flex flex-wrap justify-center h-screen ml-[7rem] bg-gradient-to-r from-gray-100  to-blue-900 items-center">
 
             {/* first div */}
-            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col mr-6">
+            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col mr-6  bg-white/30 backdrop-blur-md border border-white/50  p-6">
                 <div className="p-4 border-b">
                     <div className="flex justify-between items-center">
                         <div className="text-sm font-medium text-gray-600">{formattedDate}</div>
@@ -208,7 +216,7 @@ function Expense() {
                             <div className="flex text-[0.7rem]">Amount</div>
                             <div className="flex">
                                 <div className='text-[1.5rem]'><FontAwesomeIcon icon={faIndianRupee} />
-                                    <input type='number' onChange={handleInputChange} value={amount}></input></div>
+                                    <input type='text' className='bg-transparent border-none focus:outline-none' onChange={handleInputChange} value={amount}></input></div>
                             </div>
                         </div>
                     </div>
@@ -253,15 +261,15 @@ function Expense() {
                             </div>
                         </div>
                     </div> */}
-                    
+
                     {animation1 && <LottieLoader />}
                     {animation2 && <LottieAnimation />}
                 </div>
-                <div className='flex m-2'>
-                    <div className='p-3 cursor-pointer bg-blue-500 text-white rounded-md' onClick={addNewExpense}>
+                <div className='flex flex-end m-2 w-full'>
+                    <div className='p-3 cursor-pointer bg-red-500 text-white rounded-md' onClick={addNewExpense}>
                         Cancel Expense
                     </div>
-                    <div className='p-3 cursor-pointer bg-blue-500 text-white rounded-md' onClick={addNewExpense}>
+                    <div className='p-3 cursor-pointer bg-green-500 text-white rounded-md' onClick={addNewExpense}>
                         Submit Expense
                     </div>
                 </div>
@@ -269,16 +277,21 @@ function Expense() {
             </div>
 
             {/* another div */}
-            <div className="w-full  h-[90%]  max-w-md bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4">
+            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4 bg-white/30 backdrop-blur-md border-white/50">
                 {/* Outer div */}
-                <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4 hover:border-cyan-400">
-                    Add Reciept
-                    <FontAwesomeIcon className='w-[10%] h-[10%] cursor-pointer' icon={faCirclePlus} />
+                <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4 bg-white/30 backdrop-blur-md border-white/50 hover:border-blue-800 hover:shadow-[0_0_20px_5px_rgba(0, 68, 255, 0.8)] transition-all duration-300 ease-in-out">
+                    Add Receipt
+                    <FontAwesomeIcon className='w-[10%] h-[10%] cursor-pointer' icon={faCirclePlus} onClick={handleIconClickFile} />
                     <input
-                        type="file"
+                        type="file" ref={fileInputRef}
                         onChange={handleFileChange}
-                        className="mt-2"
+                        style={{ display: 'none' }}
                     />
+                    {fileName && (
+                        <div className="mt-2 text-sm text-gray-600">
+                            Selected file: {fileName}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
