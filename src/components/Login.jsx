@@ -22,7 +22,7 @@ function Login() {
 
   return (
     <>
-      <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="h-full w-[70%] flex flex-col justify-center mt-[-2rem] ml-[7rem]">
         <div className="text-center text-white font-bold text-2xl">Log in</div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">

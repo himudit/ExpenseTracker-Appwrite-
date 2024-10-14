@@ -143,6 +143,10 @@ function Expense() {
                         console.log("Done");
                         setanimation1(false);
                         setanimation2(true);
+                        setTimeout(() => {
+                            setanimation2(false);
+                        }, 2000);
+
                     })
 
                 } else {
@@ -156,6 +160,10 @@ function Expense() {
                         console.log("Done");
                         setanimation1(false);
                         setanimation2(true);
+                        setTimeout(() => {
+                            setanimation2(false);
+                        }, 2000);
+
                     })
                 }
             })
@@ -204,6 +212,10 @@ function Expense() {
                 console.log("Done");
                 setanimation1(false);
                 setanimation2(true);
+                setTimeout(() => {
+                    setanimation2(false);
+                }, 2000);
+
             })
         }
     }
@@ -287,7 +299,7 @@ function Expense() {
             </div>
 
             {/* second div */}
-                  <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4 bg-white/30 backdrop-blur-md border-white/50">
+            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4 bg-white/30 backdrop-blur-md border-white/50">
                 <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4 bg-white/30 backdrop-blur-md border-white/50 hover:border-blue-800 hover:shadow-[0_0_20px_5px_rgba(0, 68, 255, 0.8)] transition-all duration-300 ease-in-out">
                     Add Receipt
                     <FontAwesomeIcon className='w-[10%] h-[10%] cursor-pointer' icon={faCirclePlus} onClick={handleIconClickFile} />
