@@ -86,6 +86,7 @@ function Expense() {
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
+            setSelectedFile(file)
             setFileName(file.name); // Set the file name to display it
         }
     };
@@ -112,7 +113,9 @@ function Expense() {
             console.log('Entry exists');
 
             // for bucket 2
-            await storage.createFile(conf.appwriteBucket2Id, fileId, selectedFile);
+            if (selectedFile) {
+                await storage.createFile(conf.appwriteBucket2Id, fileId, selectedFile);
+            }
 
             // for collection 2
             const expense = {
@@ -120,7 +123,10 @@ function Expense() {
                 ExpenseAmount: Number(amount),
                 Category: String(selectedCategory.text),
                 Date: String(formattedDateTime),
-                ReceiptId: fileId
+                if(selectedFile) {
+                    ReceiptId: fileId
+                }
+
             }
             const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
             promise.then(() => {
@@ -157,15 +163,18 @@ function Expense() {
             console.log('Entry does not exist');
 
             // for bucket 2
-            await storage.createFile(conf.appwriteBucket2Id, fileId, selectedFile);
-
+            if (selectedFile) {
+                await storage.createFile(conf.appwriteBucket2Id, fileId, selectedFile);
+            }
             // for collection 2
             const expense = {
                 userid: String(userId),
                 ExpenseAmount: Number(amount),
                 Category: String(selectedCategory.text),
                 Date: String(formattedDateTime),
-                ReceiptId: fileId
+                if(selectedFile) {
+                    ReceiptId: fileId
+                }
             }
             const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
 
@@ -201,6 +210,7 @@ function Expense() {
 
     return (
         <div className="flex flex-wrap justify-center h-screen ml-[7rem] bg-gradient-to-r from-gray-100  to-blue-900 items-center">
+            {/* // <div className="flex flex-wrap justify-center h-screen ml-[7rem] "> */}
 
             {/* first div */}
             <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col mr-6  bg-white/30 backdrop-blur-md border border-white/50  p-6">
@@ -276,9 +286,8 @@ function Expense() {
 
             </div>
 
-            {/* another div */}
-            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4 bg-white/30 backdrop-blur-md border-white/50">
-                {/* Outer div */}
+            {/* second div */}
+                  <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4 bg-white/30 backdrop-blur-md border-white/50">
                 <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4 bg-white/30 backdrop-blur-md border-white/50 hover:border-blue-800 hover:shadow-[0_0_20px_5px_rgba(0, 68, 255, 0.8)] transition-all duration-300 ease-in-out">
                     Add Receipt
                     <FontAwesomeIcon className='w-[10%] h-[10%] cursor-pointer' icon={faCirclePlus} onClick={handleIconClickFile} />
@@ -294,6 +303,7 @@ function Expense() {
                     )}
                 </div>
             </div>
+
         </div>
     );
 }
