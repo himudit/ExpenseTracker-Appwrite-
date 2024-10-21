@@ -10,7 +10,7 @@ function Home() {
 
   const [userId, setUserId] = useState(null);
   const [userDetails, setUserDetails] = useState()
-  const [budget, setBudget] = useState();
+  const [budget, setBudget] = useState(0);
   const [expenses, setExpenses] = useState(0);
   const [profilePictureUrl, setProfilePictureUrl] = useState('/image.png');
 
@@ -27,17 +27,32 @@ function Home() {
   }, [])
 
   useEffect(() => {
+
     const fetchProfilePictureUrl = async () => {
+      if (!userDetails || !userDetails.$id) return;
       try {
-        if (!userDetails || !userDetails.$id) return;
-        // if (userDetails) {
         const res = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection3Id, [Query.equal('user_id', userDetails.$id)]);
         setProfilePictureUrl(`${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${res.documents[0].image_id}/view?project=${conf.appwriteProjectId}&mode=admin`);
       } catch (error) {
         console.log(error);
       }
     };
+
+    // for collection1(Main)
+    const fetchDataFromMain = async () => {
+      try {
+        const res1 = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection1Id, [Query.equal('user_id', userDetails.$id)]);
+        if (res1.total > 0) {
+          // exist & update
+          console.log(res1.documents);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     fetchProfilePictureUrl();
+    fetchDataFromMain();
   }, [userDetails]);
 
   return (

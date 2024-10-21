@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import LottieAnimation from './LottieAnimation';
 import { account, databases, storage } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid'
@@ -87,21 +87,20 @@ function Expense() {
         const file = event.target.files[0];
         if (file) {
             setSelectedFile(file)
-            setFileName(file.name); // Set the file name to display it
+            setFileName(file.name);
         }
     };
     const handleIconClickFile = () => {
-        fileInputRef.current.click(); // Trigger the file input click
+        fileInputRef.current.click();
     };
 
-    // adding new expense in collection2
+    // adding new expense in collection2(newexpense)
     const addNewExpense = async () => {
         if (!userId) return;
         console.log('User ID being queried:', userId);
         setanimation1(true);
 
-
-        // checking collection4
+        // checking collection4(category)
         const res = await databases.listDocuments(
             conf.appwriteDatabaseId,
             conf.appwriteCollection4Id,
@@ -215,9 +214,31 @@ function Expense() {
                 setTimeout(() => {
                     setanimation2(false);
                 }, 2000);
-
             })
         }
+
+        const userData = await databases.listDocuments(
+            conf.appwriteDatabaseId,
+            conf.appwriteCollection4Id,
+            [
+                Query.equal('userid', userId)
+            ]
+        )
+        const userDocument = userData.documents[0];
+
+        const others = userDocument.others || 0;
+        const foodDining = userDocument.FoodDining || 0;
+        const shopping = userDocument.Shopping || 0;
+        const travelling = userDocument.Travelling || 0;
+        const entertainment = userDocument.Entertainment || 0;
+        const medicalBills = userDocument.Medical || 0;
+        const bills = userDocument.Bills || 0;
+        const rent = userDocument.Rent || 0;
+        const taxes = userDocument.Taxes || 0;
+        const investments = userDocument.Investments || 0;
+
+        const total = others + foodDining + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
+        console.log('Total for user:', total);
     }
 
     return (
@@ -289,10 +310,10 @@ function Expense() {
                 </div>
                 <div className='flex flex-end m-2 w-full'>
                     <div className='p-3 cursor-pointer bg-red-500 text-white rounded-md' onClick={addNewExpense}>
-                        Cancel Expense
+                        <FontAwesomeIcon icon={faXmark} />  Cancel
                     </div>
                     <div className='p-3 cursor-pointer bg-green-500 text-white rounded-md' onClick={addNewExpense}>
-                        Submit Expense
+                        <FontAwesomeIcon icon={faCheck} /> Save
                     </div>
                 </div>
 
