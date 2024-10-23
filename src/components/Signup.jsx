@@ -1,15 +1,42 @@
-import React, { useState } from 'react'
-import { account } from '../appwrite/appwriteConfig'
+import React, { useState,useEffect } from 'react'
+import { account, databases, storage } from '../appwrite/appwriteConfig'
 import { useNavigate } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
+import conf from '../conf/conf'
 
 function Signup() {
   const navigate = useNavigate()
+  const [userId, setUserId] = useState(null);
   const [user, setUser] = useState({
     name: "",
     email: "",
     password: ""
   })
+
+  // for Date
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+  const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+  const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  const formattedDateTime = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}
+    ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await account.get();
+        setUserId(response.$id);
+      } catch (error) {
+        console.error('Failed to get user:', error);
+      }
+    };
+    getUser();
+  }, []);
 
   //Signup
   const signupUser = async (e) => {
@@ -23,7 +50,17 @@ function Signup() {
     );
     promise.then(
       function (response) {
-        console.log(response);
+        const data = {
+          userid: String(userId),
+          IncomeAmount: Number(0),
+          ExpenseAmount: Number(0),
+          BalanceLeft: Number(0),
+          Date: String(formattedDateTime),
+        }
+        const promise1 = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection1Id, uuidv4(), data);
+        promise1.then(() => {
+          console.log("Done");
+        })
         navigate("/profile") //success
       },
       function (error) {

@@ -10,8 +10,9 @@ function Home() {
 
   const [userId, setUserId] = useState(null);
   const [userDetails, setUserDetails] = useState()
-  const [budget, setBudget] = useState(0);
+  const [income, setIncome] = useState(0);
   const [expenses, setExpenses] = useState(0);
+  const [budget, setBudget] = useState(0);
   const [profilePictureUrl, setProfilePictureUrl] = useState('/image.png');
 
   useEffect(() => {
@@ -27,7 +28,6 @@ function Home() {
   }, [])
 
   useEffect(() => {
-
     const fetchProfilePictureUrl = async () => {
       if (!userDetails || !userDetails.$id) return;
       try {
@@ -38,13 +38,39 @@ function Home() {
       }
     };
 
+    // for collection4(Category)
+    const fetchTotalFromCategory = async () => {
+      const userData = await databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteCollection4Id,
+        [
+          Query.equal('userid', userDetails.$id)
+        ]
+      )
+      const userDocument = userData.documents[0];
+      const others = userDocument.others || 0;
+      const foodDining = userDocument.FoodDining || 0;
+      const shopping = userDocument.Shopping || 0;
+      const travelling = userDocument.Travelling || 0;
+      const entertainment = userDocument.Entertainment || 0;
+      const medicalBills = userDocument.Medical || 0;
+      const bills = userDocument.Bills || 0;
+      const rent = userDocument.Rent || 0;
+      const taxes = userDocument.Taxes || 0;
+      const investments = userDocument.Investments || 0;
+      const total = others + foodDining + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
+      setExpenses(total);
+      console.log('Total for user:', total);
+    }
+
     // for collection1(Main)
     const fetchDataFromMain = async () => {
       try {
-        const res1 = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection1Id, [Query.equal('user_id', userDetails.$id)]);
+        const res1 = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection1Id, [Query.equal('userid', userDetails.$id)]);
         if (res1.total > 0) {
           // exist & update
           console.log(res1.documents);
+          setIncome(res1.documents.IncomeAmount);
         }
       } catch (err) {
         console.log(err);
@@ -52,6 +78,7 @@ function Home() {
     };
 
     fetchProfilePictureUrl();
+    fetchTotalFromCategory();
     fetchDataFromMain();
   }, [userDetails]);
 
@@ -77,7 +104,7 @@ function Home() {
           <span className="mr-2"></span>
           <input
             type="text"
-            value={budget}
+            value={income}
             className="w-full p-2 border text-black border-gray-300 rounded-lg"
           />
         </div>
@@ -96,7 +123,7 @@ function Home() {
           <span className="mr-2"></span>
           <input
             type="text"
-            // value={}
+            value={budget}
             placeholder=""
             className="w-full p-2 border  text-black border-gray-300 rounded-lg"
           />

@@ -217,28 +217,28 @@ function Expense() {
             })
         }
 
-        const userData = await databases.listDocuments(
-            conf.appwriteDatabaseId,
-            conf.appwriteCollection4Id,
-            [
-                Query.equal('userid', userId)
-            ]
-        )
-        const userDocument = userData.documents[0];
+        // const userData = await databases.listDocuments(
+        //     conf.appwriteDatabaseId,
+        //     conf.appwriteCollection4Id,
+        //     [
+        //         Query.equal('userid', userId)
+        //     ]
+        // )
+        // const userDocument = userData.documents[0];
 
-        const others = userDocument.others || 0;
-        const foodDining = userDocument.FoodDining || 0;
-        const shopping = userDocument.Shopping || 0;
-        const travelling = userDocument.Travelling || 0;
-        const entertainment = userDocument.Entertainment || 0;
-        const medicalBills = userDocument.Medical || 0;
-        const bills = userDocument.Bills || 0;
-        const rent = userDocument.Rent || 0;
-        const taxes = userDocument.Taxes || 0;
-        const investments = userDocument.Investments || 0;
+        // const others = userDocument.others || 0;
+        // const foodDining = userDocument.FoodDining || 0;
+        // const shopping = userDocument.Shopping || 0;
+        // const travelling = userDocument.Travelling || 0;
+        // const entertainment = userDocument.Entertainment || 0;
+        // const medicalBills = userDocument.Medical || 0;
+        // const bills = userDocument.Bills || 0;
+        // const rent = userDocument.Rent || 0;
+        // const taxes = userDocument.Taxes || 0;
+        // const investments = userDocument.Investments || 0;
 
-        const total = others + foodDining + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
-        console.log('Total for user:', total);
+        // const total = others + foodDining + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
+        // console.log('Total for user:', total);
     }
 
     return (
