@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet } from '@fortawesome/free-solid-svg-icons';
 import LottieAnimation from './LottieAnimation';
 import { account, databases, storage } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid'
@@ -94,66 +94,59 @@ function Expense() {
         fileInputRef.current.click();
     };
 
-    // adding new expense in collection2(newexpense)
-    const addNewExpense = async () => {
+    // for selecting whether Income or Expense
+    const [choice, setChoice] = useState('Expense');
+    const chooseIncome = () => {
+        setChoice('Income');
+    };
+    const chooseExpense = () => {
+        setChoice('Expense');
+    };
+
+    // adding New in collections
+    const addNew = async () => {
         if (!userId) return;
         console.log('User ID being queried:', userId);
         setanimation1(true);
 
-        // checking collection4(category)
-        const res = await databases.listDocuments(
-            conf.appwriteDatabaseId,
-            conf.appwriteCollection4Id,
-            [
-                Query.equal('userid', userId)
-            ]
-        )
-        if (res.total > 0) {
-            console.log('Entry exists');
+        if (choice == 'Income') {
+            // checking collection6(categoryIncome)
+            const res = await databases.listDocuments(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollection6Id,
+                [
+                    Query.equal('userid', userId)
+                ]
+            )
+            if (res.total > 0) {
+                console.log('Entry exists');
 
-            // for bucket 2
-            if (selectedFile) {
-                await storage.createFile(conf.appwriteBucket2Id, fileId, selectedFile);
-            }
-
-            // for collection 2
-            const expense = {
-                userid: String(userId),
-                ExpenseAmount: Number(amount),
-                Category: String(selectedCategory.text),
-                Date: String(formattedDateTime),
-                if(selectedFile) {
-                    ReceiptId: fileId
+                // for bucket 3
+                if (selectedFile) {
+                    await storage.createFile(conf.appwriteBucket3Id, fileId, selectedFile);
                 }
 
-            }
-            const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
-            promise.then(() => {
-                const item = selectedCategory.text;
-                const document = res.documents[0];
-                const documentId = document.$id;
-                if (selectedCategory.text === 'Food & Dining') {
-                    const value = document.FoodDining;
-                    const updatedData = {
-                        FoodDining: value + Number(amount),
-                    };
-                    const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
-                    promise.then(() => {
-                        console.log("Done");
-                        setanimation1(false);
-                        setanimation2(true);
-                        setTimeout(() => {
-                            setanimation2(false);
-                        }, 2000);
+                // for collection 5
+                const income = {
+                    userid: String(userId),
+                    IncomeAmount: Number(amount),
+                    Category: String(selectedCategory.text),
+                    Date: String(formattedDateTime),
+                    if(selectedFile) {
+                        ReceiptId: fileId
+                    }
 
-                    })
-
-                } else {
+                }
+                const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection5Id, uuidv4(), income)
+                promise.then(() => {
+                    const item = selectedCategory.text;
+                    const document = res.documents[0];
+                    const documentId = document.$id;
                     const value = document[selectedCategory.text];
                     const updatedData = {
                         [selectedCategory.text]: value + Number(amount),
                     };
-                    const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
+                    const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection6Id, documentId, updatedData);
 
                     promise4.then(() => {
                         console.log("Done");
@@ -164,81 +157,167 @@ function Expense() {
                         }, 2000);
 
                     })
-                }
-            })
-        } else {
-            console.log('Entry does not exist');
 
-            // for bucket 2
-            if (selectedFile) {
-                await storage.createFile(conf.appwriteBucket2Id, fileId, selectedFile);
-            }
-            // for collection 2
-            const expense = {
-                userid: String(userId),
-                ExpenseAmount: Number(amount),
-                Category: String(selectedCategory.text),
-                Date: String(formattedDateTime),
-                if(selectedFile) {
-                    ReceiptId: fileId
-                }
-            }
-            const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
-
-            // for collection4
-            const data = {
-                userid: String(userId),
-                others: Number(0),
-                FoodDining: Number(0),
-                Shopping: Number(0),
-                Travelling: Number(0),
-                Entertainment: Number(0),
-                Medical: Number(0),
-                Bills: Number(0),
-                Rent: Number(0),
-                Taxes: Number(0),
-                Investments: Number(0),
-            }
-            if (selectedCategory.text === 'Food & Dining') {
-                data['FoodDining'] = expense.ExpenseAmount;
+                })
             } else {
-                if (expense.Category in data) {
-                    data[expense.Category] = expense.ExpenseAmount;
+                console.log('Entry does not exist');
+
+                // for bucket 3
+                if (selectedFile) {
+                    await storage.createFile(conf.appwriteBucket3Id, fileId, selectedFile);
                 }
+                // for collection 5
+                const income = {
+                    userid: String(userId),
+                    IncomeAmount: Number(amount),
+                    Category: String(selectedCategory.text),
+                    Date: String(formattedDateTime),
+                    if(selectedFile) {
+                        ReceiptId: fileId
+                    }
+                }
+                const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection5Id, uuidv4(), income)
+
+                // for collection6
+                const data = {
+                    userid: String(userId),
+                    others: Number(0),
+                    Salary: Number(0),
+                    Sold: Number(0),
+                }
+                if (income.Category in data) {
+                    data[income.Category] = income.IncomeAmount;
+                }
+
+                const promise4 = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection6Id, uuidv4(), data);
+                promise4.then(() => {
+                    console.log("Done");
+                    setanimation1(false);
+                    setanimation2(true);
+                    setTimeout(() => {
+                        setanimation2(false);
+                    }, 2000);
+                })
             }
-            const promise4 = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, uuidv4(), data);
-            promise4.then(() => {
-                console.log("Done");
-                setanimation1(false);
-                setanimation2(true);
-                setTimeout(() => {
-                    setanimation2(false);
-                }, 2000);
-            })
         }
+        else {
+            // checking collection4(categoryExpense)
+            const res = await databases.listDocuments(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollection4Id,
+                [
+                    Query.equal('userid', userId)
+                ]
+            )
+            if (res.total > 0) {
+                console.log('Entry exists');
 
-        // const userData = await databases.listDocuments(
-        //     conf.appwriteDatabaseId,
-        //     conf.appwriteCollection4Id,
-        //     [
-        //         Query.equal('userid', userId)
-        //     ]
-        // )
-        // const userDocument = userData.documents[0];
+                // for bucket 2
+                if (selectedFile) {
+                    await storage.createFile(conf.appwriteBucket2Id, fileId, selectedFile);
+                }
 
-        // const others = userDocument.others || 0;
-        // const foodDining = userDocument.FoodDining || 0;
-        // const shopping = userDocument.Shopping || 0;
-        // const travelling = userDocument.Travelling || 0;
-        // const entertainment = userDocument.Entertainment || 0;
-        // const medicalBills = userDocument.Medical || 0;
-        // const bills = userDocument.Bills || 0;
-        // const rent = userDocument.Rent || 0;
-        // const taxes = userDocument.Taxes || 0;
-        // const investments = userDocument.Investments || 0;
+                // for collection 2
+                const expense = {
+                    userid: String(userId),
+                    ExpenseAmount: Number(amount),
+                    Category: String(selectedCategory.text),
+                    Date: String(formattedDateTime),
+                    if(selectedFile) {
+                        ReceiptId: fileId
+                    }
 
-        // const total = others + foodDining + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
-        // console.log('Total for user:', total);
+                }
+                const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
+                promise.then(() => {
+                    const item = selectedCategory.text;
+                    const document = res.documents[0];
+                    const documentId = document.$id;
+                    if (selectedCategory.text === 'Food & Dining') {
+                        const value = document.FoodDining;
+                        const updatedData = {
+                            FoodDining: value + Number(amount),
+                        };
+                        const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
+                        promise.then(() => {
+                            console.log("Done");
+                            setanimation1(false);
+                            setanimation2(true);
+                            setTimeout(() => {
+                                setanimation2(false);
+                            }, 2000);
+
+                        })
+
+                    } else {
+                        const value = document[selectedCategory.text];
+                        const updatedData = {
+                            [selectedCategory.text]: value + Number(amount),
+                        };
+                        const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
+
+                        promise4.then(() => {
+                            console.log("Done");
+                            setanimation1(false);
+                            setanimation2(true);
+                            setTimeout(() => {
+                                setanimation2(false);
+                            }, 2000);
+
+                        })
+                    }
+                })
+            } else {
+                console.log('Entry does not exist');
+
+                // for bucket 2
+                if (selectedFile) {
+                    await storage.createFile(conf.appwriteBucket2Id, fileId, selectedFile);
+                }
+                // for collection 2
+                const expense = {
+                    userid: String(userId),
+                    ExpenseAmount: Number(amount),
+                    Category: String(selectedCategory.text),
+                    Date: String(formattedDateTime),
+                    if(selectedFile) {
+                        ReceiptId: fileId
+                    }
+                }
+                const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
+
+                // for collection4
+                const data = {
+                    userid: String(userId),
+                    others: Number(0),
+                    FoodDining: Number(0),
+                    Shopping: Number(0),
+                    Travelling: Number(0),
+                    Entertainment: Number(0),
+                    Medical: Number(0),
+                    Bills: Number(0),
+                    Rent: Number(0),
+                    Taxes: Number(0),
+                    Investments: Number(0),
+                }
+                if (selectedCategory.text === 'Food & Dining') {
+                    data['FoodDining'] = expense.ExpenseAmount;
+                } else {
+                    if (expense.Category in data) {
+                        data[expense.Category] = expense.ExpenseAmount;
+                    }
+                }
+                const promise4 = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, uuidv4(), data);
+                promise4.then(() => {
+                    console.log("Done");
+                    setanimation1(false);
+                    setanimation2(true);
+                    setTimeout(() => {
+                        setanimation2(false);
+                    }, 2000);
+                })
+            }
+        }
     }
 
     return (
@@ -253,6 +332,12 @@ function Expense() {
                         <div className="text-sm font-medium text-gray-600">{formattedTime}</div>
                     </div>
                 </div>
+                <div className="p-4 border-b">
+                    <div className="flex justify-between items-center">
+                        <div className="text-sm font-medium text-gray-600 cursor-pointer" onClick={chooseIncome}>Income</div>
+                        <div className="text-sm font-medium text-gray-600 cursor-pointer" onClick={chooseExpense}>Expense</div>
+                    </div>
+                </div>
                 <div className="flex-grow overflow-y-auto p-4">
                     <div className="mb-4">
                         <div className="text-sm font-medium text-gray-700 mb-1">
@@ -265,7 +350,7 @@ function Expense() {
                     </div>
 
                     {/* category */}
-                    <div className="mb-4">
+                    {choice === 'Expense' ? (<div className="mb-4">
                         <div className="text-sm font-medium text-gray-700 mb-1">
                             <div className="flex text-[0.7rem]">Category</div>
                             <div className="flex justify-between">
@@ -275,10 +360,9 @@ function Expense() {
                                 </div>
                                 <div className='cursor-pointer' onClick={handleIconClick}><FontAwesomeIcon icon={faChevronRight} /></div>
                             </div>
-                            {/* Conditionally render the new div if isOpen is true */}
                             {isOpen && (
                                 <div ref={divRef} className="grid grid-cols-3 gap-4 p-4 h-[13rem] bg-gray-200 rounded shadow-md mt-2">
-                                    <div onClick={() => settingCategory(faEllipsis, 'others')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faEllipsis} /> </div>Others</div>
+                                    <div onClick={() => settingCategory(faEllipsis, 'others')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faEllipsis} /> </div>others</div>
                                     <div onClick={() => settingCategory(faPizzaSlice, 'Food & Dining')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faPizzaSlice} /> </div>Food & Dining</div>
                                     <div onClick={() => settingCategory(faCartShopping, 'Shopping')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faCartShopping} /></div>Shopping</div>
                                     <div onClick={() => settingCategory(faPlane, 'Travelling')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faPlane} /></div>Travelling</div>
@@ -293,26 +377,33 @@ function Expense() {
                             )}
 
                         </div>
-                    </div>
-
-                    {/* <div className="mb-4">
+                    </div>) : (<div className="mb-4">
                         <div className="text-sm font-medium text-gray-700 mb-1">
-                            <div className="flex text-[0.7rem]">Payment mode</div>
+                            <div className="flex text-[0.7rem]">Category</div>
                             <div className="flex justify-between">
-                                <div className='text-[1.3rem]'>Cash</div>
-                                <div className='cursor-pointer'><FontAwesomeIcon icon={faChevronRight} /></div>
+                                <div className='text-[1.3rem]'>
+                                    <FontAwesomeIcon icon={selectedCategory.icon} className="mr-2" />
+                                    <span>{selectedCategory.text}</span>
+                                </div>
+                                <div className='cursor-pointer' onClick={handleIconClick}><FontAwesomeIcon icon={faChevronRight} /></div>
                             </div>
+                            {isOpen && (
+                                <div ref={divRef} className="grid grid-cols-3 gap-4 p-4 h-[13rem] bg-gray-200 rounded shadow-md mt-2">
+                                    <div onClick={() => settingCategory(faEllipsis, 'others')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faEllipsis} /> </div>others</div>
+                                    <div onClick={() => settingCategory(faWallet, 'Salary')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faWallet} /> </div>Salary</div>
+                                    <div onClick={() => settingCategory(faCartShopping, 'Sold')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faCartShopping} /></div>Sold-items</div>
+                                </div>
+                            )}
                         </div>
-                    </div> */}
-
+                    </div>)}
                     {animation1 && <LottieLoader />}
                     {animation2 && <LottieAnimation />}
                 </div>
                 <div className='flex flex-end m-2 w-full'>
-                    <div className='p-3 cursor-pointer bg-red-500 text-white rounded-md' onClick={addNewExpense}>
-                        <FontAwesomeIcon icon={faXmark} />  Cancel
+                    <div className='p-3 cursor-pointer' onClick={addNew}>
+                        <FontAwesomeIcon icon={faXmark} /> Cancel
                     </div>
-                    <div className='p-3 cursor-pointer bg-green-500 text-white rounded-md' onClick={addNewExpense}>
+                    <div className='p-3 cursor-pointer' onClick={addNew}>
                         <FontAwesomeIcon icon={faCheck} /> Save
                     </div>
                 </div>
