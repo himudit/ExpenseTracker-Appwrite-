@@ -41,7 +41,7 @@ function Navbar() {
           <NavLink
             to="/expense"
             className={({ isActive }) =>
-              isActive ? 'bg-lime-green w-11.4 h-11 text-black px-4 py-2 rounded-full' : 'text-black-300 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
+              isActive ? 'bg-lime-green w-11.4 h-11 text-black px-4 py-2 rounded-full' : 'text-gray-400 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
             }
           >
             <FontAwesomeIcon icon={faPlus} />

@@ -363,7 +363,7 @@ function Expense() {
                             {isOpen && (
                                 <div ref={divRef} className="grid grid-cols-3 gap-4 p-4 h-[13rem] bg-gray-200 rounded shadow-md mt-2">
                                     <div onClick={() => settingCategory(faEllipsis, 'others')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faEllipsis} /> </div>others</div>
-                                    <div onClick={() => settingCategory(faPizzaSlice, 'Food & Dining')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faPizzaSlice} /> </div>Food & Dining</div>
+                                    <div onClick={() => settingCategory(faPizzaSlice, 'Food & Dining')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faPizzaSlice} color="orange" /> </div>Food & Dining</div>
                                     <div onClick={() => settingCategory(faCartShopping, 'Shopping')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faCartShopping} /></div>Shopping</div>
                                     <div onClick={() => settingCategory(faPlane, 'Travelling')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faPlane} /></div>Travelling</div>
                                     <div onClick={() => settingCategory(faVideo, 'Entertainment')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faVideo} /></div>Entertainment</div>
@@ -399,11 +399,11 @@ function Expense() {
                     {animation1 && <LottieLoader />}
                     {animation2 && <LottieAnimation />}
                 </div>
-                <div className='flex flex-end m-2 w-full'>
-                    <div className='p-3 cursor-pointer' onClick={addNew}>
+                <div className='flex justify-between m-2 w-full'>
+                    <div className='p-2 cursor-pointer' onClick={addNew}>
                         <FontAwesomeIcon icon={faXmark} /> Cancel
                     </div>
-                    <div className='p-3 cursor-pointer' onClick={addNew}>
+                    <div className='p-2 cursor-pointer' onClick={addNew}>
                         <FontAwesomeIcon icon={faCheck} /> Save
                     </div>
                 </div>

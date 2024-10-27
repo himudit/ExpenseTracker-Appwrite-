@@ -58,28 +58,44 @@ function Home() {
       const rent = userDocument.Rent || 0;
       const taxes = userDocument.Taxes || 0;
       const investments = userDocument.Investments || 0;
-      const total = others + foodDining + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
-      setExpenses(total);
-      console.log('Total for user:', total);
+      const totalExpense = others + foodDining + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
+      setExpenses(totalExpense);
+      console.log('TotalExpense for user:', totalExpense);
+
+      const userDataInc = await databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteCollection6Id,
+        [
+          Query.equal('userid', userDetails.$id)
+        ]
+      )
+      const userDocumentInc = userDataInc.documents[0];
+      const othersInc = userDocumentInc.others || 0;
+      const Salary = userDocumentInc.Salary || 0;
+      const Sold = userDocumentInc.Sold || 0;
+
+      const totalIncome = othersInc + Salary + Sold;
+      setIncome(totalIncome);
+      console.log('TotalIncome for user:', totalIncome);
     }
 
     // for collection1(Main)
-    const fetchDataFromMain = async () => {
-      try {
-        const res1 = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection1Id, [Query.equal('userid', userDetails.$id)]);
-        if (res1.total > 0) {
-          // exist & update
-          console.log(res1.documents);
-          setIncome(res1.documents.IncomeAmount);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
+    // const fetchDataFromMain = async () => {
+    //   try {
+    //     const res1 = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection1Id, [Query.equal('userid', userDetails.$id)]);
+    //     if (res1.total > 0) {
+    //       // exist & update
+    //       console.log(res1.documents);
+    //       setIncome(res1.documents.IncomeAmount);
+    //     }
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // };
 
     fetchProfilePictureUrl();
     fetchTotalFromCategory();
-    fetchDataFromMain();
+    // fetchDataFromMain();
   }, [userDetails]);
 
   return (
@@ -129,12 +145,24 @@ function Home() {
           />
         </div>
       </div>
+      {/* Middle Box */}
       <div className="bg-black p-10 rounded-lg shadow-md flex-grow w-full m-4">
         Graphs
       </div>
-      <div className="bg-black p-10 rounded-lg shadow-md flex-grow w-full m-4">
-        Category
+      {/* Lowest Box */}
+      <div className="bg-white p-10 rounded-lg shadow-md flex-grow w-full m-4 border border-gray-200">
+        <div className="relative flex justify-between top-[-2.4rem]">
+          <div className="w-3/5 h-[20rem] bg-white rounded-lg shadow-md flex-grow m-4 border border-gray-200">
+            <div>Recent Transactions</div>
+          </div>
+
+          <div className="w-2/5 h-[20rem] bg-white p-10 rounded-lg shadow-md flex-grow  m-4 border border-gray-200">
+            <div>Categories</div>
+          </div>
+
+        </div>
       </div>
+
     </div>
   );
 }
