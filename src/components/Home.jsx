@@ -79,24 +79,58 @@ function Home() {
       console.log('TotalIncome for user:', totalIncome);
     }
 
-    // for collection1(Main)
-    // const fetchDataFromMain = async () => {
-    //   try {
-    //     const res1 = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection1Id, [Query.equal('userid', userDetails.$id)]);
-    //     if (res1.total > 0) {
-    //       // exist & update
-    //       console.log(res1.documents);
-    //       setIncome(res1.documents.IncomeAmount);
-    //     }
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // };
-
     fetchProfilePictureUrl();
     fetchTotalFromCategory();
-    // fetchDataFromMain();
   }, [userDetails]);
+
+  // for Transaction
+  // for category selection
+  const [expenseEntries, setExpenseEntries] = useState([]);
+  const [incomeEntries, setIncomeEntries] = useState([]);
+  const [combinedEntries, setCombinedEntries] = useState([]);
+
+  const [selectedCategory, setSelectedCategory] = useState();
+  const settingCategory = (icon, text) => {
+    setSelectedCategory({ icon, text });
+  };
+  // for data from collection 2 & collection 5
+  useEffect(() => {
+    // for collection 2 (Expense)
+    const fetchfromNewExpense = async () => {
+      const userDataExpense = await databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteCollection2Id,
+        [
+          Query.equal('userid', userDetails.$id)
+        ]
+      );
+      setExpenseEntries(userDataExpense.documents); // Update state with fetched expense entries
+    };
+
+    // for collection 5 (Income)
+    const fetchfromNewIncome = async () => {
+      const userDataIncome = await databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteCollection5Id,
+        [
+          Query.equal('userid', userDetails.$id)
+        ]
+      );
+      setIncomeEntries(userDataIncome.documents); // Update state with fetched income entries
+    };
+
+    fetchfromNewExpense();
+    fetchfromNewIncome();
+  }, [userDetails]);
+
+  useEffect(() => {
+    if (expenseEntries.length > 0 || incomeEntries.length > 0) {
+      const combined = [...expenseEntries, ...incomeEntries];
+      const sortedEntries = combined.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+
+      setCombinedEntries(sortedEntries);
+    }
+  }, [expenseEntries, incomeEntries]);
 
   return (
     <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 ml-[7rem]">
@@ -150,18 +184,36 @@ function Home() {
         Graphs
       </div>
       {/* Lowest Box */}
-      <div className="bg-white p-10 rounded-lg shadow-md flex-grow w-full m-4 border border-gray-200">
-        <div className="relative flex justify-between top-[-2.4rem]">
-          <div className="w-3/5 h-[20rem] bg-white rounded-lg shadow-md flex-grow m-4 border border-gray-200">
-            <div>Recent Transactions</div>
-          </div>
+      <div className="relative w-full flex flex-col md:flex-row justify-between top-[-0.6rem]">
 
-          <div className="w-2/5 h-[20rem] bg-white p-10 rounded-lg shadow-md flex-grow  m-4 border border-gray-200">
-            <div>Categories</div>
+        {/* <!-- Recent Transactions Section --> */}
+        <div className="w-full md:w-3/5 h-auto md:h-[20rem] bg-white rounded-lg shadow-md m-2 md:m-4 border border-gray-200 p-4">
+          <div className="text-lg md:text-[1.18rem] font-bold mt-2 md:mt-4">Recent Transactions</div>
+          <div className="relative w-full flex justify-around mt-4">
+            <div className="text-gray-400 text-sm md:text-base">Type</div>
+            <div className="text-gray-400 text-sm md:text-base">Amount</div>
+            <div className="text-gray-400 text-sm md:text-base">Date</div>
           </div>
+          {combinedEntries.map((entry, index) => (
+            <div
+              key={index}
+              className="flex justify-between bg-white p-2 border-b border-gray-300"
+            >
+              <div className="flex-1">{entry.Category}</div>
+              {entry.ExpenseAmount ? <div className="text-red-600 flex-1">{entry.ExpenseAmount}</div> : <div className="text-green-500 flex-1">{entry.IncomeAmount}</div>}
 
+              <div className="flex-1">{new Date(entry.Date).toLocaleDateString()}</div>
+            </div>
+          ))}
         </div>
+
+        {/* <!-- Categories Section --> */}
+        <div className="w-full md:w-2/5 h-auto md:h-[20rem] bg-white p-4 md:p-10 rounded-lg shadow-md m-2 md:m-4 border border-gray-200">
+          <div className="text-lg font-bold">Categories</div>
+        </div>
+
       </div>
+
 
     </div>
   );

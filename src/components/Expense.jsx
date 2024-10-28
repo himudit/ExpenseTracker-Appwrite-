@@ -361,17 +361,37 @@ function Expense() {
                                 <div className='cursor-pointer' onClick={handleIconClick}><FontAwesomeIcon icon={faChevronRight} /></div>
                             </div>
                             {isOpen && (
-                                <div ref={divRef} className="grid grid-cols-3 gap-4 p-4 h-[13rem] bg-gray-200 rounded shadow-md mt-2">
-                                    <div onClick={() => settingCategory(faEllipsis, 'others')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faEllipsis} /> </div>others</div>
-                                    <div onClick={() => settingCategory(faPizzaSlice, 'Food & Dining')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faPizzaSlice} color="orange" /> </div>Food & Dining</div>
-                                    <div onClick={() => settingCategory(faCartShopping, 'Shopping')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faCartShopping} /></div>Shopping</div>
-                                    <div onClick={() => settingCategory(faPlane, 'Travelling')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faPlane} /></div>Travelling</div>
-                                    <div onClick={() => settingCategory(faVideo, 'Entertainment')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faVideo} /></div>Entertainment</div>
-                                    <div onClick={() => settingCategory(faSuitcaseMedical, 'Medical')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faSuitcaseMedical} /></div>Medical</div>
-                                    <div onClick={() => settingCategory(faReceipt, 'Bills')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faReceipt} /></div>Bills</div>
-                                    <div onClick={() => settingCategory(faHouseCircleCheck, 'Rent')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faHouseCircleCheck} /></div>Rent</div>
-                                    <div onClick={() => settingCategory(faIndianRupee, 'Taxes')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faIndianRupee} /></div>Taxes</div>
-                                    <div onClick={() => settingCategory(faChartSimple, 'Investments')} className="flex items-center justify-center cursor-pointer"><div className='cursor-pointer'><FontAwesomeIcon icon={faChartSimple} /></div>Investments</div>
+                                <div ref={divRef} className="grid grid-cols-3 gap-4 p-4 h-[16rem] bg-gray-200 rounded shadow-md mt-2">
+                                    <div onClick={() => settingCategory(faEllipsis, 'others')} className="flex items-center justify-center cursor-pointer">
+                                        {/* <div className='cursor-pointer'> */}
+                                        <div className="cursor-pointer bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center">
+                                            <FontAwesomeIcon icon={faEllipsis} /> </div>others</div>
+
+                                    <div
+                                        onClick={() => settingCategory(faPizzaSlice, 'Food & Dining')}
+                                        className="flex items-center space-x-2 cursor-pointer"
+                                    >
+                                        <div className="bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center">
+                                            <FontAwesomeIcon icon={faPizzaSlice} color="orange" />
+                                        </div>
+                                        <span>Food</span>
+                                    </div>
+
+                                    <div onClick={() => settingCategory(faCartShopping, 'Shopping')} className="flex items-center justify-center cursor-pointer"> <div className="bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center"><FontAwesomeIcon icon={faCartShopping} /></div>Shopping</div>
+
+                                    <div onClick={() => settingCategory(faPlane, 'Travelling')} className="flex items-center justify-center cursor-pointer"> <div className="bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center"><FontAwesomeIcon icon={faPlane} /></div>Travelling</div>
+
+                                    <div onClick={() => settingCategory(faHouseCircleCheck, 'Rent')} className="flex items-center justify-center cursor-pointer"> <div className="bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center"><FontAwesomeIcon icon={faHouseCircleCheck} /></div>Rent</div>
+
+                                    <div onClick={() => settingCategory(faVideo, 'Entertainment')} className="flex items-center justify-center cursor-pointer"> <div className="bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center"><FontAwesomeIcon icon={faVideo} /></div>Entertainment</div>
+
+                                    <div onClick={() => settingCategory(faSuitcaseMedical, 'Medical')} className="flex items-center justify-center cursor-pointer"> <div className="bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center"><FontAwesomeIcon icon={faSuitcaseMedical} /></div>Medical</div>
+
+                                    <div onClick={() => settingCategory(faReceipt, 'Bills')} className="flex items-center justify-center cursor-pointer"> <div className="bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center"><FontAwesomeIcon icon={faReceipt} /></div>Bills</div>
+
+                                    <div onClick={() => settingCategory(faIndianRupee, 'Taxes')} className="flex items-center justify-center cursor-pointer"> <div className="bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center"><FontAwesomeIcon icon={faIndianRupee} /></div>Taxes</div>
+
+                                    <div onClick={() => settingCategory(faChartSimple, 'Investments')} className="flex items-center justify-center cursor-pointer"> <div className="bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center"><FontAwesomeIcon icon={faChartSimple} /></div>Investments</div>
                                 </div>
 
                             )}
