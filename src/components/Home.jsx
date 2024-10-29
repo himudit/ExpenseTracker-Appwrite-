@@ -62,7 +62,7 @@ function Home() {
       const investments = userDocument.Investments || 0;
       const totalExpense = others + foodDining + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
       setExpenses(totalExpense);
-      console.log('TotalExpense for user:', totalExpense);
+      // console.log('TotalExpense for user:', totalExpense);
 
       const userDataInc = await databases.listDocuments(
         conf.appwriteDatabaseId,
@@ -78,7 +78,7 @@ function Home() {
 
       const totalIncome = othersInc + Salary + Sold;
       setIncome(totalIncome);
-      console.log('TotalIncome for user:', totalIncome);
+      // console.log('TotalIncome for user:', totalIncome);
     }
 
     fetchProfilePictureUrl();
@@ -228,33 +228,40 @@ function Home() {
               key={index}
               className="flex justify-between bg-white p-2 border-b border-gray-300"
             >
-              <div className="flex-1 text-center">
-                <div className="bg-gray-300 text-center text-black rounded-full w-12 h-12 flex items-center justify-center">
-                  <FontAwesomeIcon icon={getCategoryIcon(entry.Category)} style={{ color: "green" }} />
-                </div>
-              </div>
+              {/* <div className="flex justify-between"> */}
+              <div className="flex space-x-2">
+                <div className="box1">  {/* first box */}
+                  <div className="flex-1 text-center">
+                    <div className="bg-gray-300 text-center text-black rounded-full w-12 h-12 flex items-center justify-center">
+                      <FontAwesomeIcon icon={getCategoryIcon(entry.Category)} style={{ color: "green" }} />
+                    </div>
+                  </div></div>
 
-              <div className="flex-1 text-center">
-                {entry.ExpenseAmount ? <div className="text-red-600 flex-1">{entry.ExpenseAmount}</div> : <div className="text-green-500 flex-1">{entry.IncomeAmount}</div>}
-                <div className="flex-1">{entry.Category}</div>
-              </div>
-
-              <div className="flex-1 text-center">
-                <div>
-                  {new Date(entry.Date).toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: '2-digit'
-                  })}
-                </div>
-                <div className="text-sm text-gray-500">
+                <div className="box2"> {/* second box */}
+                  <div className="flex-1 text-center">
+                    <div className="flex-1 font-bold">{entry.Category}</div>
+                    <div className='text-gray-500 text-sm'>
+                      {new Date(entry.Date).toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: '2-digit'
+                      })}
+                    </div>
+                    {/* <div className="text-sm text-gray-500">
                   {new Date(entry.Date).toLocaleTimeString('en-US', {
                     hour: 'numeric',
                     minute: 'numeric',
                     hour12: true
                   })}
-                </div>
+                </div> */}
+                  </div></div>
               </div>
+
+              <div className="box3">{/* third Box */}
+                <div className="flex-1 text-center">
+                  {entry.ExpenseAmount ? <div className="text-red-600 font-bold-400 flex-1">{entry.ExpenseAmount}</div> : <div className="text-green-500 font-bold-400 flex-1">{entry.IncomeAmount}</div>}
+                </div></div>
+              {/* </div> */}
 
             </div>
           ))}
