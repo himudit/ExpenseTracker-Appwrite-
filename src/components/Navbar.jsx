@@ -10,7 +10,7 @@ function Navbar() {
   return (
     <>
       <div className="fixed top-0 left-0 h-full w-25 bg-dark-white flex flex-col items-center py-4 border-r-2 border-black-50">
-      
+
         {/* logo */}
         <div className="mb-8 flex flex-col items-center">
           <img
@@ -19,8 +19,6 @@ function Navbar() {
             alt="Logo"
           />
           {/* Responsive text below the logo */}
-          {/* <div className="mt-4 ml-4 text-base sm:text-s md:text-s lg:text-s xl:text-s font-bold"> */}
-          {/* <div className="mt-4 ml-4  text-base size-0 font-bold"> */}
           <div className="mt-4 ml-1 font-bold" style={{ fontSize: '0.8rem' }}>
             ExpenseMate
           </div>
@@ -38,10 +36,16 @@ function Navbar() {
             <FontAwesomeIcon icon={faHouse} />
           </NavLink>
 
-          <NavLink
+          {/* <NavLink
             to="/expense"
             className={({ isActive }) =>
               isActive ? 'bg-lime-green w-11.4 h-11 text-black px-4 py-2 rounded-full' : 'text-gray-400 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
+            }
+          > */}
+          <NavLink
+            to="/expense"
+            className={({ isActive }) =>
+              isActive ? 'bg-gray-300 text-center text-black rounded-full w-11 h-11 flex items-center justify-center' : 'text-gray-400 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
             }
           >
             <FontAwesomeIcon icon={faPlus} />
@@ -61,7 +65,7 @@ function Navbar() {
             Sign Up
           </NavLink>
         </div>
-      </div>
+      </div >
     </>
   )
 }

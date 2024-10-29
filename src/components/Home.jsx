@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Query } from 'appwrite';
 import conf from '../conf/conf';
 import { useNavigate, Link, Navigate } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet } from '@fortawesome/free-solid-svg-icons';
 
 function Home() {
   const navigate = useNavigate();
@@ -132,6 +134,38 @@ function Home() {
     }
   }, [expenseEntries, incomeEntries]);
 
+  // swicth for 
+  const getCategoryIcon = (category) => {
+    switch (category) {
+      case 'others':
+        return faEllipsis;
+      case 'Salary':
+        return faWallet;
+      case 'Sold':
+        return faCartShopping;
+      case 'Food & Dining':
+        return faPizzaSlice;
+      case 'Shopping':
+        return faCartShopping;
+      case 'Travelling':
+        return faPlane;
+      case 'Entertainment':
+        return faVideo;
+      case 'Medical':
+        return faSuitcaseMedical;
+      case 'Bills':
+        return faReceipt;
+      case 'Rent':
+        return faHouseCircleCheck;
+      case 'Taxes':
+        return faIndianRupee;
+      case 'Investmnts':
+        return faChartSimple;
+      default:
+        return faEllipsis;
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 ml-[7rem]">
 
@@ -189,20 +223,39 @@ function Home() {
         {/* <!-- Recent Transactions Section --> */}
         <div className="w-full md:w-3/5 h-auto md:h-[20rem] bg-white rounded-lg shadow-md m-2 md:m-4 border border-gray-200 p-4">
           <div className="text-lg md:text-[1.18rem] font-bold mt-2 md:mt-4">Recent Transactions</div>
-          <div className="relative w-full flex justify-around mt-4">
-            <div className="text-gray-400 text-sm md:text-base">Type</div>
-            <div className="text-gray-400 text-sm md:text-base">Amount</div>
-            <div className="text-gray-400 text-sm md:text-base">Date</div>
-          </div>
           {combinedEntries.map((entry, index) => (
             <div
               key={index}
               className="flex justify-between bg-white p-2 border-b border-gray-300"
             >
-              <div className="flex-1">{entry.Category}</div>
-              {entry.ExpenseAmount ? <div className="text-red-600 flex-1">{entry.ExpenseAmount}</div> : <div className="text-green-500 flex-1">{entry.IncomeAmount}</div>}
+              <div className="flex-1 text-center">
+                <div className="bg-gray-300 text-center text-black rounded-full w-12 h-12 flex items-center justify-center">
+                  <FontAwesomeIcon icon={getCategoryIcon(entry.Category)} style={{ color: "green" }} />
+                </div>
+              </div>
 
-              <div className="flex-1">{new Date(entry.Date).toLocaleDateString()}</div>
+              <div className="flex-1 text-center">
+                {entry.ExpenseAmount ? <div className="text-red-600 flex-1">{entry.ExpenseAmount}</div> : <div className="text-green-500 flex-1">{entry.IncomeAmount}</div>}
+                <div className="flex-1">{entry.Category}</div>
+              </div>
+
+              <div className="flex-1 text-center">
+                <div>
+                  {new Date(entry.Date).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: '2-digit'
+                  })}
+                </div>
+                <div className="text-sm text-gray-500">
+                  {new Date(entry.Date).toLocaleTimeString('en-US', {
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: true
+                  })}
+                </div>
+              </div>
+
             </div>
           ))}
         </div>
@@ -213,7 +266,6 @@ function Home() {
         </div>
 
       </div>
-
 
     </div>
   );
