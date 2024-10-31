@@ -5,7 +5,9 @@ import { Query } from 'appwrite';
 import conf from '../conf/conf';
 import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { PieChart, Pie } from 'recharts';
+import PieChartComponent from './PieChartComponent';
 
 function Home() {
   const navigate = useNavigate();
@@ -78,7 +80,6 @@ function Home() {
 
       const totalIncome = othersInc + Salary + Sold;
       setIncome(totalIncome);
-      // console.log('TotalIncome for user:', totalIncome);
     }
 
     fetchProfilePictureUrl();
@@ -166,6 +167,22 @@ function Home() {
     }
   };
 
+  // for categories
+  const data1 = [
+    { "name": "Group A", "value": 400 },
+    { "name": "Group B", "value": 300 },
+    { "name": "Group C", "value": 300 },
+    { "name": "Group D", "value": 200 },
+    { "name": "Group E", "value": 278 },
+    { "name": "Group F", "value": 189 }
+  ];
+  useEffect(() => {
+    const fetchFromExpenseCategory = async () => {
+      
+    };
+    fetchFromExpenseCategory();
+  }, userId);
+
   return (
     <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 ml-[7rem]">
 
@@ -202,7 +219,7 @@ function Home() {
             className="w-full p-2 border text-black border-gray-300 rounded-lg"
           />
         </div>
-        <div className="bg-green-200  text-white p-6 rounded-lg shadow-md flex-1">
+        {/* <div className="bg-green-200  text-white p-6 rounded-lg shadow-md flex-1">
           Remaining Balance
           <span className="mr-2"></span>
           <input
@@ -211,7 +228,8 @@ function Home() {
             placeholder=""
             className="w-full p-2 border  text-black border-gray-300 rounded-lg"
           />
-        </div>
+        </div> */}
+
       </div>
       {/* Middle Box */}
       <div className="bg-black p-10 rounded-lg shadow-md flex-grow w-full m-4">
@@ -269,7 +287,19 @@ function Home() {
 
         {/* <!-- Categories Section --> */}
         <div className="w-full md:w-2/5 h-auto md:h-[20rem] bg-white p-4 md:p-10 rounded-lg shadow-md m-2 md:m-4 border border-gray-200">
-          <div className="text-lg font-bold">Categories</div>
+          <div>
+            <div className="text-lg font-bold flex ml-[-0.8rem] mt-[-1.2rem]">Category</div>
+            <PieChartComponent data1={data1} />
+            <div className='flex justify-between m-2 w-full'>
+              <div className='bg-gray-300 w-9 h-9 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
+              </div>
+              <div className='bg-gray-300 w-9 h-9 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
+              </div>
+
+            </div>
+          </div>
         </div>
 
       </div>
