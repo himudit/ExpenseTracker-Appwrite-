@@ -168,21 +168,50 @@ function Home() {
   };
 
   // for categories
-  const data1 = [
-    { "name": "Group A", "value": 400 },
-    { "name": "Group B", "value": 300 },
-    { "name": "Group C", "value": 300 },
-    { "name": "Group D", "value": 200 },
-    { "name": "Group E", "value": 278 },
-    { "name": "Group F", "value": 189 }
-  ];
+  // const [data1, setData1] = useState({ "name": null, "value": null });
+  const [dataCatExp, setDataCatExp] = useState([]);
+  const [data1, setData1] = useState([]);
+
   useEffect(() => {
     const fetchFromExpenseCategory = async () => {
-      
+      const result = await databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteCollection4Id,
+        [
+          Query.equal('userid', userDetails.$id)
+        ]
+      );
+      setDataCatExp(result.documents);
+      console.log(result.documents[0]);
+      if (result.documents && result.documents.length > 0) {
+        setData1([
+          { name: "others", value: result.documents[0].others },
+          { name: "Food", value: result.documents[0].FoodDining },
+          { name: "Shopping", value: result.documents[0].Shopping },
+          { name: "Travelling", value: result.documents[0].Travelling },
+          { name: "Entertainment", value: result.documents[0].Entertainment },
+          { name: "Medical", value: result.documents[0].Medical },
+          { name: "Bills", value: result.documents[0].Bills },
+          { name: "Rent", value: result.documents[0].Rent },
+          { name: "Taxes", value: result.documents[0].Taxes },
+          { name: "Investments", value: result.documents[0].Investments }
+        ]);
+      }
     };
     fetchFromExpenseCategory();
-  }, userId);
-
+  }, [userDetails]);
+  // const data1 = [
+  //   { "name": "others", "value": dataCatExp[0].others },
+  //   { "name": "Food", "value": dataCatExp[0].others },
+  //   { "name": "Shopping", "value": dataCatExp[0].others },
+  //   { "name": "Travelling", "value": dataCatExp[0].others },
+  //   { "name": "Entertainment", "value": dataCatExp[0].others },
+  //   { "name": "Medical", "value": dataCatExp[0].others },
+  //   { "name": "Bills", "value": dataCatExp[0].others },
+  //   { "name": "Rent", "value": dataCatExp[0].others },
+  //   { "name": "Taxes", "value": dataCatExp[0].others },
+  //   { "name": "Investments", "value": dataCatExp[0].others },
+  // ];
   return (
     <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 ml-[7rem]">
 
@@ -239,7 +268,7 @@ function Home() {
       <div className="relative w-full flex flex-col md:flex-row justify-between top-[-0.6rem]">
 
         {/* <!-- Recent Transactions Section --> */}
-        <div className="w-full md:w-3/5 h-auto md:h-[20rem] bg-white rounded-lg shadow-md m-2 md:m-4 border border-gray-200 p-4">
+        <div className="w-full md:w-3/6 h-auto md:h-[20rem] bg-white rounded-lg shadow-md m-2 md:m-4 border border-gray-200 p-4">
           <div className="text-lg md:text-[1.18rem] font-bold mt-2 md:mt-4">Recent Transactions</div>
           {combinedEntries.map((entry, index) => (
             <div
@@ -286,7 +315,7 @@ function Home() {
         </div>
 
         {/* <!-- Categories Section --> */}
-        <div className="w-full md:w-2/5 h-auto md:h-[20rem] bg-white p-4 md:p-10 rounded-lg shadow-md m-2 md:m-4 border border-gray-200">
+        <div className="w-full md:w-3/6 h-auto md:h-[20rem] bg-white p-4 md:p-10 rounded-lg shadow-md m-2 md:m-4 border border-gray-200">
           <div>
             <div className="text-lg font-bold flex ml-[-0.8rem] mt-[-1.2rem]">Category</div>
             <PieChartComponent data1={data1} />
@@ -297,7 +326,6 @@ function Home() {
               <div className='bg-gray-300 w-9 h-9 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
                 <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
               </div>
-
             </div>
           </div>
         </div>

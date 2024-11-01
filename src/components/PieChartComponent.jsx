@@ -1,62 +1,73 @@
 import { faLeftLong } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
-import { PieChart, Pie } from 'recharts';
-function PieChartComponent({ data1 }){
-const data01 = [
-    { "name": "Group A", "value": 400 },
-    { "name": "Group B", "value": 300 },
-    { "name": "Group C", "value": 300 },
-    { "name": "Group D", "value": 200 },
-    { "name": "Group E", "value": 278 },
-    { "name": "Group F", "value": 189 }
-];
+import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 
-const data02 = [
-    { "name": "Group A", "value": 2400 },
-    { "name": "Group B", "value": 4567 },
-    { "name": "Group C", "value": 1398 },
-    { "name": "Group D", "value": 9800 },
-    { "name": "Group E", "value": 3908 },
-    { "name": "Group F", "value": 4800 }
-];
-
-return (
-    <div
-        style={{
-            display: "flex",
-            // justifyContent: "center", 
-            // alignItems: "center",     
-            // padding: "20px",         
-            // margin: "10px",          
-            marginLeft: "10px",
-            marginTop: "2rem",
-            // backgroundColor: "#f5f5f5", // Optional background color
-        }}
-    >
-        <PieChart width={170} height={170}>
-            <Pie
-                data={data01}
-                dataKey="value"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={75}
-                fill="#8884d8"
-            />
-            {/* <Pie
-                    data={data02}
+function PieChartComponent({ data1 }) {
+    const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50", "#0088fe", "#00c49f", "#ffbb28", "#ff8042", "#0088ff", "#ff6347"];
+    return (
+        <div
+            style={{
+                // display: "flex",
+                // justifyContent: "center",
+                // alignItems: "center",
+                // padding: "20px",
+                // margin: "10px",
+                marginLeft: "2rem",
+                marginTop: "0.2rem",
+                // backgroundColor: "#f5f5f5",
+            }}
+        >
+            <PieChart width={200} height={200}>
+                <Pie
+                    data={data1}
                     dataKey="value"
                     nameKey="name"
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    fill="#82ca9d"
-                /> */}
-        </PieChart>
-    </div>
-);
+                    outerRadius={90}
+                    fill="#8884d8"
+                    // label={(entry) => `${entry.name}: ${entry.value}`}
+                    // labelLine={false} // Optional: removes the line connecting labels to slices
+                >
+                    {data1.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                    ))}
+                </Pie>
+                <Tooltip />
+            </PieChart>
+        </div >
+    );
 
 }
 
 export default PieChartComponent
+
+// import React from 'react';
+// import { PieChart, Pie, Cell, Tooltip } from 'recharts';
+
+// function PieChartComponent({ data1 }) {
+//     const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50", "#0088fe", "#00c49f", "#ffbb28", "#ff8042", "#0088ff", "#ff6347"];
+
+//     return (
+//         <PieChart width={300} height={300}>
+//             <Pie
+//                 data={data1}
+//                 dataKey="value"
+//                 nameKey="name"
+//                 cx="50%"
+//                 cy="50%"
+//                 outerRadius={70}
+//                 fill="#8884d8"
+//                 label={(entry) => `${entry.name}: ${entry.value}`}
+//                 labelLine={false} // Optional: removes the line connecting labels to slices
+//             >
+//                 {data1.map((entry, index) => (
+//                     <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+//                 ))}
+//             </Pie>
+//             <Tooltip />
+//         </PieChart>
+//     );
+// }
+
+// export default PieChartComponent;
