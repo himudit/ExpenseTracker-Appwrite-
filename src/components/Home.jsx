@@ -135,7 +135,7 @@ function Home() {
     }
   }, [expenseEntries, incomeEntries]);
 
-  // swicth for 
+  // switch for 
   const getCategoryIcon = (category) => {
     switch (category) {
       case 'others':
@@ -160,12 +160,28 @@ function Home() {
         return faHouseCircleCheck;
       case 'Taxes':
         return faIndianRupee;
-      case 'Investmnts':
+      case 'Investments':
         return faChartSimple;
       default:
         return faEllipsis;
     }
   };
+
+  const categoryColors = {
+    Shopping: 'blue',      
+    "Food & Dining": '#FFBF00',  
+    Travelling: 'purple',   
+    Entertainment: '#AA4A44',
+    Medical: 'red',      
+    Bills: '#7FFF00',     
+    Rent: '#DAA520',        
+    Taxes: '#DC143C',        
+    Investments: '#32CD32',  
+    others: '#A9A9A9',         
+    Salary: 'lightgreen',        
+    Sold: 'brown',     
+  };
+
 
   // for categories
   // const [data1, setData1] = useState({ "name": null, "value": null });
@@ -260,13 +276,14 @@ function Home() {
         </div> */}
 
       </div>
+
       {/* Middle Box */}
       <div className="bg-black p-10 rounded-lg shadow-md flex-grow w-full m-4">
         Graphs
       </div>
+
       {/* Lowest Box */}
       <div className="relative w-full flex flex-col md:flex-row justify-between top-[-0.6rem]">
-
         {/* <!-- Recent Transactions Section --> */}
         <div className="w-full md:w-3/6 h-auto md:h-[20rem] bg-white rounded-lg shadow-md m-2 md:m-4 border border-gray-200 p-4">
           <div className="text-lg md:text-[1.18rem] font-bold mt-2 md:mt-4">Recent Transactions</div>
@@ -275,14 +292,14 @@ function Home() {
               key={index}
               className="flex justify-between bg-white p-2 border-b border-gray-300"
             >
-              {/* <div className="flex justify-between"> */}
               <div className="flex space-x-2">
                 <div className="box1">  {/* first box */}
                   <div className="flex-1 text-center">
-                    <div className="bg-gray-300 text-center text-black rounded-full w-12 h-12 flex items-center justify-center">
-                      <FontAwesomeIcon icon={getCategoryIcon(entry.Category)} style={{ color: "green" }} />
+                    <div className=" text-center text-black rounded-full w-12 h-12 flex items-center justify-center">
+                      <FontAwesomeIcon icon={getCategoryIcon(entry.Category)} style={{ color: categoryColors[entry.Category] }} />
                     </div>
-                  </div></div>
+                  </div>
+                </div>
 
                 <div className="box2"> {/* second box */}
                   <div className="flex-1 text-center">
@@ -294,21 +311,14 @@ function Home() {
                         year: '2-digit'
                       })}
                     </div>
-                    {/* <div className="text-sm text-gray-500">
-                  {new Date(entry.Date).toLocaleTimeString('en-US', {
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    hour12: true
-                  })}
-                </div> */}
                   </div></div>
               </div>
 
               <div className="box3">{/* third Box */}
                 <div className="flex-1 text-center">
                   {entry.ExpenseAmount ? <div className="text-red-600 font-bold-400 flex-1">{entry.ExpenseAmount}</div> : <div className="text-green-500 font-bold-400 flex-1">{entry.IncomeAmount}</div>}
-                </div></div>
-              {/* </div> */}
+                </div>
+              </div>
 
             </div>
           ))}
