@@ -5,7 +5,7 @@ import { Query } from 'appwrite';
 import conf from '../conf/conf';
 import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faChevronLeft,faBurger } from '@fortawesome/free-solid-svg-icons';
 import { PieChart, Pie } from 'recharts';
 import PieChartComponent from './PieChartComponent';
 
@@ -145,7 +145,8 @@ function Home() {
       case 'Sold':
         return faCartShopping;
       case 'Food & Dining':
-        return faPizzaSlice;
+        // return faPizzaSlice;
+        return faBurger;
       case 'Shopping':
         return faCartShopping;
       case 'Travelling':
@@ -168,14 +169,14 @@ function Home() {
   };
 
   const categoryColors = {
-    Shopping: 'blue',      
+    Shopping: '#4D4DFF',      
     "Food & Dining": '#FFBF00',  
     Travelling: 'purple',   
-    Entertainment: '#AA4A44',
+    Entertainment: '#FF6F61',
     Medical: 'red',      
-    Bills: '#7FFF00',     
-    Rent: '#DAA520',        
-    Taxes: '#DC143C',        
+    Bills: '#797982',     
+    Rent: '#005F6A',        
+    Taxes: '#721322',        
     Investments: '#32CD32',  
     others: '#A9A9A9',         
     Salary: 'lightgreen',        
@@ -216,18 +217,7 @@ function Home() {
     };
     fetchFromExpenseCategory();
   }, [userDetails]);
-  // const data1 = [
-  //   { "name": "others", "value": dataCatExp[0].others },
-  //   { "name": "Food", "value": dataCatExp[0].others },
-  //   { "name": "Shopping", "value": dataCatExp[0].others },
-  //   { "name": "Travelling", "value": dataCatExp[0].others },
-  //   { "name": "Entertainment", "value": dataCatExp[0].others },
-  //   { "name": "Medical", "value": dataCatExp[0].others },
-  //   { "name": "Bills", "value": dataCatExp[0].others },
-  //   { "name": "Rent", "value": dataCatExp[0].others },
-  //   { "name": "Taxes", "value": dataCatExp[0].others },
-  //   { "name": "Investments", "value": dataCatExp[0].others },
-  // ];
+  
   return (
     <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 ml-[7rem]">
 
@@ -287,7 +277,7 @@ function Home() {
         {/* <!-- Recent Transactions Section --> */}
         <div className="w-full md:w-3/6 h-auto md:h-[20rem] bg-white rounded-lg shadow-md m-2 md:m-4 border border-gray-200 p-4">
           <div className="text-lg md:text-[1.18rem] font-bold mt-2 md:mt-4">Recent Transactions</div>
-          {combinedEntries.map((entry, index) => (
+          {combinedEntries.slice(0, 4).map((entry, index) => (
             <div
               key={index}
               className="flex justify-between bg-white p-2 border-b border-gray-300"
@@ -296,7 +286,7 @@ function Home() {
                 <div className="box1">  {/* first box */}
                   <div className="flex-1 text-center">
                     <div className=" text-center text-black rounded-full w-12 h-12 flex items-center justify-center">
-                      <FontAwesomeIcon icon={getCategoryIcon(entry.Category)} style={{ color: categoryColors[entry.Category] }} />
+                      <FontAwesomeIcon icon={getCategoryIcon(entry.Category)} style={{ color: categoryColors[entry.Category],fontSize:"1.4rem" } } />
                     </div>
                   </div>
                 </div>

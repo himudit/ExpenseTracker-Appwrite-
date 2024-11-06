@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice,faBurger, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet } from '@fortawesome/free-solid-svg-icons';
 import LottieAnimation from './LottieAnimation';
 import { account, databases, storage } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid'
@@ -368,11 +368,11 @@ function Expense() {
                                             <FontAwesomeIcon icon={faEllipsis} /> </div>others</div>
 
                                     <div
-                                        onClick={() => settingCategory(faPizzaSlice, 'Food & Dining')}
+                                        onClick={() => settingCategory(faBurger, 'Food & Dining')}
                                         className="flex items-center space-x-2 cursor-pointer"
                                     >
                                         <div className="bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center">
-                                            <FontAwesomeIcon icon={faPizzaSlice} color="orange" />
+                                            <FontAwesomeIcon icon={faBurger} color="orange" />
                                         </div>
                                         <span>Food</span>
                                     </div>
