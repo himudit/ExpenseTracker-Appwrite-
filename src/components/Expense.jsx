@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice,faBurger, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faBurger, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import LottieAnimation from './LottieAnimation';
 import { account, databases, storage } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid'
@@ -321,9 +321,7 @@ function Expense() {
     }
 
     return (
-        <div className="flex flex-wrap justify-center h-screen ml-[7rem] bg-gradient-to-r from-gray-100  to-blue-900 items-center">
-            {/* // <div className="flex flex-wrap justify-center h-screen ml-[7rem] "> */}
-
+        <div className="flex flex-wrap justify-center h-screen ml-[7rem] bg-gradient-to-r items-center">
             {/* first div */}
             <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col mr-6  bg-white/30 backdrop-blur-md border border-white/50  p-6">
                 <div className="p-4 border-b">
@@ -358,12 +356,15 @@ function Expense() {
                                     <FontAwesomeIcon icon={selectedCategory.icon} className="mr-2" />
                                     <span>{selectedCategory.text}</span>
                                 </div>
-                                <div className='cursor-pointer' onClick={handleIconClick}><FontAwesomeIcon icon={faChevronRight} /></div>
+                                <div className='cursor-pointer' onClick={handleIconClick}>{isOpen?<FontAwesomeIcon icon={faAngleDown}/> : <FontAwesomeIcon icon={faChevronRight} />}</div>
                             </div>
                             {isOpen && (
-                                <div ref={divRef} className="grid grid-cols-3 gap-4 p-4 h-[16rem] bg-gray-200 rounded shadow-md mt-2">
+                                <div
+                                ref={divRef}
+                                className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4 h-[16rem] bg-gray-200 rounded shadow-md mt-2"
+                              >
+                                {/* <div ref={divRef} className="grid grid-cols-3 gap-4 p-4 h-[16rem] bg-gray-200 rounded shadow-md mt-2"> */}
                                     <div onClick={() => settingCategory(faEllipsis, 'others')} className="flex items-center justify-center cursor-pointer">
-                                        {/* <div className='cursor-pointer'> */}
                                         <div className="cursor-pointer bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center">
                                             <FontAwesomeIcon icon={faEllipsis} /> </div>others</div>
 
@@ -393,7 +394,6 @@ function Expense() {
 
                                     <div onClick={() => settingCategory(faChartSimple, 'Investments')} className="flex items-center justify-center cursor-pointer"> <div className="bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center"><FontAwesomeIcon icon={faChartSimple} /></div>Investments</div>
                                 </div>
-
                             )}
 
                         </div>
@@ -430,26 +430,26 @@ function Expense() {
 
             </div>
 
-            {/* second div */}
-            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4 bg-white/30 backdrop-blur-md border-white/50">
-                <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4 bg-white/30 backdrop-blur-md border-white/50 hover:border-blue-800 hover:shadow-[0_0_20px_5px_rgba(0, 68, 255, 0.8)] transition-all duration-300 ease-in-out">
-                    Add Receipt
-                    <FontAwesomeIcon className='w-[10%] h-[10%] cursor-pointer' icon={faCirclePlus} onClick={handleIconClickFile} />
-                    <input
-                        type="file" ref={fileInputRef}
-                        onChange={handleFileChange}
-                        style={{ display: 'none' }}
-                    />
-                    {fileName && (
-                        <div className="mt-2 text-sm text-gray-600">
-                            Selected file: {fileName}
-                        </div>
-                    )}
+                {/* second div */}
+                <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4 bg-white/30 backdrop-blur-md border-white/50">
+                    <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4 bg-white/30 backdrop-blur-md border-white/50 hover:border-blue-800 hover:shadow-[0_0_20px_5px_rgba(0, 68, 255, 0.8)] transition-all duration-300 ease-in-out">
+                        Add Receipt
+                        <FontAwesomeIcon className='w-[10%] h-[10%] cursor-pointer' icon={faCirclePlus} onClick={handleIconClickFile} />
+                        <input
+                            type="file" ref={fileInputRef}
+                            onChange={handleFileChange}
+                            style={{ display: 'none' }}
+                        />
+                        {fileName && (
+                            <div className="mt-2 text-sm text-gray-600">
+                                Selected file: {fileName}
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
 
-        </div>
-    );
+            </div>
+            );
 }
 
-export default Expense;
+            export default Expense;
