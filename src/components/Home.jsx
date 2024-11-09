@@ -135,7 +135,7 @@ function Home() {
       const combined = [...expenseEntries, ...incomeEntries];
       const sortedEntries = combined.sort((a, b) => new Date(b.Date) - new Date(a.Date));
       setCombinedEntries(sortedEntries);
-      setEndingIndex(sortedEntries.length1 - 1);
+      setEndingIndex(sortedEntries.length - 1);
     }
   }, [expenseEntries, incomeEntries]);
 
@@ -186,28 +186,24 @@ function Home() {
     Sold: 'brown',
   };
   const LeftArrowT = () => {
+    setRightT(true);
     if (indexT - 3 == 0) {
-      setLeftT(false);
-      setRightT(true);
       setindexT(indexT - 3);
-    } else if (indexT - 3 < 0) {
       setLeftT(false);
-      setRightT(true);
-      setindexT(0);
     } else {
       setindexT(indexT - 3);
     }
   }
 
   const RightArrowT = () => {
-    setindexT(indexT + 3);
-    if (endingIndex <= indexT+3) {
-      setRightT(false);
-      setLeftT(false);
+    setLeftT(true);
+    if (indexT + 4 >= endingIndex) {
       setindexT(indexT + 3);
+      setRightT(false);
     } else {
       setindexT(indexT + 3);
     }
+    console.log(indexT, endingIndex);
   }
 
   // for categories
@@ -301,54 +297,72 @@ function Home() {
       <div className="relative w-full flex flex-col md:flex-row justify-between top-[-0.6rem]">
 
         {/* <!-- Recent Transactions Section --> */}
-        <div className="w-full md:w-3/6 h-auto md:h-[20rem] bg-white rounded-lg shadow-md m-2 md:m-4 border border-gray-200 p-4">
+        <div className="w-full md:w-3/6 h-auto md:h-[20rem] bg-white rounded-lg shadow-md m-2 md:m-4 border border-gray-200 p-4 relative">
           <div className="text-lg md:text-[1.18rem] font-bold mt-2 md:mt-4">Recent Transactions</div>
-          {combinedEntries.slice(indexT, indexT + 3).map((entry, index) => (
-            <div
-              key={index}
-              className="flex justify-between bg-white p-2 border-b border-gray-300"
-            >
-              <div className="flex space-x-2">
-                <div className="box1">  {/* first box */}
-                  <div className="flex-1 text-center">
-                    <div className=" text-center text-black rounded-full w-12 h-12 flex items-center justify-center">
-                      <FontAwesomeIcon icon={getCategoryIcon(entry.Category)} style={{ color: categoryColors[entry.Category], fontSize: "1.4rem" }} />
+
+          {/* Transaction Entries */}
+          <div className="overflow-y-auto  min-h-[13rem] max-h-[13rem]">
+            {combinedEntries.slice(indexT, indexT + 3).map((entry, index) => (
+              <div
+                key={index}
+                className="flex justify-between bg-white p-2 border-b border-gray-300"
+              >
+                <div className="flex space-x-2">
+                  <div className="box1">
+                    <div className="flex-1 text-center">
+                      <div className="text-center text-black rounded-full w-12 h-12 flex items-center justify-center">
+                        <FontAwesomeIcon icon={getCategoryIcon(entry.Category)} style={{ color: categoryColors[entry.Category], fontSize: "1.4rem" }} />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="box2">
+                    <div className="flex-1 text-center">
+                      <div className="font-bold">{entry.Category}</div>
+                      <div className='text-gray-500 text-sm'>
+                        {new Date(entry.Date).toLocaleDateString('en-GB', {
+                          day: '2-digit',
+                          month: 'short',
+                          year: '2-digit'
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className="box2"> {/* second box */}
+                <div className="box3">
                   <div className="flex-1 text-center">
-                    <div className="flex-1 font-bold">{entry.Category}</div>
-                    <div className='text-gray-500 text-sm'>
-                      {new Date(entry.Date).toLocaleDateString('en-GB', {
-                        day: '2-digit',
-                        month: 'short',
-                        year: '2-digit'
-                      })}
-                    </div>
-                  </div></div>
-              </div>
-              <div className="box3">{/* third Box */}
-                <div className="flex-1 text-center">
-                  {entry.ExpenseAmount ? <div className="text-red-600 font-bold-400 flex-1">{entry.ExpenseAmount}</div> : <div className="text-green-500 font-bold-400 flex-1">{entry.IncomeAmount}</div>}
+                    {entry.ExpenseAmount ? (
+                      <div className="text-red-600 font-bold-400">{entry.ExpenseAmount}</div>
+                    ) : (
+                      <div className="text-green-500 font-bold-400">{entry.IncomeAmount}</div>
+                    )}
+                  </div>
                 </div>
               </div>
-
-            </div>
-          ))}
-          <div className='flex justify-between m-2 w-full'>
-            {leftT ? <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={LeftArrowT}>
-              <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
-            </div> : <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
-              <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
-            </div>}
-            {rightT ? <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={RightArrowT} >
-              <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
-            </div> : <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
-              <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
-            </div>}
+            ))}
           </div>
 
+          {/* Navigation Arrows */}
+          <div className='flex justify-between w-full'>
+            {leftT ? (
+              <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={LeftArrowT}>
+                <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
+              </div>
+            ) : (
+              <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
+              </div>
+            )}
+
+            {rightT ? (
+              <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={RightArrowT}>
+                <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
+              </div>
+            ) : (
+              <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* <!-- Categories Section --> */}
