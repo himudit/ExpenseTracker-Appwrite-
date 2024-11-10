@@ -53,7 +53,7 @@ function Home() {
       )
       const userDocument = userData.documents[0];
       const others = userDocument.others || 0;
-      const foodDining = userDocument.FoodDining || 0;
+      const food = userDocument.Food || 0;
       const shopping = userDocument.Shopping || 0;
       const travelling = userDocument.Travelling || 0;
       const entertainment = userDocument.Entertainment || 0;
@@ -62,7 +62,7 @@ function Home() {
       const rent = userDocument.Rent || 0;
       const taxes = userDocument.Taxes || 0;
       const investments = userDocument.Investments || 0;
-      const totalExpense = others + foodDining + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
+      const totalExpense = others + food + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
       setExpenses(totalExpense);
       // console.log('TotalExpense for user:', totalExpense);
 
@@ -148,7 +148,7 @@ function Home() {
         return faWallet;
       case 'Sold':
         return faCartShopping;
-      case 'Food & Dining':
+      case 'Food':
         return faBurger;
       case 'Shopping':
         return faCartShopping;
@@ -173,7 +173,7 @@ function Home() {
 
   const categoryColors = {
     Shopping: '#4D4DFF',
-    "Food & Dining": '#FFBF00',
+    "Food": '#FFBF00',
     Travelling: 'purple',
     Entertainment: '#FF6F61',
     Medical: 'red',
@@ -187,8 +187,8 @@ function Home() {
   };
   const LeftArrowT = () => {
     setRightT(true);
-    if (indexT - 3 == 0) {
-      setindexT(indexT - 3);
+    if (indexT - 3 == 0 || indexT == 0) {
+      // setindexT(indexT - 3);
       setLeftT(false);
     } else {
       setindexT(indexT - 3);
@@ -198,7 +198,7 @@ function Home() {
   const RightArrowT = () => {
     setLeftT(true);
     if (indexT + 4 >= endingIndex) {
-      setindexT(indexT + 3);
+      // setindexT(indexT + 3);
       setRightT(false);
     } else {
       setindexT(indexT + 3);
@@ -224,7 +224,7 @@ function Home() {
       if (result.documents && result.documents.length > 0) {
         setData1([
           { name: "others", value: result.documents[0].others },
-          { name: "Food", value: result.documents[0].FoodDining },
+          { name: "Food", value: result.documents[0].Food },
           { name: "Shopping", value: result.documents[0].Shopping },
           { name: "Travelling", value: result.documents[0].Travelling },
           { name: "Entertainment", value: result.documents[0].Entertainment },
@@ -353,7 +353,7 @@ function Home() {
               </div>
             )}
 
-            {rightT ? (
+            {rightT && endingIndex >= 0 ? (
               <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={RightArrowT}>
                 <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
               </div>

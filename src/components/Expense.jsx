@@ -233,10 +233,10 @@ function Expense() {
                     const item = selectedCategory.text;
                     const document = res.documents[0];
                     const documentId = document.$id;
-                    if (selectedCategory.text === 'Food & Dining') {
-                        const value = document.FoodDining;
+                    if (selectedCategory.text === 'Food') {
+                        const value = document.Food;
                         const updatedData = {
-                            FoodDining: value + Number(amount),
+                            Food: value + Number(amount),
                         };
                         const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
                         promise.then(() => {
@@ -290,7 +290,7 @@ function Expense() {
                 const data = {
                     userid: String(userId),
                     others: Number(0),
-                    FoodDining: Number(0),
+                    Food: Number(0),
                     Shopping: Number(0),
                     Travelling: Number(0),
                     Entertainment: Number(0),
@@ -300,8 +300,8 @@ function Expense() {
                     Taxes: Number(0),
                     Investments: Number(0),
                 }
-                if (selectedCategory.text === 'Food & Dining') {
-                    data['FoodDining'] = expense.ExpenseAmount;
+                if (selectedCategory.text === 'Food') {
+                    data['Food'] = expense.ExpenseAmount;
                 } else {
                     if (expense.Category in data) {
                         data[expense.Category] = expense.ExpenseAmount;
@@ -369,7 +369,7 @@ function Expense() {
                                             <FontAwesomeIcon icon={faEllipsis} /> </div>others</div>
 
                                     <div
-                                        onClick={() => settingCategory(faBurger, 'Food & Dining')}
+                                        onClick={() => settingCategory(faBurger, 'Food')}
                                         className="flex items-center space-x-2 cursor-pointer"
                                     >
                                         <div className="bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center">
