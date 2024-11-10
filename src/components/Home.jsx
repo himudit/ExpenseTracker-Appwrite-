@@ -240,7 +240,7 @@ function Home() {
   }, [userDetails]);
 
   return (
-    <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 ml-[7rem]">
+    <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 ml-[7rem] ">
 
       <div className='flex w-full h-[3rem] space-x-4 p-4 border-b-2 border-black-500'>
         <div className='caret-black font-bold'>Dashboard</div>

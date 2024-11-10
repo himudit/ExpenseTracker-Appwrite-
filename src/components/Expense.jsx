@@ -58,6 +58,11 @@ function Expense() {
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
     const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const fD = new Date(formattedDate).toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: '2-digit'
+    });
     const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     const formattedDateTime = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}
     ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
@@ -323,19 +328,41 @@ function Expense() {
     return (
         <div className="flex flex-wrap justify-center h-screen ml-[7rem] bg-gradient-to-r items-center">
             {/* first div */}
-            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col mr-6  bg-white/30 backdrop-blur-md border border-white/50  p-6">
+            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col mr-6  bg-white/30  border border-white/50  p-6">
                 <div className="p-4 border-b">
                     <div className="flex justify-between items-center">
-                        <div className="text-sm font-medium text-gray-600">{formattedDate}</div>
-                        <div className="text-sm font-medium text-gray-600">{formattedTime}</div>
+                        <div className="text-sm text-[20px]  text-black">{fD}</div>
+                        {choice === "Expense" ? <>  <div
+                            className="text-sm text-[17px] text-white cursor-pointer bg-gray-300 w-[7rem] h-[2.7rem] border rounded-md flex items-center justify-center"
+                            onClick={chooseIncome}
+                        >
+                            Income
+                        </div>
+                            <div
+                                className="text-sm text-[17px] text-white cursor-pointer bg-gray-600 w-[7rem] h-[2.7rem] border rounded-md flex items-center justify-center"
+                                onClick={chooseExpense}
+                            >
+                                Expense
+                            </div></> : <>  <div
+                                className="text-sm text-[17px] text-white cursor-pointer bg-gray-600 w-[7rem] h-[2.7rem] border rounded-md flex items-center justify-center"
+                                onClick={chooseIncome}
+                            >
+                                Income
+                            </div>
+                            <div
+                                className="text-sm text-[17px] text-white cursor-pointer bg-gray-300 w-[7rem] h-[2.7rem] border rounded-md flex items-center justify-center"
+                                onClick={chooseExpense}
+                            >
+                                Expense
+                            </div></>}
                     </div>
                 </div>
-                <div className="p-4 border-b">
+                {/* <div className="p-4 border-b">
                     <div className="flex justify-between items-center">
                         <div className="text-sm font-medium text-gray-600 cursor-pointer" onClick={chooseIncome}>Income</div>
                         <div className="text-sm font-medium text-gray-600 cursor-pointer" onClick={chooseExpense}>Expense</div>
                     </div>
-                </div>
+                </div> */}
                 <div className="flex-grow overflow-y-auto p-4">
                     <div className="mb-4">
                         <div className="text-sm font-medium text-gray-700 mb-1">
@@ -356,14 +383,14 @@ function Expense() {
                                     <FontAwesomeIcon icon={selectedCategory.icon} className="mr-2" />
                                     <span>{selectedCategory.text}</span>
                                 </div>
-                                <div className='cursor-pointer' onClick={handleIconClick}>{isOpen?<FontAwesomeIcon icon={faAngleDown}/> : <FontAwesomeIcon icon={faChevronRight} />}</div>
+                                <div className='cursor-pointer' onClick={handleIconClick}>{isOpen ? <FontAwesomeIcon icon={faAngleDown} /> : <FontAwesomeIcon icon={faChevronRight} />}</div>
                             </div>
                             {isOpen && (
                                 <div
-                                ref={divRef}
-                                className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4 h-[16rem] bg-gray-200 rounded shadow-md mt-2"
-                              >
-                                {/* <div ref={divRef} className="grid grid-cols-3 gap-4 p-4 h-[16rem] bg-gray-200 rounded shadow-md mt-2"> */}
+                                    ref={divRef}
+                                    className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4 h-[16rem] bg-gray-200 rounded shadow-md mt-2"
+                                >
+                                    {/* <div ref={divRef} className="grid grid-cols-3 gap-4 p-4 h-[16rem] bg-gray-200 rounded shadow-md mt-2"> */}
                                     <div onClick={() => settingCategory(faEllipsis, 'others')} className="flex items-center justify-center cursor-pointer">
                                         <div className="cursor-pointer bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center">
                                             <FontAwesomeIcon icon={faEllipsis} /> </div>others</div>
@@ -423,33 +450,34 @@ function Expense() {
                     <div className='p-2 cursor-pointer' onClick={addNew}>
                         <FontAwesomeIcon icon={faXmark} /> Cancel
                     </div>
-                    <div className='p-2 cursor-pointer' onClick={addNew}>
+                    <div className='ml-[-4rem] p-2 cursor-pointer' onClick={addNew}>
                         <FontAwesomeIcon icon={faCheck} /> Save
                     </div>
                 </div>
 
             </div>
 
-                {/* second div */}
-                <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4 bg-white/30 backdrop-blur-md border-white/50">
-                    <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4 bg-white/30 backdrop-blur-md border-white/50 hover:border-blue-800 hover:shadow-[0_0_20px_5px_rgba(0, 68, 255, 0.8)] transition-all duration-300 ease-in-out">
-                        Add Receipt
-                        <FontAwesomeIcon className='w-[10%] h-[10%] cursor-pointer' icon={faCirclePlus} onClick={handleIconClickFile} />
-                        <input
-                            type="file" ref={fileInputRef}
-                            onChange={handleFileChange}
-                            style={{ display: 'none' }}
-                        />
-                        {fileName && (
-                            <div className="mt-2 text-sm text-gray-600">
-                                Selected file: {fileName}
-                            </div>
-                        )}
-                    </div>
+            {/* second div */}
+            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4 bg-white/30 border-white/50">
+                <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4 bg-white/30 backdrop-blur-md border-white/50 hover:border-gray-600 hover:shadow-[0_0_20px_5px_rgba(0, 68, 255, 0.8)] transition-all duration-300 ease-in-out">
+                    <div className='text-[2rem]'> Add Receipt</div>
+                    <div>Upload your receipt for better tracking</div>
+                    <FontAwesomeIcon className='w-[11%] h-[11%] cursor-pointer text-gray-600' icon={faCirclePlus} onClick={handleIconClickFile} />
+                    <input
+                        type="file" ref={fileInputRef}
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                    />
+                    {fileName && (
+                        <div className="mt-2 text-sm text-gray-600">
+                            Selected file: {fileName}
+                        </div>
+                    )}
                 </div>
-
             </div>
-            );
+
+        </div>
+    );
 }
 
-            export default Expense;
+export default Expense;
