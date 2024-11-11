@@ -9,7 +9,7 @@ import Logo from '../assets/Logo.jpg';
 function Navbar() {
   return (
     <>
-      <div className="fixed top-0 left-0 h-full w-25 bg-dark-white flex flex-col items-center py-4 border-r-2 border-gray-300 bg-white">
+      <div className="fixed top-0 left-0 h-full w-25 bg-dark-white flex flex-col items-center py-4 border-r-2 border-gray-300 bg-black">
 
         {/* logo */}
         <div className="mb-8 flex flex-col items-center">

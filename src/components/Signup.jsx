@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { account, databases, storage } from '../appwrite/appwriteConfig'
 import { useNavigate } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
@@ -39,36 +39,52 @@ function Signup() {
   }, []);
 
   //Signup
+  // const signupUser = async (e) => {
+  //   e.preventDefault()
+
+  //   const promise = account.create(
+  //     uuidv4(),
+  //     user.email,
+  //     user.password,
+  //     user.name
+  //   );
+  //   promise.then(
+  //     function (response) {
+  //       const data = {
+  //         userid: String(userId),
+  //         IncomeAmount: Number(0),
+  //         ExpenseAmount: Number(0),
+  //         BalanceLeft: Number(0),
+  //         Date: String(formattedDateTime),
+  //       }
+  //       const promise1 = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection1Id, uuidv4(), data);
+  //       promise1.then(() => {
+  //         console.log("Done");
+  //       })
+  //       navigate("/profile") //success
+  //     },
+  //     function (error) {
+  //       console.log(error); //failure
+  //     }
+  //   )
+  // }
   const signupUser = async (e) => {
-    e.preventDefault()
-
-    const promise = account.create(
-      uuidv4(),
-      user.email,
-      user.password,
-      user.name
-    );
-    promise.then(
-      function (response) {
-        const data = {
-          userid: String(userId),
-          IncomeAmount: Number(0),
-          ExpenseAmount: Number(0),
-          BalanceLeft: Number(0),
-          Date: String(formattedDateTime),
-        }
-        const promise1 = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection1Id, uuidv4(), data);
-        promise1.then(() => {
-          console.log("Done");
-        })
-        navigate("/profile") //success
-      },
-      function (error) {
-        console.log(error); //failure
-      }
-    )
-  }
-
+    e.preventDefault();
+    const promise = account.create(uuidv4(), user.email, user.password, user.name);
+    promise.then((response) => {
+      const data = {
+        userid: String(userId),
+        IncomeAmount: Number(0),
+        ExpenseAmount: Number(0),
+        BalanceLeft: Number(0),
+        Date: String(formattedDateTime),
+      };
+      databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection1Id, uuidv4(), data)
+        .then(() => console.log("Done"));
+      navigate("/profile");
+    }).catch((error) => console.log(error));
+  };
+  
   return (
     <>
       {/* <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8"> */}
