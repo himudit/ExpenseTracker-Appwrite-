@@ -132,8 +132,8 @@ function Profile() {
     <>
       {userDetails ? (
         <>
-          <div className='bg-gray-700 w-full h-[10rem]'>
-            <div className='flex justify-center'>
+          <div className="min-h-min w-[300px] mx-auto shadow-md flex justify-between text-right py-3 px-3 mt-2 rounded-md">
+            <div className='flex flex-col'>
               <div>
                 {/* Profile Picture */}
                 <div className="absolute top-1 md:top-3 md:right-[10rem] lg:top-10 lg:right-[43rem]">
@@ -141,7 +141,7 @@ function Profile() {
                     src={profilePictureUrl}
                     alt="Profile"
                     style={{ height: '13rem', width: '12.5rem' }} // Adjust values as needed
-                    className="rounded-full cursor-pointer border-[0.2rem] border-white"
+                    className="rounded-full cursor-pointer"
                   />
                   <input
                     type="file"
@@ -158,6 +158,14 @@ function Profile() {
                 <div>
                   <p className="text-xl text-black">Hello {userDetails.name}</p>
                 </div>
+              </div>
+              <div>
+                <button
+                  className="bg-red-400 w-40 text-white p-1 rounded-md"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
               </div>
             </div>
           </div>
