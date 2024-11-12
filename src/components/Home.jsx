@@ -255,14 +255,14 @@ function Home() {
       </div>
       {/* logic for profile and good morning */}
       <div className='caret-black'>Good Morning {userDetails ? userDetails.name : "Nothing"}</div>
-      <div className="flex w-full space-x-4 p-4">
+      {/* <div className="flex w-full space-x-4 p-4">
         <div className="bg-blue-200 w-[33%] text-white p-6 rounded-lg shadow-md ">
           Total Income
           <span className="mr-2"></span>
           <input
             type="text"
             value={income}
-            className="w-full p-2 border text-black border-gray-300 rounded-lg"
+            className="w-full p-2 border text-black text-[100%] border-gray-300 rounded-lg"
           />
         </div>
         <div className="bg-purple-200 p-6 w-[33%] text-white rounded-lg shadow-md ">
@@ -272,7 +272,7 @@ function Home() {
             type="text"
             value={expenses}
             placeholder=""
-            className="w-full p-2 border  text-black border-gray-300 rounded-lg"
+            className="w-full p-2 border  text-black text-[100%] border-gray-300 rounded-lg"
           />
         </div>
         <div className="bg-green-200 w-[33%] text-white p-6 rounded-lg shadow-md">
@@ -282,10 +282,42 @@ function Home() {
             type="text"
             value={budget}
             placeholder=""
-            className="w-full p-2 border  text-black border-gray-300 rounded-lg"
+            className="w-full p-2 border  text-black text-[100%] border-gray-300 rounded-lg"
+          />
+        </div>
+      </div> */}
+      <div className="flex flex-wrap w-full space-y-4 sm:space-y-0 sm:space-x-4 p-4">
+        <div className="bg-blue-200 text-white p-6 rounded-lg shadow-md flex-1 w-full sm:w-auto">
+          Total Income
+          <span className="mr-2"></span>
+          <input
+            type="text"
+            value={income}
+            className="w-full p-2 border text-black border-gray-300 rounded-lg"
+          />
+        </div>
+        <div className="bg-purple-200 p-6 text-white rounded-lg shadow-md flex-1 w-full sm:w-auto">
+          Total Expense
+          <span className="mr-2"></span>
+          <input
+            type="text"
+            value={expenses}
+            placeholder=""
+            className="w-full p-2 border text-black border-gray-300 rounded-lg"
+          />
+        </div>
+        <div className="bg-green-200 text-white p-6 rounded-lg shadow-md flex-1 w-full sm:w-auto">
+          Remaining Balance
+          <span className="mr-2"></span>
+          <input
+            type="text"
+            value={budget}
+            placeholder=""
+            className="w-full p-2 border text-black border-gray-300 rounded-lg"
           />
         </div>
       </div>
+
 
       {/* Middle Box */}
       <div className="bg-black p-10  rounded-lg shadow-md flex-grow w-full m-4">
