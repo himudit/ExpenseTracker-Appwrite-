@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { account } from '../appwrite/appwriteConfig'
-import { useNavigate } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 
 function Login() {
   const navigate = useNavigate()
@@ -81,12 +81,12 @@ function Login() {
 
                 <div className="flex items-center justify-between">
                   <div className="text-sm">
-                    <a
-                      href="/signup"
+                    <NavLink
+                      to="/signup"
                       className="font-medium text-indigo-600 hover:text-indigo-500"
                     >
                       Don't have Account, Sign Up
-                    </a>
+                    </NavLink>
                   </div>
                 </div>
 
@@ -101,7 +101,7 @@ function Login() {
                 </div>
               </form>
 
-              <div className="mt-6">
+              {/* <div className="mt-6">
                 <div className="relative">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-gray-300" />
@@ -173,7 +173,9 @@ function Login() {
                     </a>
                   </div>
                 </div>
-              </div>
+              </div> */}
+
+              
             </div>
           </div>
         </div>

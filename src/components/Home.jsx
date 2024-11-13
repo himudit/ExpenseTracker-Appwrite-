@@ -74,7 +74,7 @@ function Home() {
         ]
       )
       const userDocumentInc = userDataInc.documents[0];
-      const othersInc= userDocumentInc.others || 0;
+      const othersInc = userDocumentInc.others || 0;
       const Salary = userDocumentInc.Salary || 0;
       const Sold = userDocumentInc.Sold || 0;
 
@@ -135,7 +135,7 @@ function Home() {
       const combined = [...expenseEntries, ...incomeEntries];
       const sortedEntries = combined.sort((a, b) => new Date(b.Date) - new Date(a.Date));
       setCombinedEntries(sortedEntries);
-      setEndingIndex(sortedEntries.length - 1);
+      setEndingIndex(sortedEntries.length);
     }
   }, [expenseEntries, incomeEntries]);
 
@@ -188,7 +188,7 @@ function Home() {
   const LeftArrowT = () => {
     setRightT(true);
     if (indexT - 3 == 0 || indexT == 0) {
-      // setindexT(indexT - 3);
+      setindexT(indexT - 3);
       setLeftT(false);
     } else {
       setindexT(indexT - 3);
@@ -197,8 +197,8 @@ function Home() {
 
   const RightArrowT = () => {
     setLeftT(true);
-    if (indexT + 4 >= endingIndex) {
-      // setindexT(indexT + 3);
+    if (indexT + 6 >= endingIndex) {
+      setindexT(indexT + 3);
       setRightT(false);
     } else {
       setindexT(indexT + 3);
@@ -311,7 +311,7 @@ function Home() {
           <span className="mr-2"></span>
           <input
             type="text"
-            value={budget}
+            value={income - expenses}
             placeholder=""
             className="w-full p-2 border text-black border-gray-300 rounded-lg"
           />

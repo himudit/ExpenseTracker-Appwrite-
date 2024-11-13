@@ -38,53 +38,23 @@ function Signup() {
     getUser();
   }, []);
 
-  //Signup
   // const signupUser = async (e) => {
-  //   e.preventDefault()
+  //   e.preventDefault();
+  //   const promise = account.create(uuidv4(), user.email, user.password, user.name);
+  //   promise.then((response) => {
+  //     const data = {
+  //       userid: String(userId),
+  //       IncomeAmount: Number(0),
+  //       ExpenseAmount: Number(0),
+  //       BalanceLeft: Number(0),
+  //       Date: String(formattedDateTime),
+  //     };
+  //     databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection1Id, uuidv4(), data)
+  //       .then(() => console.log("Done"));
+  //     navigate("/profile");
+  //   }).catch((error) => console.log(error));
+  // };
 
-  //   const promise = account.create(
-  //     uuidv4(),
-  //     user.email,
-  //     user.password,
-  //     user.name
-  //   );
-  //   promise.then(
-  //     function (response) {
-  //       const data = {
-  //         userid: String(userId),
-  //         IncomeAmount: Number(0),
-  //         ExpenseAmount: Number(0),
-  //         BalanceLeft: Number(0),
-  //         Date: String(formattedDateTime),
-  //       }
-  //       const promise1 = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection1Id, uuidv4(), data);
-  //       promise1.then(() => {
-  //         console.log("Done");
-  //       })
-  //       navigate("/profile") //success
-  //     },
-  //     function (error) {
-  //       console.log(error); //failure
-  //     }
-  //   )
-  // }
-  const signupUser = async (e) => {
-    e.preventDefault();
-    const promise = account.create(uuidv4(), user.email, user.password, user.name);
-    promise.then((response) => {
-      const data = {
-        userid: String(userId),
-        IncomeAmount: Number(0),
-        ExpenseAmount: Number(0),
-        BalanceLeft: Number(0),
-        Date: String(formattedDateTime),
-      };
-      databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection1Id, uuidv4(), data)
-        .then(() => console.log("Done"));
-      navigate("/profile");
-    }).catch((error) => console.log(error));
-  };
-  
   return (
     <>
       {/* <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8"> */}
@@ -176,11 +146,12 @@ function Signup() {
               </div>
             </form>
 
-            <div className="mt-6">
+            {/* <div className="mt-6">
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300" />
                 </div>
+
                 <div className="relative flex justify-center text-sm">
                   <span className="px-2 bg-white text-gray-500">
                     Or continue with
@@ -248,7 +219,9 @@ function Signup() {
                   </a>
                 </div>
               </div>
-            </div>
+            </div> */}
+
+
           </div>
         </div>
       </div>
