@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { databases, account, storage } from '../appwrite/appwriteConfig';
 import { useNavigate, Link } from 'react-router-dom'
 import { Query } from 'appwrite';
 import conf from '../conf/conf';
 import { v4 as uuidv4 } from 'uuid';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 function Profile() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const fileInputRef = useRef();
   const handleInputChange = (e) => {
-    setDish(e.target.value);
+    setDish(e.target.value); se
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -111,6 +114,10 @@ function Profile() {
     }
   }
 
+  const editImage = () => {
+    fileInputRef.current.click();
+  };
+
   // getting the data from collection(history)
   const [userId, setUserId] = useState(null);
 
@@ -143,11 +150,15 @@ function Profile() {
                     style={{ height: '13rem', width: '12.5rem' }} // Adjust values as needed
                     className="rounded-full cursor-pointer border-[0.2rem] border-white"
                   />
-                  <input
-                    type="file"
-                    onChange={handleFileChange}
-                    className="mt-2"
-                  />
+                  <div><FontAwesomeIcon icon={faPenToSquare} className="cursor-pointer h-[1.3rem] w-[1.3rem]" onClick={editImage} />
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      onChange={handleFileChange}
+                      className="hidden mt-2"
+                    />
+                  </div>
+
                   <button
                     onClick={handleUpload}
                     className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
@@ -155,6 +166,7 @@ function Profile() {
                     Upload Profile Picture
                   </button>
                 </div>
+
                 <div>
                   <p className="text-xl text-black">Hello {userDetails.name}</p>
                 </div>

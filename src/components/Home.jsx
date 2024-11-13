@@ -74,7 +74,7 @@ function Home() {
         ]
       )
       const userDocumentInc = userDataInc.documents[0];
-      const othersInc = userDocumentInc.others || 0;
+      const othersInc= userDocumentInc.others || 0;
       const Salary = userDocumentInc.Salary || 0;
       const Sold = userDocumentInc.Sold || 0;
 
