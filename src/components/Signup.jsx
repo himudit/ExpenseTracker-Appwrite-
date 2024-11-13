@@ -38,26 +38,27 @@ function Signup() {
     getUser();
   }, []);
 
-  // const signupUser = async (e) => {
-  //   e.preventDefault();
-  //   const promise = account.create(uuidv4(), user.email, user.password, user.name);
-  //   promise.then((response) => {
-  //     const data = {
-  //       userid: String(userId),
-  //       IncomeAmount: Number(0),
-  //       ExpenseAmount: Number(0),
-  //       BalanceLeft: Number(0),
-  //       Date: String(formattedDateTime),
-  //     };
-  //     databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection1Id, uuidv4(), data)
-  //       .then(() => console.log("Done"));
-  //     navigate("/profile");
-  //   }).catch((error) => console.log(error));
-  // };
+  const signupUser = async (e) => {
+    e.preventDefault();
+    const promise = account.create(uuidv4(), user.email, user.password, user.name);
+    promise.then((response) => {
+      const data = {
+        userid: String(userId),
+        IncomeAmount: Number(0),
+        ExpenseAmount: Number(0),
+        BalanceLeft: Number(0),
+        Date: String(formattedDateTime),
+      };
+      databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection1Id, uuidv4(), data)
+        .then(() => console.log("Done"));
+      navigate("/profile");
+    }).catch((error) => console.log(error));
+  };
 
   return (
     <>
       {/* <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8"> */}
+      <div className='flex'>
       <div className="h-full w-[70%] flex flex-col justify-center mt-[-2rem] ml-[7rem]">
         <div className="text-center text-2xl font-bold text-white">Sign up</div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -224,6 +225,7 @@ function Signup() {
 
           </div>
         </div>
+      </div>
       </div>
     </>
   )

@@ -16,12 +16,11 @@ function Expense() {
     const [animation2, setanimation2] = useState(false);
 
     // for amount
-    const [amount, setAmount] = useState(0);
+    const [amount, setAmount] = useState('');
+
     const handleInputChange = (event) => {
         const value = event.target.value;
-        if (amount === 0) {
-            setAmount('');
-        } else {
+        if (!isNaN(value)) {
             setAmount(value);
         }
     };
@@ -369,7 +368,7 @@ function Expense() {
                             <div className="flex text-[0.7rem]">Amount</div>
                             <div className="flex">
                                 <div className='text-[1.5rem]'><FontAwesomeIcon icon={faIndianRupee} />
-                                    <input type='text' className='bg-transparent border-none focus:outline-none' onChange={handleInputChange} value={amount}></input></div>
+                                    <input type='text' className='bg-transparent border-none focus:outline-none' onChange={handleInputChange} value={amount} placeholder="0"></input></div>
                             </div>
                         </div>
                     </div>
