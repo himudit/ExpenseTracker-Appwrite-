@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { account, databases, storage } from '../appwrite/appwriteConfig'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import conf from '../conf/conf'
 
@@ -13,19 +13,6 @@ function Signup() {
     email: "",
     password: ""
   })
-
-  // for Date
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth() + 1;
-  const day = now.getDate();
-  const hours = now.getHours();
-  const minutes = now.getMinutes();
-  const seconds = now.getSeconds();
-  const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-  const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  const formattedDateTime = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}
-    ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
   useEffect(() => {
     const getUser = async () => {
@@ -41,36 +28,35 @@ function Signup() {
 
   const signupUser = async (e) => {
     e.preventDefault();
+
     // Password validation
     if (user.password.length < 8) {
       setPasswordError("Password must be at least 8 characters long.");
       return;
     } else {
-      setPasswordError(''); // Clear error if password is valid
+      setPasswordError('');
     }
+
     try {
+      // Sign up
       const promise = account.create(uuidv4(), user.email, user.password, user.name);
+      promise
+        .then(() => {
+          return account.createEmailPasswordSession(user.email, user.password);
+        })
+        .then(() => {
+          navigate("/home");
+        })
+        .catch((err) => {
+          console.log("Error during login:", err.message);
+        });
     } catch (err) {
-      console.log(err);
+      console.log("Unexpected error:", err);
     }
-    // const promise = account.create(uuidv4(), user.email, user.password, user.name);
-    // promise.then((response) => {
-    //   const data = {
-    //     userid: String(userId),
-    //     IncomeAmount: Number(0),
-    //     ExpenseAmount: Number(0),
-    //     BalanceLeft: Number(0),
-    //     Date: String(formattedDateTime),
-    //   };
-    //   databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection1Id, uuidv4(), data)
-    //     .then(() => console.log("Done"));
-    //   navigate("/profile");
-    // }).catch((error) => console.log(error));
   };
 
   return (
     <>
-      {/* <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8"> */}
       <div className='flex'>
         <div className="h-full w-[70%] flex flex-col justify-center mt-[-2rem] ml-[7rem]">
           <div className="text-center text-2xl font-bold text-white">Sign up</div>

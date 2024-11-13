@@ -52,19 +52,19 @@ function Home() {
         ]
       )
       const userDocument = userData.documents[0];
-      const others = userDocument.others || 0;
-      const food = userDocument.Food || 0;
-      const shopping = userDocument.Shopping || 0;
-      const travelling = userDocument.Travelling || 0;
-      const entertainment = userDocument.Entertainment || 0;
-      const medicalBills = userDocument.Medical || 0;
-      const bills = userDocument.Bills || 0;
-      const rent = userDocument.Rent || 0;
-      const taxes = userDocument.Taxes || 0;
-      const investments = userDocument.Investments || 0;
+      const others = userDocument?.others || 0;
+      const food = userDocument?.Food || 0;
+      const shopping = userDocument?.Shopping || 0;
+      const travelling = userDocument?.Travelling || 0;
+      const entertainment = userDocument?.Entertainment || 0;
+      const medicalBills = userDocument?.Medical || 0;
+      const bills = userDocument?.Bills || 0;
+      const rent = userDocument?.Rent || 0;
+      const taxes = userDocument?.Taxes || 0;
+      const investments = userDocument?.Investments || 0;
+
       const totalExpense = others + food + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
       setExpenses(totalExpense);
-      // console.log('TotalExpense for user:', totalExpense);
 
       const userDataInc = await databases.listDocuments(
         conf.appwriteDatabaseId,
@@ -74,11 +74,10 @@ function Home() {
         ]
       )
       const userDocumentInc = userDataInc.documents[0];
-      const othersInc = userDocumentInc.others || 0;
-      const Salary = userDocumentInc.Salary || 0;
-      const Sold = userDocumentInc.Sold || 0;
-
-      const totalIncome = othersInc + Salary + Sold;
+      const othersInc = userDocumentInc?.others || 0;
+      const salary = userDocumentInc?.Salary || 0;
+      const sold = userDocumentInc?.Sold || 0;
+      const totalIncome = othersInc + salary + sold;
       setIncome(totalIncome);
     }
 
@@ -93,7 +92,7 @@ function Home() {
   const [startingIndex, setStartingIndex] = useState(0);
   const [endingIndex, setEndingIndex] = useState(0);
   const [leftT, setLeftT] = useState(false);
-  const [rightT, setRightT] = useState(true);
+  const [rightT, setRightT] = useState(false);
   const [indexT, setindexT] = useState(0);
 
   const [selectedCategory, setSelectedCategory] = useState();
@@ -111,7 +110,7 @@ function Home() {
           Query.equal('userid', userDetails.$id)
         ]
       );
-      setExpenseEntries(userDataExpense.documents); // Update state with fetched expense entries
+      setExpenseEntries(userDataExpense.documents);
     };
 
     // for collection 5 (Income)
@@ -123,7 +122,7 @@ function Home() {
           Query.equal('userid', userDetails.$id)
         ]
       );
-      setIncomeEntries(userDataIncome.documents); // Update state with fetched income entries
+      setIncomeEntries(userDataIncome.documents);
     };
 
     fetchfromNewExpense();
@@ -136,6 +135,9 @@ function Home() {
       const sortedEntries = combined.sort((a, b) => new Date(b.Date) - new Date(a.Date));
       setCombinedEntries(sortedEntries);
       setEndingIndex(sortedEntries.length);
+      if (sortedEntries.length > 3) {
+        setRightT(true);
+      }
     }
   }, [expenseEntries, incomeEntries]);
 

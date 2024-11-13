@@ -168,6 +168,15 @@ function Profile() {
                 </div>
 
                 <div>
+                  <button
+                    className="bg-red-400 w-40 text-white p-1 rounded-md"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </div>
+
+                <div>
                   <p className="text-xl text-black">Hello {userDetails.name}</p>
                 </div>
               </div>
