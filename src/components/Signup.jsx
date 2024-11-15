@@ -194,10 +194,10 @@ function Signup() {
       await account.create(uuidv4(), user.email, user.password, user.name);
 
       // Log in the user
-      // await account.createEmailPasswordSession(user.email, user.password);
+      await account.createEmailPasswordSession(user.email, user.password);
 
       // Redirect to the home page
-      navigate('/');
+      navigate('/home');
     } catch (err) {
       console.error('Error during signup or login:', err);
       alert(err.message || 'An unexpected error occurred. Please try again.');
