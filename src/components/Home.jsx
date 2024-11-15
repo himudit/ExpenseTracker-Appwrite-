@@ -11,6 +11,9 @@ import PieChartComponent from './PieChartComponent';
 
 function Home() {
   const navigate = useNavigate();
+  const [leftC, setLeftC] = useState(false);
+  const [rightC, setRightC] = useState(false);
+  const [indexC, setindexC] = useState(0);
 
   const [userId, setUserId] = useState(null);
   const [userDetails, setUserDetails] = useState()
@@ -44,6 +47,20 @@ function Home() {
 
     // for collection4(Category)
     const fetchTotalFromCategory = async () => {
+      const userDataInc = await databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteCollection6Id,
+        [
+          Query.equal('userid', userDetails.$id)
+        ]
+      )
+      const userDocumentInc = userDataInc.documents[0];
+      const othersInc = userDocumentInc?.others || 0;
+      const salary = userDocumentInc?.Salary || 0;
+      const sold = userDocumentInc?.Sold || 0;
+      const totalIncome = othersInc + salary + sold;
+      setIncome(totalIncome);
+
       const userData = await databases.listDocuments(
         conf.appwriteDatabaseId,
         conf.appwriteCollection4Id,
@@ -62,23 +79,9 @@ function Home() {
       const rent = userDocument?.Rent || 0;
       const taxes = userDocument?.Taxes || 0;
       const investments = userDocument?.Investments || 0;
-
       const totalExpense = others + food + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
       setExpenses(totalExpense);
 
-      const userDataInc = await databases.listDocuments(
-        conf.appwriteDatabaseId,
-        conf.appwriteCollection6Id,
-        [
-          Query.equal('userid', userDetails.$id)
-        ]
-      )
-      const userDocumentInc = userDataInc.documents[0];
-      const othersInc = userDocumentInc?.others || 0;
-      const salary = userDocumentInc?.Salary || 0;
-      const sold = userDocumentInc?.Sold || 0;
-      const totalIncome = othersInc + salary + sold;
-      setIncome(totalIncome);
     }
 
     fetchProfilePictureUrl();
@@ -122,6 +125,7 @@ function Home() {
           Query.equal('userid', userDetails.$id)
         ]
       );
+      setRightC(true);
       setIncomeEntries(userDataIncome.documents);
     };
 
@@ -205,15 +209,26 @@ function Home() {
     } else {
       setindexT(indexT + 3);
     }
-    console.log(indexT, endingIndex);
+    // console.log(indexT, endingIndex);
   }
 
   // for categories
-  const [dataCatExp, setDataCatExp] = useState([]);
+  // const [dataCatExp, setDataCatExp] = useState([]);
   const [data1, setData1] = useState([]);
+  const [data2, setData2] = useState([]);
+
+  const LeftArrowC = () => {
+    setRightC(true);
+    setLeftC(false);
+  }
+  const RightArrowC = () => {
+    setLeftC(true);
+    setRightC(false);
+  }
 
   useEffect(() => {
     const fetchFromExpenseCategory = async () => {
+      // Expense
       const result = await databases.listDocuments(
         conf.appwriteDatabaseId,
         conf.appwriteCollection4Id,
@@ -221,8 +236,6 @@ function Home() {
           Query.equal('userid', userDetails.$id)
         ]
       );
-      setDataCatExp(result.documents);
-      console.log(result.documents[0]);
       if (result.documents && result.documents.length > 0) {
         setData1([
           { name: "others", value: result.documents[0].others },
@@ -235,6 +248,22 @@ function Home() {
           { name: "Rent", value: result.documents[0].Rent },
           { name: "Taxes", value: result.documents[0].Taxes },
           { name: "Investments", value: result.documents[0].Investments }
+        ]);
+      }
+
+      // Income
+      const result1 = await databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteCollection6Id,
+        [
+          Query.equal('userid', userDetails.$id)
+        ]
+      );
+      if (result1.documents && result1.documents.length > 0) {
+        setData2([
+          { name: "others", value: result1.documents[0].others },
+          { name: "Salary", value: result1.documents[0].Salary },
+          { name: "Sold", value: result1.documents[0].Sold },
         ]);
       }
     };
@@ -402,14 +431,30 @@ function Home() {
         <div className="w-full md:w-3/6 h-auto md:h-[20rem] bg-white p-4 md:p-10 rounded-lg shadow-md m-2 md:m-4 border border-gray-200">
           <div>
             <div className="text-lg font-bold flex ml-[-0.8rem] mt-[-1.2rem]">Category</div>
-            <PieChartComponent data1={data1} />
+            {
+              leftC ? <PieChartComponent data1={data1} /> : <PieChartComponent data1={data2} />
+            }
+
             <div className='flex justify-between m-2 w-full'>
-              <div className='bg-gray-300 w-9 h-9 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
-                <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
-              </div>
-              <div className='bg-gray-300 w-9 h-9 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
-                <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
-              </div>
+              {leftC ? (
+                <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={LeftArrowC}>
+                  <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
+                </div>
+              ) : (
+                <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                  <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
+                </div>
+              )}
+
+              {rightC ? (
+                <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={RightArrowC}>
+                  <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
+                </div>
+              ) : (
+                <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                  <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
+                </div>
+              )}
             </div>
           </div>
         </div>

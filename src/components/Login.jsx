@@ -11,6 +11,8 @@ function Login() {
 
   // Login
   const loginUser = async (e) => {
+    console.log(user.email);
+    console.log(user.password);
     e.preventDefault()
     try {
       await account.createEmailPasswordSession(user.email, user.password)
