@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faChevronLeft, faBurger } from '@fortawesome/free-solid-svg-icons';
 import { PieChart, Pie } from 'recharts';
 import PieChartComponent from './PieChartComponent';
+import CustomAreaChart from './CustomAreaChart';
 
 function Home() {
   const navigate = useNavigate();
@@ -352,7 +353,7 @@ function Home() {
 
       {/* Middle Box */}
       <div className="bg-black p-10  rounded-lg shadow-md flex-grow w-full m-4">
-        Graphs
+        <CustomAreaChart></CustomAreaChart>
       </div>
 
       {/* Lowest Box */}
@@ -393,9 +394,9 @@ function Home() {
                 <div className="box3">
                   <div className="flex-1 text-center">
                     {entry.ExpenseAmount ? (
-                      <div className="text-red-600 font-bold-400">{entry.ExpenseAmount}</div>
+                      <div className="text-red-600 font-bold-400"><FontAwesomeIcon icon={faIndianRupee} />{entry.ExpenseAmount}</div>
                     ) : (
-                      <div className="text-green-500 font-bold-400">{entry.IncomeAmount}</div>
+                      <div className="text-green-500 font-bold-400"><FontAwesomeIcon icon={faIndianRupee} />{entry.IncomeAmount}</div>
                     )}
                   </div>
                 </div>
