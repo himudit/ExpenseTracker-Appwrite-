@@ -22,7 +22,9 @@ function Home() {
   const [expenses, setExpenses] = useState(0);
   const [budget, setBudget] = useState(0);
   const [profilePictureUrl, setProfilePictureUrl] = useState('/image.png');
+  const [middleData, setMiddleData] = useState([]);
 
+  // const [booleangraph, setBooleangraph] = useState(true);
   useEffect(() => {
     const getData = account.get()
     getData.then(
@@ -82,9 +84,7 @@ function Home() {
       const investments = userDocument?.Investments || 0;
       const totalExpense = others + food + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
       setExpenses(totalExpense);
-
     }
-
     fetchProfilePictureUrl();
     fetchTotalFromCategory();
   }, [userDetails]);
@@ -139,12 +139,51 @@ function Home() {
       const combined = [...expenseEntries, ...incomeEntries];
       const sortedEntries = combined.sort((a, b) => new Date(b.Date) - new Date(a.Date));
       setCombinedEntries(sortedEntries);
+      // console.log(combinedEntries.length);
       setEndingIndex(sortedEntries.length);
       if (sortedEntries.length > 3) {
         setRightT(true);
       }
     }
   }, [expenseEntries, incomeEntries]);
+
+  useEffect(() => {
+    console.log(combinedEntries.length);
+    let i = 0;
+    while (i < combinedEntries.length) {
+      let sumE = 0;
+      let sumI = 0;
+      let catE = '';
+      let catI = '';
+      const day = new Date(combinedEntries[i].Date).getDate();
+      // setBooleangraph(false);
+      let j = i + 1;
+      while (j < combinedEntries.length) {
+        if (new Date(combinedEntries[j].Date).getDate() === day) {
+          if (combinedEntries[j].hasOwnProperty('ExpenseAmount')) {
+            sumE += combinedEntries[j].ExpenseAmount;
+            catE += (catE ? ',' : '') + combinedEntries[j].Category;
+          } else {
+            sumI += combinedEntries[j].IncomeAmount;
+            catI += (catI ? ',' : '') + combinedEntries[j].Category;
+          }
+        } else {
+          const newObject = {
+            date: day,
+            spend: sumE,
+            spendCategory: catE,
+            cashback: sumI,
+            cashbackCategory: catI,
+          };
+          console.log(newObject);
+          setMiddleData(prevData => prevData.concat(newObject));
+          break;
+        }
+        j++;
+      }
+      i = j;
+    }
+  }, [combinedEntries]);
 
   // switch for 
   const getCategoryIcon = (category) => {
@@ -266,8 +305,6 @@ function Home() {
           { name: "Sold", value: result1.documents[0].Sold },
         ]);
       }
-
-
     };
     fetchFromExpenseCategory();
   }, [userDetails]);
@@ -323,20 +360,16 @@ function Home() {
 
       {/* Middle Box */}
       <div className="bg-black p-10  rounded-lg shadow-md flex-grow w-[95%] m-4">
-        {/* <CustomAreaChart data={[
-          { date: '16', spend: 7200, cashback: 126420 },
-          { date: '17', spend: 700, cashback: 0 },
-          { date: '18', spend: 23000, cashback: 0 },
-          { date: '19', spend: 35000, cashback: 0 },
-        ]
-        }></CustomAreaChart> */}
-        <CustomAreaChart
+        {/* <CustomAreaChart
           data={[
             { date: '16', spend: 7200, spendCategory: 'Travelling,Food', cashback: 126420, cashbackCategory: 'Sold Items' },
             { date: '17', spend: 700, spendCategory: 'Food', cashback: 0, cashbackCategory: '' },
             { date: '18', spend: 23000, spendCategory: 'Shopping', cashback: 0, cashbackCategory: '' },
             { date: '19', spend: 35000, spendCategory: 'Electronics', cashback: 0, cashbackCategory: '' },
           ]}
+        /> */}
+        <CustomAreaChart
+          data={middleData}
         />
 
       </div>
