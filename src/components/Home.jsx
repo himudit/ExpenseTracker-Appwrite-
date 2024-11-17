@@ -23,8 +23,9 @@ function Home() {
   const [budget, setBudget] = useState(0);
   const [profilePictureUrl, setProfilePictureUrl] = useState('/image.png');
   const [middleData, setMiddleData] = useState([]);
+  const [middleFlag, setMiddleFlag] = useState(false);
+  const [descombinedEntries, setDesCombinedEntries] = useState([]);
 
-  // const [booleangraph, setBooleangraph] = useState(true);
   useEffect(() => {
     const getData = account.get()
     getData.then(
@@ -148,42 +149,60 @@ function Home() {
   }, [expenseEntries, incomeEntries]);
 
   useEffect(() => {
-    console.log(combinedEntries.length);
-    let i = 0;
-    while (i < combinedEntries.length) {
-      let sumE = 0;
-      let sumI = 0;
-      let catE = '';
-      let catI = '';
-      const day = new Date(combinedEntries[i].Date).getDate();
-      // setBooleangraph(false);
-      let j = i + 1;
-      while (j < combinedEntries.length) {
-        if (new Date(combinedEntries[j].Date).getDate() === day) {
-          if (combinedEntries[j].hasOwnProperty('ExpenseAmount')) {
-            sumE += combinedEntries[j].ExpenseAmount;
-            catE += (catE ? ',' : '') + combinedEntries[j].Category;
-          } else {
-            sumI += combinedEntries[j].IncomeAmount;
-            catI += (catI ? ',' : '') + combinedEntries[j].Category;
-          }
+    // console.log(combinedEntries);
+    const combined = [...expenseEntries, ...incomeEntries];
+    const dessortedEntries = combined.sort((a, b) => new Date(a.Date) - new Date(b.Date));
+    setDesCombinedEntries(dessortedEntries);
+    // console.log(descombinedEntries);
+    if (dessortedEntries.length > 0) {
+      const newMiddleData = [];
+      let i = 0;
+      while (i < dessortedEntries.length) {
+        let sumE = 0;
+        let sumI = 0;
+        let catE = '';
+        let catI = '';
+        if (dessortedEntries[i]?.hasOwnProperty('ExpenseAmount')) {
+          sumE += dessortedEntries[i].ExpenseAmount || 0;
+          catE += (catE ? ',' : '') + (dessortedEntries[i].Category || '');
         } else {
-          const newObject = {
-            date: day,
-            spend: sumE,
-            spendCategory: catE,
-            cashback: sumI,
-            cashbackCategory: catI,
-          };
-          console.log(newObject);
-          setMiddleData(prevData => prevData.concat(newObject));
-          break;
+          sumI += dessortedEntries[i].IncomeAmount || 0;
+          catI += (catI ? ',' : '') + (dessortedEntries[i].Category || '');
         }
-        j++;
+        // const day = new Date(dessortedEntries[i]?.Date).getDate();
+        const day = dessortedEntries[i]?.Date.split("T")[0].split("-")[2];
+        // console.log(day);
+
+        let j = i + 1;
+        while (j < dessortedEntries.length) {
+          // if (new Date(dessortedEntries[j]?.Date).getDate() === day) {
+          if (dessortedEntries[j]?.Date.split("T")[0].split("-")[2] === day) {
+            if (dessortedEntries[j]?.hasOwnProperty('ExpenseAmount')) {
+              sumE += dessortedEntries[j].ExpenseAmount || 0;
+              catE += (catE ? ',' : '') + (dessortedEntries[j].Category || '');
+            } else {
+              sumI += dessortedEntries[j].IncomeAmount || 0;
+              catI += (catI ? ',' : '') + (dessortedEntries[j].Category || '');
+            }
+          } else {
+            break;
+          }
+          j++;
+        }
+        newMiddleData.push({
+          date: day,
+          spend: sumE,
+          spendCategory: catE,
+          cashback: sumI,
+          cashbackCategory: catI,
+        });
+        i = j;
       }
-      i = j;
+      setMiddleData(newMiddleData);
+      // console.log(newMiddleData);
     }
   }, [combinedEntries]);
+
 
   // switch for 
   const getCategoryIcon = (category) => {
@@ -360,14 +379,6 @@ function Home() {
 
       {/* Middle Box */}
       <div className="bg-black p-10  rounded-lg shadow-md flex-grow w-[95%] m-4">
-        {/* <CustomAreaChart
-          data={[
-            { date: '16', spend: 7200, spendCategory: 'Travelling,Food', cashback: 126420, cashbackCategory: 'Sold Items' },
-            { date: '17', spend: 700, spendCategory: 'Food', cashback: 0, cashbackCategory: '' },
-            { date: '18', spend: 23000, spendCategory: 'Shopping', cashback: 0, cashbackCategory: '' },
-            { date: '19', spend: 35000, spendCategory: 'Electronics', cashback: 0, cashbackCategory: '' },
-          ]}
-        /> */}
         <CustomAreaChart
           data={middleData}
         />
@@ -400,10 +411,12 @@ function Home() {
                     <div className="flex-1 text-center">
                       <div className="font-bold">{entry.Category}</div>
                       <div className='text-gray-500 text-sm'>
+                        {/* {entry?.Date.split("T")[0].split("-")[2]} */}
                         {new Date(entry.Date).toLocaleDateString('en-GB', {
                           day: '2-digit',
                           month: 'short',
-                          year: '2-digit'
+                          year: '2-digit',
+                          timeZone: 'UTC',
                         })}
                       </div>
                     </div>
