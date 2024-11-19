@@ -8,12 +8,12 @@ const CustomTooltip = ({ active, payload, label }) => {
         <p>Date {label}</p>
         {payload[0] && (
           <p style={{ color: payload[0].color }}>
-            Spend:${payload[0].value} on {payload[0].payload.spendCategory}
+            Spend:₹{payload[0].value} on {payload[0].payload.spendCategory}
           </p>
         )}
         {payload[1] && payload[1].value > 0 && (
           <p style={{ color: payload[1].color }}>
-            Cashback: ${payload[1].value} by {payload[1].payload.cashbackCategory}
+            Cashback: ₹{payload[1].value} by {payload[1].payload.cashbackCategory}
           </p>
         )}
       </div>

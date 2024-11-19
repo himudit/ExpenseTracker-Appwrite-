@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { account } from '../appwrite/appwriteConfig';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import Logo from '../assets/Logo.jpg';
 
 function Signup() {
   const navigate = useNavigate();
@@ -52,9 +53,8 @@ function Signup() {
   };
 
   return (
-    <div className="flex">
-      <div className="h-full w-[70%] flex flex-col justify-center mt-[-2rem] ml-[7rem]">
-        <div className="text-center text-2xl font-bold text-white">Sign up</div>
+    <div className='flex justify-center items-center'>
+      <div className="h-full w-[70%] flex flex-col justify-center mt-[3rem] ml-[6rem]">
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={signupUser}>

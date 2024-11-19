@@ -24,9 +24,8 @@ function Login() {
 
   return (
     <>
-      <div className='flex'>
-        <div className="h-full w-[70%] flex flex-col justify-center mt-[-2rem] ml-[6rem]">
-          <div className="text-center text-white font-bold text-2xl">Log in</div>
+      <div className='flex justify-center items-center'>
+        <div className="h-full w-[70%] flex flex-col justify-center  mt-[4rem] ml-[6rem]">
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
               <form className="space-y-6" action="#" method="POST">

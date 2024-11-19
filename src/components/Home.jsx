@@ -350,7 +350,7 @@ function Home() {
           <span className="mr-2"></span>
           <input
             type="text"
-            value={income}
+            value={"₹" + income}
             className="w-full p-2 border text-black border-gray-300 rounded-lg"
           />
         </div>
@@ -359,7 +359,7 @@ function Home() {
           <span className="mr-2"></span>
           <input
             type="text"
-            value={expenses}
+            value={"₹" + expenses}
             placeholder=""
             className="w-full p-2 border text-black border-gray-300 rounded-lg"
           />
@@ -369,7 +369,7 @@ function Home() {
           <span className="mr-2"></span>
           <input
             type="text"
-            value={income - expenses}
+            value={"₹" + (income - expenses)}
             placeholder=""
             className="w-full p-2 border text-black border-gray-300 rounded-lg"
           />
