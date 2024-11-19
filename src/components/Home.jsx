@@ -296,16 +296,16 @@ function Home() {
       );
       if (result.documents && result.documents.length > 0) {
         setData1([
-          { name: "others", value: result.documents[0].others },
-          { name: "Food", value: result.documents[0].Food },
-          { name: "Shopping", value: result.documents[0].Shopping },
-          { name: "Travelling", value: result.documents[0].Travelling },
-          { name: "Entertainment", value: result.documents[0].Entertainment },
-          { name: "Medical", value: result.documents[0].Medical },
-          { name: "Bills", value: result.documents[0].Bills },
-          { name: "Rent", value: result.documents[0].Rent },
-          { name: "Taxes", value: result.documents[0].Taxes },
-          { name: "Investments", value: result.documents[0].Investments }
+          { name: "others", value: result.documents[0].others, color: "#A9A9A9" },
+          { name: "Food", value: result.documents[0].Food, color: "#FFBF00" },
+          { name: "Shopping", value: result.documents[0].Shopping, color: "#0000ff" },
+          { name: "Travelling", value: result.documents[0].Travelling, color: "purple" },
+          { name: "Entertainment", value: result.documents[0].Entertainment, color: "#FF6F61" },
+          { name: "Medical", value: result.documents[0].Medical, color: "red" },
+          { name: "Bills", value: result.documents[0].Bills, color: "#797982" },
+          { name: "Rent", value: result.documents[0].Rent, color: "#005F6A" },
+          { name: "Taxes", value: result.documents[0].Taxes, color: "#721322" },
+          { name: "Investments", value: result.documents[0].Investments, color: "#32CD32" },
         ]);
       }
 
@@ -319,9 +319,9 @@ function Home() {
       );
       if (result1.documents && result1.documents.length > 0) {
         setData2([
-          { name: "others", value: result1.documents[0].others },
-          { name: "Salary", value: result1.documents[0].Salary },
-          { name: "Sold", value: result1.documents[0].Sold },
+          { name: "others", value: result1.documents[0].others, color: "#A9A9A9" },
+          { name: "Salary", value: result1.documents[0].Salary, color: "lightgreen" },
+          { name: "Sold", value: result1.documents[0].Sold, color: "brown" },
         ]);
       }
     };
