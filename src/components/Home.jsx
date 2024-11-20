@@ -344,34 +344,34 @@ function Home() {
       </div>
       {/* logic for profile and good morning */}
       <div className='caret-black'>Good Morning {userDetails ? userDetails.name : "Nothing"}</div>
-      <div className="flex flex-wrap w-full space-y-4 sm:space-y-0 sm:space-x-4 p-4">
-        <div className="bg-blue-200 text-white p-6 rounded-lg shadow-md flex-1 w-full sm:w-auto">
-          Total Income
-          <span className="mr-2"></span>
+
+      <div className="flex flex-wrap w-full gap-4 p-4">
+        <div className="bg-blue-200 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
+          <div className="mb-2 text-lg font-semibold">Total Income</div>
           <input
             type="text"
             value={"₹" + income}
-            className="w-full p-2 border text-black border-gray-300 rounded-lg"
+            className="w-full p-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-        <div className="bg-purple-200 p-6 text-white rounded-lg shadow-md flex-1 w-full sm:w-auto">
-          Total Expense
-          <span className="mr-2"></span>
+
+        <div className="bg-purple-200 p-6 text-white rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
+          <div className="mb-2 text-lg font-semibold">Total Expense</div>
           <input
             type="text"
             value={"₹" + expenses}
             placeholder=""
-            className="w-full p-2 border text-black border-gray-300 rounded-lg"
+            className="w-full p-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
-        <div className="bg-green-200 text-white p-6 rounded-lg shadow-md flex-1 w-full sm:w-auto">
-          Remaining Balance
-          <span className="mr-2"></span>
+
+        <div className="bg-green-200 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
+          <div className="mb-2 text-lg font-semibold">Remaining Balance</div>
           <input
             type="text"
             value={"₹" + (income - expenses)}
             placeholder=""
-            className="w-full p-2 border text-black border-gray-300 rounded-lg"
+            className="w-full p-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />
         </div>
       </div>
