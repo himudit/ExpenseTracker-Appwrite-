@@ -343,7 +343,21 @@ function Home() {
         </div>
       </div>
       {/* logic for profile and good morning */}
-      <div className='caret-black'>Good Morning {userDetails ? userDetails.name : "Nothing"}</div>
+      <div className="caret-black">
+        {(() => {
+          const currentHour = new Date().getHours();
+          if (currentHour >= 5 && currentHour < 12) {
+            return "Good Morning";
+          } else if (currentHour >= 12 && currentHour < 17) {
+            return "Good Afternoon";
+          } else if (currentHour >= 17 && currentHour < 21) {
+            return "Good Evening";
+          } else {
+            return "Good Night";
+          }
+        })()}{" "}
+        {userDetails ? userDetails.name : "Nothing"}
+      </div>
 
       <div className="flex flex-wrap w-full gap-4 p-4">
         <div className="bg-blue-200 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">

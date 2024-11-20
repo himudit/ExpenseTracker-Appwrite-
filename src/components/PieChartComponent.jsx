@@ -10,14 +10,14 @@ function PieChartComponent({ data1 }) {
                 marginTop: "0.2rem",
             }}
         >
-            <PieChart width={200} height={200}>
+            <PieChart width={150} height={150}>
                 <Pie
                     data={data1}
                     dataKey="value"
                     nameKey="name"
                     cx="50%"
                     cy="50%"
-                    outerRadius={90}
+                    outerRadius={75}
                 >
                     {data1.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
