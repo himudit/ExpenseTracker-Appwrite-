@@ -158,7 +158,7 @@ function Expense() {
                         setanimation2(true);
                         setTimeout(() => {
                             setanimation2(false);
-                        }, 2000);
+                        }, 1000);
 
                     })
 

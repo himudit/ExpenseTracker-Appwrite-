@@ -4,7 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import Logo from '../assets/Logo.jpg';
+// import Logo from '../assets/Logo.jpg';
+import Logo from '../assets/wallet.png';
 
 function Navbar() {
   return (
@@ -15,7 +16,7 @@ function Navbar() {
         <div className="mb-8 flex flex-col items-center">
           <img
             src={Logo}
-            className="w-7 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl object-contain"
+            className="w-9 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl object-contain"
             alt="Logo"
           />
           {/* Responsive text below the logo */}

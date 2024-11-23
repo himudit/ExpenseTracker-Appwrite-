@@ -356,7 +356,7 @@ function Home() {
             return "Good Night";
           }
         })()}{" "}
-        {userDetails ? userDetails.name : "Nothing"}
+        {userDetails ? userDetails.name : ""}
       </div>
 
       <div className="flex flex-wrap w-full gap-4 p-4">
@@ -439,9 +439,9 @@ function Home() {
                 <div className="box3">
                   <div className="flex-1 text-center">
                     {entry.ExpenseAmount ? (
-                      <div className="text-red-600 font-bold-400"><FontAwesomeIcon icon={faIndianRupee} />{entry.ExpenseAmount}</div>
+                      <div className="text-red-600 font-bold-400">-<FontAwesomeIcon icon={faIndianRupee} />{entry.ExpenseAmount}</div>
                     ) : (
-                      <div className="text-green-500 font-bold-400"><FontAwesomeIcon icon={faIndianRupee} />{entry.IncomeAmount}</div>
+                      <div className="text-green-500 font-bold-400">+<FontAwesomeIcon icon={faIndianRupee} />{entry.IncomeAmount}</div>
                     )}
                   </div>
                 </div>
