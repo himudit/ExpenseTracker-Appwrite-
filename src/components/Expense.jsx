@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faBurger, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faBurger, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faAngleDown,faMinus } from '@fortawesome/free-solid-svg-icons';
 import LottieAnimation from './LottieAnimation';
 import { account, databases, storage } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid'
@@ -327,7 +327,7 @@ function Expense() {
     return (
         <div className="flex flex-wrap justify-center h-screen ml-[7rem] bg-gradient-to-r items-center">
             {/* first div */}
-            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col mr-6  bg-white/30  border border-white/50  p-6">
+            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-2xl flex flex-col mr-6  bg-white/30  border border-white/50  p-6">
                 <div className="p-4 border-b">
                     <div className="flex justify-between items-center">
                         <div className="text-sm text-[20px]  text-black">{fD}</div>
@@ -377,6 +377,7 @@ function Expense() {
                                         icon={selectedCategory.icon}
                                         style={{ color: selectedCategory.col }}
                                     />
+                                    <span>  </span>
                                     <span>{selectedCategory.text}</span>
                                 </div>
                                 <div className='cursor-pointer' onClick={handleIconClick}>{isOpen ? <FontAwesomeIcon icon={faAngleDown} /> : <FontAwesomeIcon icon={faChevronRight} />}</div>
@@ -428,6 +429,7 @@ function Expense() {
                                         icon={selectedCategory.icon}
                                         style={{ color: selectedCategory.col }}
                                     />
+                                    <span>  </span>
                                     <span>{selectedCategory.text}</span>
                                 </div>
                                 <div className='cursor-pointer' onClick={handleIconClick}><FontAwesomeIcon icon={faChevronRight} /></div>
@@ -457,7 +459,7 @@ function Expense() {
             </div>
 
             {/* second div */}
-            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-md flex flex-col items-center justify-center p-4 bg-white/30 border-white/50">
+            <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-2xl flex flex-col items-center justify-center p-4 bg-white/30 border-white/50">
                 <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4 bg-white/30 backdrop-blur-md border-white/50 hover:border-gray-600 hover:shadow-[0_0_20px_5px_rgba(0, 68, 255, 0.8)] transition-all duration-300 ease-in-out">
                     <div className='text-[2rem]'> Add Receipt</div>
                     <div>Upload your receipt for better tracking</div>

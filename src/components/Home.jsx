@@ -5,7 +5,7 @@ import { Query } from 'appwrite';
 import conf from '../conf/conf';
 import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faChevronLeft, faBurger } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faChevronLeft, faBurger, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { PieChart, Pie } from 'recharts';
 import PieChartComponent from './PieChartComponent';
 import CustomAreaChart from './CustomAreaChart';
@@ -364,7 +364,7 @@ function Home() {
           <div className="mb-2 text-lg font-semibold">Total Income</div>
           <input
             type="text"
-            value={"₹" + income}
+            value={+ income}
             className="w-full p-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -439,9 +439,9 @@ function Home() {
                 <div className="box3">
                   <div className="flex-1 text-center">
                     {entry.ExpenseAmount ? (
-                      <div className="text-red-600 font-bold-400">-<FontAwesomeIcon icon={faIndianRupee} />{entry.ExpenseAmount}</div>
+                      <div className="text-red-600 font-bold-400"><FontAwesomeIcon icon={faMinus} /><span>  </span><FontAwesomeIcon icon={faIndianRupee} />{entry.ExpenseAmount}</div>
                     ) : (
-                      <div className="text-green-500 font-bold-400">+<FontAwesomeIcon icon={faIndianRupee} />{entry.IncomeAmount}</div>
+                      <div className="text-green-500 font-bold-400"><FontAwesomeIcon icon={faPlus} /><span>  </span><FontAwesomeIcon icon={faIndianRupee} />{entry.IncomeAmount}</div>
                     )}
                   </div>
                 </div>

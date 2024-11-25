@@ -10,7 +10,7 @@ const Layout = () => {
   return (
     <div className="h-full w-full">
       <Navbar />
-      <div className={`h-full ${isExpensePage ? "bg-gray-300" : ""}`}>
+      <div className={`h-full ${isExpensePage ? "bg-gray-100" : ""}`}>
         <Outlet />
       </div>
     </div>
