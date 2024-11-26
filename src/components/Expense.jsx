@@ -505,8 +505,7 @@ function Expense() {
                 (animation1 || animation2) && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                         {/* <div className="flex-grow overflow-y-auto p-4"> */}
-                        {animation1 && <LottieLoader />}
-                        <div className="w-[30rem] h-[30rem]">{animation2 && <LottieAnimation />}</div>
+                        {animation1 ? <div> {animation1 && <LottieLoader />}</div> : <div className="w-[30rem] h-[30rem]">{animation2 && <LottieAnimation />}</div>}
                     </div>
                 )
             }
