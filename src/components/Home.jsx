@@ -364,7 +364,7 @@ function Home() {
           <div className="mb-2 text-lg font-semibold">Total Income</div>
           <input
             type="text"
-            value={+ income}
+            value={"₹" + " " + income}
             className="w-full p-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -373,7 +373,7 @@ function Home() {
           <div className="mb-2 text-lg font-semibold">Total Expense</div>
           <input
             type="text"
-            value={"₹" + expenses}
+            value={"₹" + " " + expenses}
             placeholder=""
             className="w-full p-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
@@ -381,12 +381,23 @@ function Home() {
 
         <div className="bg-green-200 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
           <div className="mb-2 text-lg font-semibold">Remaining Balance</div>
-          <input
+          {(income > expenses) ? <input
             type="text"
-            value={"₹" + (income - expenses)}
+            value={"₹" + " " + (income - expenses)}
+            placeholder=""
+            className="w-full p-2 border text-green-500 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          /> : <input
+            type="text"
+            value={"₹" + " " + (income - expenses)}
+            placeholder=""
+            className="w-full p-2 border text-red-500 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+          />}
+          {/* <input
+            type="text"
+            value={"₹" + " " + (income - expenses)}
             placeholder=""
             className="w-full p-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+          /> */}
         </div>
       </div>
 
