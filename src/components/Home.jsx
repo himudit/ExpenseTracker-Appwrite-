@@ -439,9 +439,9 @@ function Home() {
                 <div className="box3">
                   <div className="flex-1 text-center">
                     {entry.ExpenseAmount ? (
-                      <div className="text-red-600 font-bold-400"><FontAwesomeIcon icon={faMinus} /><span>  </span><FontAwesomeIcon icon={faIndianRupee} />{entry.ExpenseAmount}</div>
+                      <div className="text-red-600 font-bold-400"><span>  </span><FontAwesomeIcon icon={faIndianRupee} />{entry.ExpenseAmount}</div>
                     ) : (
-                      <div className="text-green-500 font-bold-400"><FontAwesomeIcon icon={faPlus} /><span>  </span><FontAwesomeIcon icon={faIndianRupee} />{entry.IncomeAmount}</div>
+                      <div className="text-green-500 font-bold-400"><span>  </span><FontAwesomeIcon icon={faIndianRupee} />{entry.IncomeAmount}</div>
                     )}
                   </div>
                 </div>
