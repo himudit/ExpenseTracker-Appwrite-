@@ -11,13 +11,14 @@ function Login() {
 
   // Login
   const loginUser = async (e) => {
-    console.log(user.email);
-    console.log(user.password);
+    // console.log(user.email);
+    // console.log(user.password);
     e.preventDefault()
     try {
       await account.createEmailPasswordSession(user.email, user.password)
       navigate("/profile")
     } catch (error) {
+      alert("Login failed. Please check your email and password and try again.");
       console.log(error);
     }
   }

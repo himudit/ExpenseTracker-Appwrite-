@@ -3,6 +3,7 @@ import { account } from '../appwrite/appwriteConfig';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import Logo from '../assets/Logo.jpg';
+import isEmail from 'validator/lib/isEmail';
 
 function Signup() {
   const navigate = useNavigate();
@@ -39,6 +40,12 @@ function Signup() {
 
     try {
       // Create user account
+      if (!user.name || user.name.length > 15) {
+        throw new Error('Name must be more than 15 characters long.');
+      }
+      if (!user.email || !isEmail(user.email)) {
+        throw new Error("Invalid email address");
+      }
       await account.create(uuidv4(), user.email, user.password, user.name);
 
       // Log in the user
@@ -47,7 +54,7 @@ function Signup() {
       // Redirect to the home page
       navigate('/home');
     } catch (err) {
-      console.error('Error during signup or login:', err);
+      // console.error('Error during signup or login:', err);
       alert(err.message || 'An unexpected error occurred. Please try again.');
     }
   };
