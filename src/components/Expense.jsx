@@ -19,13 +19,7 @@ function Expense() {
 
     // for amount
     const [amount, setAmount] = useState('');
-
-    const handleBlur = () => {
-        if (amount === "0" || amount === "") {
-            alert("Amount cannot be zero!");
-        }
-    };
-
+    
     const handleInputChange = (event) => {
         const value = event.target.value;
         if (!isNaN(value)) {
@@ -393,7 +387,7 @@ function Expense() {
                                 <div className="flex text-[0.7rem]">Amount</div>
                                 <div className="flex">
                                     <div className='text-[1.5rem]'><FontAwesomeIcon icon={faIndianRupee} />
-                                        <input type='text' className='bg-transparent border-none focus:outline-none' onChange={handleInputChange} value={amount} placeholder="0" onBlur={handleBlur}></input></div>
+                                        <input type='text' className='bg-transparent border-none focus:outline-none' onChange={handleInputChange} value={amount} placeholder="0"></input></div>
                                 </div>
                             </div>
                         </div>
