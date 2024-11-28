@@ -16,7 +16,7 @@ function Login() {
     e.preventDefault()
     try {
       await account.createEmailPasswordSession(user.email, user.password)
-      navigate("/profile")
+      navigate("/home")
     } catch (error) {
       alert("Login failed. Please check your email and password and try again.");
       console.log(error);
