@@ -251,7 +251,7 @@ function Expense() {
                         const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
                         promise.then(() => {
                             console.log("Done");
-                            setanimation1(true);
+                            setanimation1(false);
                             setIsSubmitting(true);
                             setanimation2(true);
                             setTimeout(() => {
