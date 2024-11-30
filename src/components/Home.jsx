@@ -392,12 +392,6 @@ function Home() {
             placeholder=""
             className="w-full p-2 border text-red-500 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
           />}
-          {/* <input
-            type="text"
-            value={"₹" + " " + (income - expenses)}
-            placeholder=""
-            className="w-full p-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          /> */}
         </div>
       </div>
 
