@@ -367,7 +367,7 @@ function Home() {
             <p className="text-gray-700 font-medium">{"Hi, " + userDetails.name + "!"}</p>
             <p className="text-gray-500 text-sm">{userDetails.email}</p>
             <hr className="my-2" />
-            <button className="w-full  text-white text-left px-4 py-2 bg-black hover:bg-gray-700 rounded-md">
+            <button onClick={() => navigate('/profile')} className="w-full  text-white text-left px-4 py-2 bg-black hover:bg-gray-700 rounded-md" >
               Edit Profile
             </button>
             {/* <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-md" >
@@ -377,7 +377,7 @@ function Home() {
         )}
 
         {/* Profile Picture */}
-        <div className="absolute top-1 right-[4rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20" onClick={showProfile}>
+        <div className="absolute top-1 right-[0.3rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20 border-red-400" onClick={showProfile}>
           <img
             src={profilePictureUrl}
             alt="Profile"
