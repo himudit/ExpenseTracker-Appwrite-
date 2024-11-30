@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useNavigate } from 'react-router-dom';
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import { faHouse } from '@fortawesome/free-solid-svg-icons';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../assets/wallet.png';
 import { databases, account, storage } from '../appwrite/appwriteConfig';
 import conf from '../conf/conf';
@@ -89,6 +89,7 @@ function Navbar() {
                 className="rounded-full bg-red-200 px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-lime-green/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                 onClick={handleLogout}
               >
+                <FontAwesomeIcon icon={faRightFromBracket} />
                 Logout
               </button>
             </div> : <NavLink

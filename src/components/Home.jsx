@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { databases, account, storage } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid';
 import { Query } from 'appwrite';
 import conf from '../conf/conf';
 import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faChevronLeft, faBurger, faMinus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faChevronLeft, faBurger, faMinus, faPlus, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { PieChart, Pie } from 'recharts';
 import PieChartComponent from './PieChartComponent';
 import CustomAreaChart from './CustomAreaChart';
@@ -25,6 +25,32 @@ function Home() {
   const [middleData, setMiddleData] = useState([]);
   const [middleFlag, setMiddleFlag] = useState(false);
   const [descombinedEntries, setDesCombinedEntries] = useState([]);
+
+  const [openProfile, setOpenProfile] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const showProfile = () => {
+    setOpenProfile(!openProfile);
+  };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpenProfile(false); // Close the dropdown
+    }
+  };
+  useEffect(() => {
+    if (openProfile) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    // Cleanup event listener on unmount
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [openProfile]);
+
 
   useEffect(() => {
     const getData = account.get()
@@ -333,8 +359,25 @@ function Home() {
 
       <div className='flex w-full h-[4rem] space-x-4 p-4 border-b-2 border-black-500'>
         <div className='caret-black font-bold'>Dashboard</div>
+        {/* mains*/}
+        {openProfile && (
+          <div ref={dropdownRef}
+            className="absolute top-16 right-6 lg:right-20 bg-white shadow-lg rounded-lg w-64 p-4 border border-gray-200 z-50"
+          >
+            <p className="text-gray-700 font-medium">{"Hi, " + userDetails.name + "!"}</p>
+            <p className="text-gray-500 text-sm">{userDetails.email}</p>
+            <hr className="my-2" />
+            <button className="w-full  text-white text-left px-4 py-2 bg-black hover:bg-gray-700 rounded-md">
+              Edit Profile
+            </button>
+            {/* <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-md" >
+              Logout
+            </button> */}
+          </div>
+        )}
+
         {/* Profile Picture */}
-        <div className="absolute top-1 right-[4rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20" onClick={() => navigate('/profile')}>
+        <div className="absolute top-1 right-[4rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20" onClick={showProfile}>
           <img
             src={profilePictureUrl}
             alt="Profile"

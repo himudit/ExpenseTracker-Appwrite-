@@ -136,65 +136,77 @@ function Profile() {
 
 
   return (
-    <>
-      {userDetails ? (
-        <>
-          <div className='bg-gray-700 w-full h-[10rem]'>
-            <div className='flex justify-center'>
-              <div>
-                {/* Profile Picture */}
-                <div className="absolute top-1 md:top-3 md:right-[10rem] lg:top-10 lg:right-[43rem]">
-                  <img
-                    src={profilePictureUrl}
-                    alt="Profile"
-                    style={{ height: '13rem', width: '12.5rem' }}
-                    className="rounded-full cursor-pointer border-[0.2rem] border-white"
-                  />
-                  <div className='relative top-[-4rem] left-[10rem] flex justify-center items-center bg-white border-[0.2rem] rounded-full w-9 h-9 border-white' ><FontAwesomeIcon icon={faPenToSquare} className="cursor-pointer h-[1.3rem] w-[1.3rem] bg-white" onClick={editImage} />
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={handleFileChange}
-                      className="hidden mt-2"
-                    />
-                  </div>
+    // <>
+    //   {userDetails ? (
+    //     <>
+    //       <div className='bg-gray-700 w-full h-[10rem]'>
+    //         <div className='flex justify-center'>
+    //           <div>
+    //             {/* Profile Picture */}
+    //             <div className="absolute top-1 md:top-3 md:right-[10rem] lg:top-10 lg:right-[43rem]">
+    //               <img
+    //                 src={profilePictureUrl}
+    //                 alt="Profile"
+    //                 style={{ height: '13rem', width: '12.5rem' }}
+    //                 className="rounded-full cursor-pointer border-[0.2rem] border-white"
+    //               />
+    //               <div className='relative top-[-4rem] left-[10rem] flex justify-center items-center bg-white border-[0.2rem] rounded-full w-9 h-9 border-white' ><FontAwesomeIcon icon={faPenToSquare} className="cursor-pointer h-[1.3rem] w-[1.3rem] bg-white" onClick={editImage} />
+    //                 <input
+    //                   type="file"
+    //                   ref={fileInputRef}
+    //                   onChange={handleFileChange}
+    //                   className="hidden mt-2"
+    //                 />
+    //               </div>
 
-                  <button
-                    onClick={handleUpload}
-                    className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
-                  >
-                    Upload Profile Picture
-                  </button>
-                </div>
+    //               <button
+    //                 onClick={handleUpload}
+    //                 className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
+    //               >
+    //                 Upload Profile Picture
+    //               </button>
+    //             </div>
 
-                <div>
-                  <button
-                    className="bg-red-400 w-40 text-white p-1 rounded-md"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
-                </div>
+    //             <div>
+    //               <button
+    //                 className="bg-red-400 w-40 text-white p-1 rounded-md"
+    //                 onClick={handleLogout}
+    //               >
+    //                 Logout
+    //               </button>
+    //             </div>
 
-                <div>
-                  <p className="text-xl text-black">Hello {userDetails.name}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      ) : (
-        <p className="mt-4">
-          Please Login To see Profile{" "}
-          <Link to="/">
-            <span className="bg-blue-300 p-2 cursor-pointer text-white rounded-md">
-              Login
-            </span>
-          </Link>
-        </p>
-      )}
+    //             <div>
+    //               <p className="text-xl text-black">Hello {userDetails.name}</p>
+    //             </div>
+    //           </div>
+    //         </div>
+    //       </div>
+    //     </>
+    //   ) : (
+    //     <p className="mt-4">
+    //       Please Login To see Profile{" "}
+    //       <Link to="/">
+    //         <span className="bg-blue-300 p-2 cursor-pointer text-white rounded-md">
+    //           Login
+    //         </span>
+    //       </Link>
+    //     </p>
+    //   )}
 
-    </>
+    // </>
+
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      {/* Mobile View */}
+      <div className="block lg:hidden text-2xl font-bold text-blue-600">
+        Hello
+      </div>
+
+      {/* Desktop/Laptop View */}
+      <div className="hidden lg:block text-2xl font-bold text-green-600">
+        Hi
+      </div>
+    </div>
   )
 }
 export default Profile
