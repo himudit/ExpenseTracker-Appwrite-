@@ -11,7 +11,7 @@ function Profile() {
   const navigate = useNavigate();
   const fileInputRef = useRef();
   const handleInputChange = (e) => {
-    setDish(e.target.value); se
+    setDish(e.target.value); 
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -165,6 +165,7 @@ function Profile() {
                   >
                     Upload Profile Picture
                   </button>
+                  {/*  */}
                 </div>
 
                 <div>

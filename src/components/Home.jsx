@@ -5,7 +5,7 @@ import { Query } from 'appwrite';
 import conf from '../conf/conf';
 import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faChevronLeft, faBurger, faMinus, faPlus, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faChevronLeft, faBurger, faMinus, faPlus, faRightFromBracket, faPenToSquare, faCamera, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { PieChart, Pie } from 'recharts';
 import PieChartComponent from './PieChartComponent';
 import CustomAreaChart from './CustomAreaChart';
@@ -28,28 +28,99 @@ function Home() {
 
   const [openProfile, setOpenProfile] = useState(false);
   const dropdownRef = useRef(null);
-
   const showProfile = () => {
     setOpenProfile(!openProfile);
   };
+  const closingProfile = () => {
+    setOpenProfile(false);
+    setEditProfile(false);
+    setTryProfilePictureUrl('');
+  }
 
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setOpenProfile(false); // Close the dropdown
+  // editing profile
+  const [editProfile, setEditProfile] = useState(false);
+  const editfunctionProfile = () => {
+    setEditProfile(true);
+  };
+  // 1mins
+  const [tryProfilePictureUrl, setTryProfilePictureUrl] = useState('');
+
+  const fileInputRef = useRef();
+
+  const editImage = () => {
+    fileInputRef.current.click();
+  };
+
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      const fileUrl = URL.createObjectURL(file);
+      setTryProfilePictureUrl(fileUrl);
     }
   };
-  useEffect(() => {
-    if (openProfile) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
+  const handleUpload = async () => {
+    if (selectedFile) {
+      const response = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection3Id, [
+        Query.equal('user_id', userDetails.$id),
+      ]);
 
-    // Cleanup event listener on unmount
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [openProfile]);
+      if (response.total > 0) {
+        const document = response.documents[0];
+        const documentId = document.$id;
+        const fileId = uuidv4();
+        const oldImageId = response.documents[0].image_id;
+        await storage.deleteFile(conf.appwriteBucketId, oldImageId);
+
+        const promise = await storage.createFile(conf.appwriteBucketId, fileId, selectedFile);
+
+        const documentData = {
+          user_id: String(userDetails.$id),
+          image_id: String(fileId),
+        };
+        const updatedDocument = await databases.updateDocument(
+          conf.appwriteDatabaseId,
+          conf.appwriteCollection3Id,
+          documentId,
+          { image_id: String(fileId), }
+        );
+        console.log('Document updated successfully:', updatedDocument);
+        const fileUrl = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/view?project=${conf.appwriteProjectId}&mode=admin`;
+        setProfilePictureUrl(fileUrl);
+        
+        promise.then(() => {
+          setEditProfile(false);
+          setOpenProfile(false);
+          console.log(openProfile);
+          console.log(editProfile);
+          setTryProfilePictureUrl('');
+        });
+
+      } else {
+        try {
+          const fileId = uuidv4();
+          // Upload the file
+          await storage.createFile(conf.appwriteBucketId, fileId, selectedFile);
+
+          const documentData = {
+            user_id: String(userDetails.$id),
+            image_id: String(fileId),
+          };
+          const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection3Id, uuidv4(), documentData);
+
+          // Get the file URL
+          const fileUrl = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/view?project=${conf.appwriteProjectId}&mode=admin`;
+
+          console.log(fileUrl);
+          setProfilePictureUrl(fileUrl);
+        } catch (error) {
+          console.error('Error uploading file:', error);
+        }
+      }
+    }
+  };
 
 
   useEffect(() => {
@@ -359,27 +430,64 @@ function Home() {
 
       <div className='flex w-full h-[4rem] space-x-4 p-4 border-b-2 border-black-500'>
         <div className='caret-black font-bold'>Dashboard</div>
-        {/* mains*/}
-        {openProfile && userDetails && (
-          <div ref={dropdownRef}
-            className="absolute top-16 h-[20rem] right-2 lg:right-20 bg-gray-100 shadow-lg rounded-lg w-64 p-4  z-50"
-          >
-            <div className="flex justify-center top-6 right-[0.3rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20 border-red-400" onClick={showProfile}>
-              <img
-                src={profilePictureUrl}
-                alt="Profile"
-                style={{ height: '10rem', width: '10rem', marginTop: '0.1rem' }}
-                className="rounded-full cursor-pointer border-[0.2rem] border-white"
-              />
-            </div>
-            <p className="text-gray-700 ml-14 mt-3 text-[1.4rem] font-semibold">{"Hi, " + userDetails.name + "!"}</p>
-            <p className="text-gray-500 ml-12 text-sm">{userDetails.email}</p>
-            <hr className="my-2" />
-            <button onClick={() => navigate('/profile')} className="w-full text-center text-white px-4 py-2 bg-black hover:bg-gray-700 rounded-md" >
-              Edit Profile
-            </button>
-          </div>
-        )}
+        {userDetails && (openProfile) && (
+          <>
+            {(!editProfile) ?
+              <div ref={dropdownRef}
+                className="absolute top-16 h-[22rem] right-2 lg:right-20 bg-gray-100 shadow-lg rounded-lg w-64 p-4  z-50"
+              >
+                <span className='ml-[13rem]'>
+                  <FontAwesomeIcon icon={faXmark} onClick={closingProfile} className='cursor-pointer' />
+                </span>
+                <div className="flex justify-center top-6 right-[0.3rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20 border-red-400" onClick={showProfile}>
+                  <img
+                    src={profilePictureUrl}
+                    alt="Profile"
+                    style={{ height: '9rem', width: '9rem', marginTop: '0.1rem' }}
+                    className="rounded-full cursor-pointer border-[0.2rem] border-white"
+                  />
+                </div>
+                <p className="text-gray-700 ml-14 mt-3 text-[1.4rem] font-semibold">{"Hi, " + userDetails.name + "!"}</p>
+                <p className="text-gray-500 ml-12 text-sm">{userDetails.email}</p>
+                <hr className="my-2 border-gray-500" />
+                <button onClick={editfunctionProfile} className="w-full text-center mt-[1.9rem] text-white px-4 py-2 bg-black hover:bg-gray-700 rounded-md" >
+                  <FontAwesomeIcon icon={faPenToSquare} className="h-[1rem] w-[1rem] mr-2" />
+                  Edit Profile
+                </button>
+              </div>
+              :
+              <>
+                {/* 1mins*/}
+                <div ref={dropdownRef}
+                  className="absolute top-16 h-[18rem] right-2 lg:right-20 bg-gray-100 shadow-lg rounded-lg w-64 p-4  z-50"
+                >
+                  <span className='ml-[13rem]'>
+                    <FontAwesomeIcon icon={faXmark} onClick={closingProfile} className='cursor-pointer' />
+                  </span>
+                  <div className="flex justify-center top-6 right-[0.3rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20 border-red-400">
+                    <img
+                      src={tryProfilePictureUrl || profilePictureUrl}
+                      alt="Profile"
+                      style={{ height: '9rem', width: '9rem', marginTop: '0.1rem', marginLeft: '2.6rem' }}
+                      className="rounded-full cursor-pointer border-[0.2rem] border-white"
+                    />
+                    <div className='relative top-[6rem] left-[-2rem] flex justify-center items-center bg-white border-[0.2rem] rounded-full w-9 h-9 border-white' >
+                      <FontAwesomeIcon icon={faCamera} className="cursor-pointer h-[1.3rem] w-[1.3rem] bg-white" onClick={editImage} />
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        className="hidden mt-2 w-[2px] h-[2px]"
+                      />
+                    </div>
+                  </div>
+                  <hr className="my-2 border-gray-500" />
+                  <button onClick={handleUpload} className="w-full text-center mt-[1.6rem] text-white px-4 py-2 bg-black hover:bg-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-700" >
+                    <FontAwesomeIcon icon={faUpload} className="h-[1rem] w-[1rem] mr-2" />
+                    Upload
+                  </button>
+                </div></>
+            } </>)}
 
         {/* Profile Picture */}
         <div className="absolute top-1 right-[0.3rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20 border-red-400" onClick={showProfile}>
