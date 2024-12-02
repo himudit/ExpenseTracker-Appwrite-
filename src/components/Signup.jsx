@@ -143,25 +143,32 @@ function Signup() {
                 </div>
               </div>
 
-              <div>
+              {/* <div>
                 <button
                   type="submit"
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   Sign up
                 </button>
+              </div> */}
+              <div>
+                {dotAnimation ?
+                  <>
+                    <div className='flex justify-center items-center '>
+                      <LottieDot />
+                    </div>
+                  </> : <button
+                    type="submit"
+                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    Sign up
+                  </button>}
+
               </div>
             </form>
           </div>
         </div>
       </div>
-      {
-        (dotAnimation) && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <LottieDot />
-          </div>
-        )
-      }
     </div>
   );
 }

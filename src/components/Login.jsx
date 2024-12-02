@@ -84,28 +84,33 @@ function Login() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between">
-                  <div className="text-sm">
-                    <NavLink
-                      to="/signup"
-                      className="font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                      Don't have Account, Sign Up
-                    </NavLink>
-                  </div>
-                </div>
-
                 <div>
                   {dotAnimation ?
                     <>
-                      <div className='flex justify-center ml-[9rem] mt-[-0.8rem] w-[8rem] h-[1.7rem] text-white bg-white'><LottieDot /></div>
-                    </> : <button
-                      type="submit"
-                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                      onClick={loginUser}
-                    >
-                      Log in
-                    </button>}
+                      <div className='flex justify-center items-center '>
+                        <LottieDot />
+                      </div>
+                    </> :
+                    <>
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm">
+                          <NavLink
+                            to="/signup"
+                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                          >
+                            Don't have Account, Sign Up
+                          </NavLink>
+                        </div>
+                      </div>
+                      <button
+                        type="submit"
+                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        onClick={loginUser}
+                      >
+                        Log in
+                      </button>
+                    </>
+                  }
 
                 </div>
               </form>
