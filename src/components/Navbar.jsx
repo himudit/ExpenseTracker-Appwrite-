@@ -34,7 +34,7 @@ function Navbar() {
       await account.deleteSession("current")
       // setUserDetails(null);
       setUserDetails((userDetails) => !userDetails);
-      navigate("/home")
+      navigate("/login")
     } catch (error) {
       console.log(error);
     }
@@ -60,7 +60,7 @@ function Navbar() {
         {/* navlinks */}
         <div className="flex flex-col items-center space-y-8">
           <NavLink
-            to="/home"
+            to="/"
             className={({ isActive }) =>
               isActive ? 'bg-gray-300 text-center text-black rounded-full w-16 h-9 flex items-center justify-center' : 'text-gray-300 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
             }
@@ -68,12 +68,6 @@ function Navbar() {
             <FontAwesomeIcon icon={faHouse} />
           </NavLink>
 
-          {/* <NavLink
-            to="/expense"
-            className={({ isActive }) =>
-              isActive ? 'bg-lime-green w-11.4 h-11 text-black px-4 py-2 rounded-full' : 'text-gray-400 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
-            }
-          > */}
           <NavLink
             to="/expense"
             className={({ isActive }) =>
@@ -93,7 +87,7 @@ function Navbar() {
                 Logout
               </button>
             </div> : <NavLink
-              to="/"
+              to="/login"
               className="rounded-full bg-lime-green px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-lime-green/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
             >
               Login

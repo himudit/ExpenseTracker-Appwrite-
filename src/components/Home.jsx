@@ -3,7 +3,7 @@ import { databases, account, storage } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid';
 import { Query } from 'appwrite';
 import conf from '../conf/conf';
-import { useNavigate, Link, Navigate } from 'react-router-dom'
+import { useNavigate, Link, NavLink, Navigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faChevronLeft, faBurger, faMinus, faPlus, faRightFromBracket, faPenToSquare, faCamera, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { PieChart, Pie } from 'recharts';
@@ -27,7 +27,7 @@ function Home() {
   const [descombinedEntries, setDesCombinedEntries] = useState([]);
 
   const [openProfile, setOpenProfile] = useState(false);
- 
+
   const dropdownRef = useRef(null);
   const showProfile = () => {
     setOpenProfile(!openProfile);
@@ -501,7 +501,8 @@ function Home() {
       </div>
       {/* logic for profile and good morning */}
       <div className="caret-black">
-        {(() => {
+
+        {userDetails ? <>{(() => {
           const currentHour = new Date().getHours();
           if (currentHour >= 5 && currentHour < 12) {
             return "Good Morning";
@@ -512,8 +513,10 @@ function Home() {
           } else {
             return "Good Night";
           }
-        })()}{" "}
-        {userDetails ? userDetails.name : ""}
+        })()}{" "} {userDetails.name} </> : <><NavLink
+          to="/login" >Login</NavLink>
+          <NavLink
+            to="/signup" >Signup</NavLink></>}
       </div>
 
       <div className="flex flex-wrap w-full gap-4 p-4">

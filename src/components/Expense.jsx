@@ -19,7 +19,7 @@ function Expense() {
 
     // for amount
     const [amount, setAmount] = useState('');
-    
+
     const handleInputChange = (event) => {
         const value = event.target.value;
         if (!isNaN(value)) {
@@ -339,6 +339,10 @@ function Expense() {
             }
         }
     }
+    const cancelAll = () => {
+        setAmount('');
+        setSelectedCategory({ icon: faEllipsis, text: 'others', col: '#94969B' });
+    }
     return (
         <>
             <div
@@ -468,7 +472,7 @@ function Expense() {
                         {/* {animation1 && <LottieLoader />} */}
                         {/* {animation2 && <LottieAnimation />} */}
                     </div>
-                    <div className='flex justify-between m-2 w-full'>
+                    <div className='flex justify-between m-2 w-full' onClick={cancelAll}>
                         <div className='p-2 cursor-pointer'>
                             <FontAwesomeIcon icon={faXmark} /> Cancel
                         </div>

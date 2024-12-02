@@ -18,7 +18,7 @@ function Login() {
     try {
       await account.createEmailPasswordSession(user.email, user.password);
       setDotAnimation(false);
-      navigate("/home");
+      navigate("/");
     } catch (error) {
       setDotAnimation(false);
       alert("Login failed. Please check your email and password and try again.");

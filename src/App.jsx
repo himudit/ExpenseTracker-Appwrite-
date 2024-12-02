@@ -5,7 +5,7 @@ import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } 
 import Layout from './Layout.jsx'
 import Login from './components/Login';
 import Signup from './components/Signup';
-import Profile from './components/Profile.jsx'
+// import Profile from './components/Profile.jsx'
 import Home from './components/Home.jsx'
 import Expense from './components/Expense.jsx'
 
@@ -13,10 +13,9 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path='/' element={<Layout />}>
-        <Route path='/' element={<Login />} />
+        <Route path='/' element={<Home />} />
         <Route path='signup' element={<Signup />} />
-        <Route path='home' element={<Home />} />
-        <Route path='profile' element={<Profile />} />
+        <Route path='login' element={<Login />} />
         <Route path='expense' element={<Expense />} />
       </Route>
     )

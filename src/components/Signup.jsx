@@ -21,7 +21,7 @@ function Signup() {
     const checkUser = async () => {
       try {
         const response = await account.get();
-        navigate('/home');
+        navigate('/');
       } catch (error) {
         console.log('No logged-in user:', error);
       }
@@ -55,7 +55,7 @@ function Signup() {
       await account.createEmailPasswordSession(user.email, user.password);
       setDotAnimation(false);
       // Redirect to the home page
-      navigate('/home');
+      navigate('/');
     } catch (err) {
       // console.error('Error during signup or login:', err);
       setDotAnimation(false);
