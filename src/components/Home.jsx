@@ -514,9 +514,12 @@ function Home() {
             return "Good Night";
           }
         })()}{" "} {userDetails.name} </> : <><NavLink
-          to="/login" >Login</NavLink>
+          to="/login"
+          className="text-blue-600 hover:underline px-2" >Login</NavLink>
+          <sapn> or </sapn>
           <NavLink
-            to="/signup" >Signup</NavLink></>}
+            to="/signup"
+            className="text-blue-600 hover:underline px-2">Signup</NavLink></>}
       </div>
 
       <div className="flex flex-wrap w-full gap-4 p-4">

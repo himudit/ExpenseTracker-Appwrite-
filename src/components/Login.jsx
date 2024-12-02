@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { account } from '../appwrite/appwriteConfig'
 import { NavLink, useNavigate } from 'react-router-dom'
 import LottieDot from './LottieDot'
+import { height } from '@fortawesome/free-solid-svg-icons/fa0'
 
 function Login() {
   const navigate = useNavigate()
@@ -12,7 +13,7 @@ function Login() {
 
   const [dotAnimation, setDotAnimation] = useState(false);
   const loginUser = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     setDotAnimation(true);
 
     try {
@@ -95,25 +96,29 @@ function Login() {
                 </div>
 
                 <div>
-                  <button
-                    type="submit"
-                    className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    onClick={loginUser}
-                  >
-                    Log in
-                  </button>
+                  {dotAnimation ?
+                    <>
+                      <div className='flex justify-center ml-[9rem] mt-[-0.8rem] w-[8rem] h-[1.7rem] text-white bg-white'><LottieDot /></div>
+                    </> : <button
+                      type="submit"
+                      className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      onClick={loginUser}
+                    >
+                      Log in
+                    </button>}
+
                 </div>
               </form>
             </div>
           </div>
         </div>
-        {
+        {/* {
           (dotAnimation) && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
               <LottieDot />
             </div>
           )
-        }
+        } */}
       </div>
     </>
   )

@@ -1,6 +1,6 @@
 import React from 'react';
 import Lottie from 'lottie-react';
-import animationData from './Animation - 1733114374359.json'
+import animationData from './DottedEdit.json'
 const LottieDot = () => {
     return (
         <div>
