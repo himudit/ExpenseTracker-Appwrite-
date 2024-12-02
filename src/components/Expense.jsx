@@ -341,11 +341,6 @@ function Expense() {
     }
     return (
         <>
-            {/* // blur */}
-            {/* // <div className="flex flex-wrap justify-center h-screen ml-[7rem] bg-gradient-to-r items-center"> */}
-            {/* <div
-            className={`flex flex-wrap justify-center h-screen ml-[7rem] bg-gradient-to-r items-center ${(animation1 || animation2) ? "blur-sm" : ""}`}
-        > */}
             <div
                 className={`flex flex-wrap justify-center h-screen ml-[7rem] bg-gradient-to-r items-center`}
                 style={{ filter: (animation1 || animation2) ? "blur(1px)" : "none" }}
@@ -503,8 +498,6 @@ function Expense() {
                     </div>
                 </div>
             </div>
-            {/* last */}
-            {/* Animation Overlay */}
             {
                 (animation1 || animation2) && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">

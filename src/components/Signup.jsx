@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import Logo from '../assets/Logo.jpg';
 import isEmail from 'validator/lib/isEmail';
+import LottieDot from './LottieDot'
 
 function Signup() {
   const navigate = useNavigate();
@@ -14,11 +15,12 @@ function Signup() {
     password: ''
   });
 
+  const [dotAnimation, setDotAnimation] = useState(false);
+
   useEffect(() => {
     const checkUser = async () => {
       try {
         const response = await account.get();
-        // Redirect if user is already logged in
         navigate('/home');
       } catch (error) {
         console.log('No logged-in user:', error);
@@ -29,6 +31,7 @@ function Signup() {
 
   const signupUser = async (e) => {
     e.preventDefault();
+    setDotAnimation(true);
 
     // Password validation
     if (user.password.length < 8) {
@@ -50,11 +53,12 @@ function Signup() {
 
       // Log in the user
       await account.createEmailPasswordSession(user.email, user.password);
-
+      setDotAnimation(false);
       // Redirect to the home page
       navigate('/home');
     } catch (err) {
       // console.error('Error during signup or login:', err);
+      setDotAnimation(false);
       alert(err.message || 'An unexpected error occurred. Please try again.');
     }
   };
@@ -151,6 +155,13 @@ function Signup() {
           </div>
         </div>
       </div>
+      {
+        (dotAnimation) && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <LottieDot />
+          </div>
+        )
+      }
     </div>
   );
 }

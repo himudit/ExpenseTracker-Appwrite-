@@ -27,6 +27,7 @@ function Home() {
   const [descombinedEntries, setDesCombinedEntries] = useState([]);
 
   const [openProfile, setOpenProfile] = useState(false);
+ 
   const dropdownRef = useRef(null);
   const showProfile = () => {
     setOpenProfile(!openProfile);
@@ -89,7 +90,7 @@ function Home() {
         console.log('Document updated successfully:', updatedDocument);
         const fileUrl = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/view?project=${conf.appwriteProjectId}&mode=admin`;
         setProfilePictureUrl(fileUrl);
-        
+
         promise.then(() => {
           setEditProfile(false);
           setOpenProfile(false);
@@ -466,7 +467,7 @@ function Home() {
                   </span>
                   <div className="flex justify-center top-6 right-[0.3rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20 border-red-400">
                     <img
-                      src={tryProfilePictureUrl || profilePictureUrl}
+                      src={tryProfilePictureUrl || '/image.png'}
                       alt="Profile"
                       style={{ height: '9rem', width: '9rem', marginTop: '0.1rem', marginLeft: '2.6rem' }}
                       className="rounded-full cursor-pointer border-[0.2rem] border-white"

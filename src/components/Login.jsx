@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { account } from '../appwrite/appwriteConfig'
 import { NavLink, useNavigate } from 'react-router-dom'
+import LottieDot from './LottieDot'
 
 function Login() {
   const navigate = useNavigate()
@@ -9,23 +10,25 @@ function Login() {
     password: ""
   })
 
-  // Login
+  const [dotAnimation, setDotAnimation] = useState(false);
   const loginUser = async (e) => {
-    // console.log(user.email);
-    // console.log(user.password);
-    e.preventDefault()
+    e.preventDefault(); 
+    setDotAnimation(true);
+
     try {
-      await account.createEmailPasswordSession(user.email, user.password)
-      navigate("/home")
+      await account.createEmailPasswordSession(user.email, user.password);
+      setDotAnimation(false);
+      navigate("/home");
     } catch (error) {
+      setDotAnimation(false);
       alert("Login failed. Please check your email and password and try again.");
-      console.log(error);
     }
-  }
+  };
+
 
   return (
     <>
-      <div className='flex justify-center items-center'>
+      <div className={`flex justify-center items-center`}>
         <div className="h-full w-[70%] flex flex-col justify-center  mt-[4rem] ml-[6rem]">
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
@@ -104,6 +107,13 @@ function Login() {
             </div>
           </div>
         </div>
+        {
+          (dotAnimation) && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <LottieDot />
+            </div>
+          )
+        }
       </div>
     </>
   )
