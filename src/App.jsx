@@ -22,7 +22,9 @@ function App() {
   );
   return (
     <>
-      <RouterProvider router={router} />
+      {/* <Provider store={appStore}> */}
+        <RouterProvider router={router} />
+      {/* </Provider> */}
     </>
   )
 }

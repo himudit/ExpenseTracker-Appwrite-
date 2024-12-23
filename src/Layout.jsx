@@ -1,5 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import { Provider } from 'react-redux'
+import appStore from './utils/appStore.js'
 
 const Layout = () => {
   const location = useLocation();
@@ -9,11 +11,15 @@ const Layout = () => {
 
   return (
     <div className="h-full w-full">
-      <Navbar />
+      <Provider store={appStore}>
+        <Navbar />
+      </Provider>
       <div className={`h-full ${isExpensePage ? "bg-gray-100" : ""}`}>
-        <Outlet />
+        <Provider store={appStore}>
+          <Outlet />
+        </Provider>
       </div>
-    </div>
+    </div >
   );
 };
 

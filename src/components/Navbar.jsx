@@ -8,31 +8,37 @@ import { faSearch, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import Logo from '../assets/wallet.png';
 import { databases, account, storage } from '../appwrite/appwriteConfig';
 import conf from '../conf/conf';
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from '../utils/userSlice'
 
 function Navbar() {
   const [userId, setUserId] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [flag, setFlag] = useState(false);
   const navigate = useNavigate();
+  const userContext = useSelector((store) => store.user.user)
+  const dispatch = useDispatch();
   // fetching user data
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
         const response = await account.get();
+        dispatch(setUser(response.name));
         setUserDetails(response);
       } catch (error) {
         setUserDetails(null);
         console.log('No user logged in:', error);
       }
     };
+    // console.log(userContext);
     fetchUserDetails();
-  }, [userDetails])
+  })
 
   // logout
   const handleLogout = async () => {
     try {
       await account.deleteSession("current")
-      // setUserDetails(null);
+      dispatch(setUser(null));
       setUserDetails((userDetails) => !userDetails);
       navigate("/login")
     } catch (error) {
@@ -78,7 +84,7 @@ function Navbar() {
           </NavLink>
 
           {
-            userDetails ? <div>
+            userContext ? <div>
               <button
                 className="rounded-full bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-lime-green/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                 onClick={handleLogout}
@@ -94,7 +100,7 @@ function Navbar() {
             </NavLink>
           }
 
-          {userDetails ? <></> :
+          {userContext ? <></> :
             <NavLink
               to="/signup"
               className="rounded-full bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"

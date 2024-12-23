@@ -3,6 +3,8 @@ import { account } from '../appwrite/appwriteConfig'
 import { NavLink, useNavigate } from 'react-router-dom'
 import LottieDot from './LottieDot'
 import { height } from '@fortawesome/free-solid-svg-icons/fa0'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from '../utils/userSlice'
 
 function Login() {
   const navigate = useNavigate()
@@ -10,6 +12,8 @@ function Login() {
     email: "",
     password: ""
   })
+  const userContext = useSelector((store) => store.user.user)
+  const dispatch = useDispatch();
 
   const [dotAnimation, setDotAnimation] = useState(false);
   const loginUser = async (e) => {
@@ -17,11 +21,13 @@ function Login() {
     setDotAnimation(true);
 
     try {
-      await account.createEmailPasswordSession(user.email, user.password);
+      const response = await account.createEmailPasswordSession(user.email, user.password);
+      dispatch(setUser("NotNull"));
       setDotAnimation(false);
       navigate("/");
     } catch (error) {
       setDotAnimation(false);
+      console.log(error);
       alert("Login failed. Please check your email and password and try again.");
     }
   };
