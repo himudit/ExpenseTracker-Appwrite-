@@ -26,13 +26,15 @@ function Navbar() {
         dispatch(setUser(response.name));
         setUserDetails(response);
       } catch (error) {
+        console.log("hi");
         setUserDetails(null);
         console.log('No user logged in:', error);
       }
     };
-    // console.log(userContext);
+    console.log(userContext);
     fetchUserDetails();
-  })
+    
+  }, []);
 
   // logout
   const handleLogout = async () => {
@@ -86,11 +88,10 @@ function Navbar() {
           {
             userContext ? <div>
               <button
-                className="rounded-full bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-lime-green/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                className="rounded-full  w-16 h-9  bg-blue-300 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-lime-green/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                 onClick={handleLogout}
               >
                 <FontAwesomeIcon icon={faRightFromBracket} />
-                Logout
               </button>
             </div> : <NavLink
               to="/login"

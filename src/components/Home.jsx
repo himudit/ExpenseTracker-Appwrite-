@@ -17,7 +17,7 @@ function Home() {
   const [indexC, setindexC] = useState(0);
 
   const [userId, setUserId] = useState(null);
-  const [userDetails, setUserDetails] = useState()
+  const [userDetails, setUserDetails] = useState(null)
   const [income, setIncome] = useState(0);
   const [expenses, setExpenses] = useState(0);
   const [budget, setBudget] = useState(0);
@@ -27,7 +27,17 @@ function Home() {
   const [descombinedEntries, setDesCombinedEntries] = useState([]);
 
   const [openProfile, setOpenProfile] = useState(false);
-
+  useEffect(() => {
+    const getData = account.get()
+    getData.then(
+      function (response) {
+        setUserDetails(response)
+      },
+      function (error) {
+        console.log(error);
+      }
+    )
+  })
   const dropdownRef = useRef(null);
   const showProfile = () => {
     setOpenProfile(!openProfile);
@@ -123,22 +133,11 @@ function Home() {
     }
   };
 
-
-  useEffect(() => {
-    const getData = account.get()
-    getData.then(
-      function (response) {
-        setUserDetails(response)
-      },
-      function (error) {
-        console.log(error);
-      }
-    )
-  }, [])
-
   useEffect(() => {
     const fetchProfilePictureUrl = async () => {
-      if (!userDetails || !userDetails.$id) return;
+      if (userDetails == null) {
+        return;
+      }
       try {
         const res = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection3Id, [Query.equal('user_id', userDetails.$id)]);
         setProfilePictureUrl(`${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${res.documents[0].image_id}/view?project=${conf.appwriteProjectId}&mode=admin`);
@@ -149,6 +148,9 @@ function Home() {
 
     // for collection4(Category)
     const fetchTotalFromCategory = async () => {
+      if (userDetails == null) {
+        return;
+      }
       const userDataInc = await databases.listDocuments(
         conf.appwriteDatabaseId,
         conf.appwriteCollection6Id,
@@ -206,6 +208,9 @@ function Home() {
   useEffect(() => {
     // for collection 2 (Expense)
     const fetchfromNewExpense = async () => {
+      if (userDetails == null) {
+        return;
+      }
       const userDataExpense = await databases.listDocuments(
         conf.appwriteDatabaseId,
         conf.appwriteCollection2Id,
@@ -218,6 +223,9 @@ function Home() {
 
     // for collection 5 (Income)
     const fetchfromNewIncome = async () => {
+      if (userDetails == null) {
+        return;
+      }
       const userDataIncome = await databases.listDocuments(
         conf.appwriteDatabaseId,
         conf.appwriteCollection5Id,
@@ -384,6 +392,9 @@ function Home() {
 
   useEffect(() => {
     const fetchFromExpenseCategory = async () => {
+      if (userDetails == null) {
+        return;
+      }
       // Expense
       const result = await databases.listDocuments(
         conf.appwriteDatabaseId,
@@ -516,7 +527,7 @@ function Home() {
         })()}{" "} {userDetails.name} </> : <><NavLink
           to="/login"
           className="text-blue-600 hover:underline px-2" >Login</NavLink>
-          <sapn> or </sapn>
+          <span> or </span>
           <NavLink
             to="/signup"
             className="text-blue-600 hover:underline px-2">Signup</NavLink></>}
@@ -525,36 +536,25 @@ function Home() {
       <div className="flex flex-wrap w-full gap-4 p-4">
         <div className="bg-blue-200 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
           <div className="mb-2 text-lg font-semibold">Total Income</div>
-          <input
-            type="text"
-            value={"₹" + " " + income}
-            className="w-full p-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div
+            className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >{`₹ ${income}`}</div>
         </div>
 
         <div className="bg-purple-200 p-6 text-white rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
           <div className="mb-2 text-lg font-semibold">Total Expense</div>
-          <input
-            type="text"
-            value={"₹" + " " + expenses}
-            placeholder=""
-            className="w-full p-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
+          <div
+            className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >{`₹ ${expenses}`}</div>
         </div>
 
         <div className="bg-green-200 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
           <div className="mb-2 text-lg font-semibold">Remaining Balance</div>
-          {(income > expenses) ? <input
-            type="text"
-            value={"₹" + " " + (income - expenses)}
-            placeholder=""
-            className="w-full p-2 border text-green-500 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          /> : <input
-            type="text"
-            value={"₹" + " " + (income - expenses)}
-            placeholder=""
-            className="w-full p-2 border text-red-500 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />}
+          {(income > expenses) ? <div
+            className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >{`₹ ${income - expenses}`}</div> : <div
+            className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >{`₹ ${expenses - income}`}</div>}
         </div>
       </div>
 

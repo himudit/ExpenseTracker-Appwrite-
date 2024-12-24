@@ -19,16 +19,16 @@ function Login() {
   const loginUser = async (e) => {
     e.preventDefault();
     setDotAnimation(true);
-
     try {
       const response = await account.createEmailPasswordSession(user.email, user.password);
-      dispatch(setUser("NotNull"));
+      // dispatch(setUser("NotNull"));
+      dispatch({ type: 'user/setUser', payload: 'NotNull' });
       setDotAnimation(false);
       navigate("/");
     } catch (error) {
       setDotAnimation(false);
       console.log(error);
-      alert("Login failed. Please check your email and password and try again.");
+      alert(error);
     }
   };
 
