@@ -26,7 +26,6 @@ function Navbar() {
         dispatch(setUser(response.name));
         setUserDetails(response);
       } catch (error) {
-        console.log("hi");
         setUserDetails(null);
         console.log('No user logged in:', error);
       }

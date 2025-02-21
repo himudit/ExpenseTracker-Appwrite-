@@ -37,7 +37,7 @@ function Home() {
         console.log(error);
       }
     )
-  })
+  }, []);
   const dropdownRef = useRef(null);
   const showProfile = () => {
     setOpenProfile(!openProfile);
