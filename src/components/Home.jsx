@@ -9,35 +9,26 @@ import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleChe
 import { PieChart, Pie } from 'recharts';
 import PieChartComponent from './PieChartComponent';
 import CustomAreaChart from './CustomAreaChart';
+import { useSelector } from "react-redux";
 
 function Home() {
   const navigate = useNavigate();
   const [leftC, setLeftC] = useState(false);
   const [rightC, setRightC] = useState(false);
   const [indexC, setindexC] = useState(0);
-
+  const userDetails = useSelector((state) => state.user.user);
+  // console.log(userDetails);
   const [userId, setUserId] = useState(null);
-  const [userDetails, setUserDetails] = useState(null)
-  const [income, setIncome] = useState(0);
-  const [expenses, setExpenses] = useState(0);
-  const [budget, setBudget] = useState(0);
+  const [income, setIncome] = useState('');
+  const [expenses, setExpenses] = useState('');
+  const [budget, setBudget] = useState('');
   const [profilePictureUrl, setProfilePictureUrl] = useState('/image.png');
   const [middleData, setMiddleData] = useState([]);
   const [middleFlag, setMiddleFlag] = useState(false);
   const [descombinedEntries, setDesCombinedEntries] = useState([]);
 
   const [openProfile, setOpenProfile] = useState(false);
-  useEffect(() => {
-    const getData = account.get()
-    getData.then(
-      function (response) {
-        setUserDetails(response)
-      },
-      function (error) {
-        console.log(error);
-      }
-    )
-  }, []);
+
   const dropdownRef = useRef(null);
   const showProfile = () => {
     setOpenProfile(!openProfile);
@@ -53,7 +44,6 @@ function Home() {
   const editfunctionProfile = () => {
     setEditProfile(true);
   };
-  // 1mins
   const [tryProfilePictureUrl, setTryProfilePictureUrl] = useState('');
 
   const fileInputRef = useRef();

@@ -23,16 +23,14 @@ function Navbar() {
     const fetchUserDetails = async () => {
       try {
         const response = await account.get();
-        dispatch(setUser(response.name));
+        dispatch(setUser(response));
         setUserDetails(response);
       } catch (error) {
         setUserDetails(null);
         console.log('No user logged in:', error);
       }
     };
-    console.log(userContext);
     fetchUserDetails();
-    
   }, []);
 
   // logout

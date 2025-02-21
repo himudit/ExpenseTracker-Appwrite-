@@ -5,7 +5,6 @@ import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } 
 import Layout from './Layout.jsx'
 import Login from './components/Login';
 import Signup from './components/Signup';
-// import Profile from './components/Profile.jsx'
 import Home from './components/Home.jsx'
 import Expense from './components/Expense.jsx'
 
@@ -22,9 +21,8 @@ function App() {
   );
   return (
     <>
-      {/* <Provider store={appStore}> */}
-        <RouterProvider router={router} />
-      {/* </Provider> */}
+      <RouterProvider router={router} />
+
     </>
   )
 }
