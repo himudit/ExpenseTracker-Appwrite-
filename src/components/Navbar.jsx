@@ -76,7 +76,7 @@ function Navbar() {
               <div>
                 <button
                   className={`rounded-full w-16 h-9 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black
-        ${clicked ? "bg-blue-300" : "bg-blue-500 hover:bg-lime-green/80"}`}
+        ${clicked ? "bg-blue-300" : "bg-blue-500 hover:bg-blue-300"}`}
                   onClick={() => {
                     setClicked(true);
                     handleLogout();
