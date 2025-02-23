@@ -9,41 +9,30 @@ import Logo from '../assets/wallet.png';
 import { databases, account, storage } from '../appwrite/appwriteConfig';
 import conf from '../conf/conf';
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from '../utils/userSlice'
+import { setUser, removeUser } from '../utils/userSlice'
+import { fetchUserProfile } from "../utils/userSlice";
 
 function Navbar() {
-  const [userId, setUserId] = useState(null);
-  const [userDetails, setUserDetails] = useState(null);
-  const [flag, setFlag] = useState(false);
   const navigate = useNavigate();
   const userContext = useSelector((store) => store.user.user)
   const dispatch = useDispatch();
-  // fetching user data
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const response = await account.get();
-        dispatch(setUser(response));
-        setUserDetails(response);
-      } catch (error) {
-        setUserDetails(null);
-        console.log('No user logged in:', error);
-      }
-    };
-    fetchUserDetails();
-  }, []);
+  const [clicked, setClicked] = useState(false);
 
-  // logout
+  useEffect(() => {
+    dispatch(fetchUserProfile());
+  }, [dispatch]);
+
   const handleLogout = async () => {
     try {
-      await account.deleteSession("current")
-      dispatch(setUser(null));
-      setUserDetails((userDetails) => !userDetails);
-      navigate("/login")
+      await account.deleteSession("current"); // Ends user session
+      dispatch(removeUser()); // Remove user from Redux
+      // setUserDetails(null); // Clear local state
+      navigate("/login"); // Redirect to login
     } catch (error) {
-      console.log(error);
+      console.log("Logout failed:", error);
     }
-  }
+  };
+
 
   return (
     <>
@@ -83,19 +72,25 @@ function Navbar() {
           </NavLink>
 
           {
-            userContext ? <div>
-              <button
-                className="rounded-full  w-16 h-9  bg-blue-300 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-lime-green/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                onClick={handleLogout}
+            userContext ?
+              <div>
+                <button
+                  className={`rounded-full w-16 h-9 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black
+        ${clicked ? "bg-blue-300" : "bg-blue-400 hover:bg-lime-green/80"}`}
+                  onClick={() => {
+                    setClicked(true);
+                    handleLogout();
+                  }}
+                >
+                  <FontAwesomeIcon icon={faRightFromBracket} />
+                </button>
+              </div>
+              : <NavLink
+                to="/login"
+                className="rounded-full bg-lime-green px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-lime-green/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
               >
-                <FontAwesomeIcon icon={faRightFromBracket} />
-              </button>
-            </div> : <NavLink
-              to="/login"
-              className="rounded-full bg-lime-green px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-lime-green/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-            >
-              Login
-            </NavLink>
+                Login
+              </NavLink>
           }
 
           {userContext ? <></> :

@@ -9,14 +9,19 @@ import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleChe
 import { PieChart, Pie } from 'recharts';
 import PieChartComponent from './PieChartComponent';
 import CustomAreaChart from './CustomAreaChart';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchUserProfile } from "../utils/userSlice";
 
 function Home() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUserProfile());
+  }, [dispatch]);
   const navigate = useNavigate();
   const [leftC, setLeftC] = useState(false);
   const [rightC, setRightC] = useState(false);
   const [indexC, setindexC] = useState(0);
-  const userDetails = useSelector((state) => state.user.user);
+  const userDetails = useSelector((store) => store.user.user)
   // console.log(userDetails);
   const [userId, setUserId] = useState(null);
   const [income, setIncome] = useState('');

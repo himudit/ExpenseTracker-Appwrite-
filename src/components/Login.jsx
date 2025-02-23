@@ -12,13 +12,14 @@ function Login() {
     email: "",
     password: ""
   })
+  const [loading, setLoading] = useState(false);
   const userContext = useSelector((store) => store.user.user)
   const dispatch = useDispatch();
 
   const [dotAnimation, setDotAnimation] = useState(false);
   const loginUser = async (e) => {
     e.preventDefault();
-    setDotAnimation(true);
+    setLoading(true);
     try {
       const response = await account.createEmailPasswordSession(user.email, user.password);
       // dispatch(setUser("NotNull"));
@@ -29,6 +30,8 @@ function Login() {
       setDotAnimation(false);
       console.log(error);
       alert(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -91,45 +94,37 @@ function Login() {
                 </div>
 
                 <div>
-                  {dotAnimation ?
-                    <>
-                      <div className='flex justify-center items-center '>
-                        <LottieDot />
-                      </div>
-                    </> :
-                    <>
-                      <div className="flex items-center justify-between">
-                        <div className="text-sm">
-                          <NavLink
-                            to="/signup"
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                          >
-                            Don't have Account, Sign Up
-                          </NavLink>
-                        </div>
-                      </div>
-                      <button
-                        type="submit"
-                        className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        onClick={loginUser}
+
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm">
+                      <NavLink
+                        to="/signup"
+                        className="font-medium text-indigo-600 hover:text-indigo-500"
                       >
-                        Log in
-                      </button>
-                    </>
-                  }
+                        Don't have Account, Sign Up
+                      </NavLink>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    onClick={loginUser}
+                    className={`w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-3 transition-colors ${loading ? 'bg-indigo-400 cursor-not-allowed' : ''
+                      }`}
+                  >
+                    {loading && (
+                      <span className="w-5 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    )}
+                    {loading ? 'Logging in...' : 'Login'}
+                  </button>
 
                 </div>
               </form>
             </div>
           </div>
         </div>
-        {/* {
-          (dotAnimation) && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-              <LottieDot />
-            </div>
-          )
-        } */}
+
       </div>
     </>
   )
