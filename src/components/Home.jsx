@@ -210,7 +210,9 @@ function Home() {
         conf.appwriteDatabaseId,
         conf.appwriteCollection2Id,
         [
-          Query.equal('userid', userDetails.$id)
+          Query.equal('userid', userDetails.$id),
+          Query.limit(100),
+          Query.offset(20)
         ]
       );
       console.log(userDataExpense);
@@ -226,7 +228,9 @@ function Home() {
         conf.appwriteDatabaseId,
         conf.appwriteCollection5Id,
         [
-          Query.equal('userid', userDetails.$id)
+          Query.equal('userid', userDetails.$id),
+          Query.limit(100),
+          Query.offset(20)
         ]
       );
 
