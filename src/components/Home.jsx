@@ -212,7 +212,7 @@ function Home() {
         [
           Query.equal('userid', userDetails.$id),
           Query.limit(100),
-          Query.offset(20)
+          // Query.offset(20)
         ]
       );
       console.log(userDataExpense);
@@ -230,7 +230,7 @@ function Home() {
         [
           Query.equal('userid', userDetails.$id),
           Query.limit(100),
-          Query.offset(20)
+          // Query.offset(20)
         ]
       );
 
