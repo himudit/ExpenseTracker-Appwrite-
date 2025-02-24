@@ -213,6 +213,7 @@ function Home() {
           Query.equal('userid', userDetails.$id)
         ]
       );
+      console.log(userDataExpense);
       setExpenseEntries(userDataExpense.documents);
     };
 
@@ -228,6 +229,8 @@ function Home() {
           Query.equal('userid', userDetails.$id)
         ]
       );
+
+      console.log(userDataIncome);
       setRightC(true);
       setIncomeEntries(userDataIncome.documents);
     };
