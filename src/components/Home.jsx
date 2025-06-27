@@ -5,7 +5,7 @@ import { Query } from 'appwrite';
 import conf from '../conf/conf';
 import { useNavigate, Link, NavLink, Navigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faChevronLeft, faBurger, faMinus, faPlus, faRightFromBracket, faPenToSquare, faCamera, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo,faCartShopping, faPlane, faXmark,  faWallet, faChevronLeft, faBurger, faPenToSquare, faCamera, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { PieChart, Pie } from 'recharts';
 import PieChartComponent from './PieChartComponent';
 import CustomAreaChart from './CustomAreaChart';
