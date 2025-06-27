@@ -5,23 +5,25 @@ import { Query } from 'appwrite';
 import conf from '../conf/conf';
 import { useNavigate, Link, NavLink, Navigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo,faCartShopping, faPlane, faXmark,  faWallet, faChevronLeft, faBurger, faPenToSquare, faCamera, faUpload } from '@fortawesome/free-solid-svg-icons';
+import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faCartShopping, faPlane, faXmark, faWallet, faChevronLeft, faBurger, faPenToSquare, faCamera, faUpload } from '@fortawesome/free-solid-svg-icons';
 import { PieChart, Pie } from 'recharts';
 import PieChartComponent from './PieChartComponent';
 import CustomAreaChart from './CustomAreaChart';
+import SkeletonIncomeCard from '../skeleton/SkeletonIncomeCard';
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUserProfile } from "../utils/userSlice";
+import SkeletonRecentCard from '../skeleton/SkeletonRecentCard';
 
 function Home() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchUserProfile());
   }, [dispatch]);
-  const navigate = useNavigate();
   const [leftC, setLeftC] = useState(false);
   const [rightC, setRightC] = useState(false);
-  const [indexC, setindexC] = useState(0);
   const userDetails = useSelector((store) => store.user.user)
+  const loading = useSelector((store) => store.user.loading)
+  // const [loading, setLoading] = useState(true);
   // console.log(userDetails);
   const [userId, setUserId] = useState(null);
   const [income, setIncome] = useState('');
@@ -29,8 +31,10 @@ function Home() {
   const [budget, setBudget] = useState('');
   const [profilePictureUrl, setProfilePictureUrl] = useState('/image.png');
   const [middleData, setMiddleData] = useState([]);
-  const [middleFlag, setMiddleFlag] = useState(false);
   const [descombinedEntries, setDesCombinedEntries] = useState([]);
+  const [loading1, setLoading1] = useState(true);
+  const [loading2, setLoading2] = useState(true);
+  const [loading3, setLoading3] = useState(true);
 
   const [openProfile, setOpenProfile] = useState(false);
 
@@ -143,43 +147,52 @@ function Home() {
 
     // for collection4(Category)
     const fetchTotalFromCategory = async () => {
-      if (userDetails == null) {
-        return;
-      }
-      const userDataInc = await databases.listDocuments(
-        conf.appwriteDatabaseId,
-        conf.appwriteCollection6Id,
-        [
-          Query.equal('userid', userDetails.$id)
-        ]
-      )
-      const userDocumentInc = userDataInc.documents[0];
-      const othersInc = userDocumentInc?.others || 0;
-      const salary = userDocumentInc?.Salary || 0;
-      const sold = userDocumentInc?.Sold || 0;
-      const totalIncome = othersInc + salary + sold;
-      setIncome(totalIncome);
+      try {
+        if (userDetails == null) {
+          return;
+        }
+        
+      setLoading2(true);
+        setLoading1(true);
+        const userDataInc = await databases.listDocuments(
+          conf.appwriteDatabaseId,
+          conf.appwriteCollection6Id,
+          [
+            Query.equal('userid', userDetails.$id)
+          ]
+        )
+        const userDocumentInc = userDataInc.documents[0];
+        const othersInc = userDocumentInc?.others || 0;
+        const salary = userDocumentInc?.Salary || 0;
+        const sold = userDocumentInc?.Sold || 0;
+        const totalIncome = othersInc + salary + sold;
+        setIncome(totalIncome);
 
-      const userData = await databases.listDocuments(
-        conf.appwriteDatabaseId,
-        conf.appwriteCollection4Id,
-        [
-          Query.equal('userid', userDetails.$id)
-        ]
-      )
-      const userDocument = userData.documents[0];
-      const others = userDocument?.others || 0;
-      const food = userDocument?.Food || 0;
-      const shopping = userDocument?.Shopping || 0;
-      const travelling = userDocument?.Travelling || 0;
-      const entertainment = userDocument?.Entertainment || 0;
-      const medicalBills = userDocument?.Medical || 0;
-      const bills = userDocument?.Bills || 0;
-      const rent = userDocument?.Rent || 0;
-      const taxes = userDocument?.Taxes || 0;
-      const investments = userDocument?.Investments || 0;
-      const totalExpense = others + food + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
-      setExpenses(totalExpense);
+        const userData = await databases.listDocuments(
+          conf.appwriteDatabaseId,
+          conf.appwriteCollection4Id,
+          [
+            Query.equal('userid', userDetails.$id)
+          ]
+        )
+        const userDocument = userData.documents[0];
+        const others = userDocument?.others || 0;
+        const food = userDocument?.Food || 0;
+        const shopping = userDocument?.Shopping || 0;
+        const travelling = userDocument?.Travelling || 0;
+        const entertainment = userDocument?.Entertainment || 0;
+        const medicalBills = userDocument?.Medical || 0;
+        const bills = userDocument?.Bills || 0;
+        const rent = userDocument?.Rent || 0;
+        const taxes = userDocument?.Taxes || 0;
+        const investments = userDocument?.Investments || 0;
+        const totalExpense = others + food + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
+        setExpenses(totalExpense);
+      } catch (err) {
+
+      } finally {
+        setLoading1(false);
+      }
     }
     fetchProfilePictureUrl();
     fetchTotalFromCategory();
@@ -243,74 +256,84 @@ function Home() {
     fetchfromNewIncome();
   }, [userDetails]);
 
+
+  // myflag
   useEffect(() => {
-    if (expenseEntries.length > 0 || incomeEntries.length > 0) {
-      const combined = [...expenseEntries, ...incomeEntries];
-      const sortedEntries = combined.sort((a, b) => new Date(b.Date) - new Date(a.Date));
-      setCombinedEntries(sortedEntries);
-      // console.log(combinedEntries.length);
-      setEndingIndex(sortedEntries.length);
-      if (sortedEntries.length > 3) {
-        setRightT(true);
+    try {
+      if (expenseEntries.length > 0 || incomeEntries.length > 0) {
+        const combined = [...expenseEntries, ...incomeEntries];
+        const sortedEntries = combined.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+        setCombinedEntries(sortedEntries);
+        // console.log(combinedEntries.length);
+        setEndingIndex(sortedEntries.length);
+        if (sortedEntries.length > 3) {
+          setRightT(true);
+        }
       }
+    } catch (err) {
+
+    } finally {
     }
   }, [expenseEntries, incomeEntries]);
 
   useEffect(() => {
-    // console.log(combinedEntries);
-    const combined = [...expenseEntries, ...incomeEntries];
-    const dessortedEntries = combined.sort((a, b) => new Date(a.Date) - new Date(b.Date));
-    setDesCombinedEntries(dessortedEntries);
-    // console.log(descombinedEntries);
-    if (dessortedEntries.length > 0) {
-      const newMiddleData = [];
-      let i = 0;
-      while (i < dessortedEntries.length) {
-        let sumE = 0;
-        let sumI = 0;
-        let catE = '';
-        let catI = '';
-        if (dessortedEntries[i]?.hasOwnProperty('ExpenseAmount')) {
-          sumE += dessortedEntries[i].ExpenseAmount || 0;
-          catE += (catE ? ',' : '') + (dessortedEntries[i].Category || '');
-        } else {
-          sumI += dessortedEntries[i].IncomeAmount || 0;
-          catI += (catI ? ',' : '') + (dessortedEntries[i].Category || '');
-        }
-        // const day = new Date(dessortedEntries[i]?.Date).getDate();
-        const day = dessortedEntries[i]?.Date.split("T")[0].split("-")[2];
-        // console.log(day);
-
-        let j = i + 1;
-        while (j < dessortedEntries.length) {
-          // if (new Date(dessortedEntries[j]?.Date).getDate() === day) {
-          if (dessortedEntries[j]?.Date.split("T")[0].split("-")[2] === day) {
-            if (dessortedEntries[j]?.hasOwnProperty('ExpenseAmount')) {
-              sumE += dessortedEntries[j].ExpenseAmount || 0;
-              catE += (catE ? ',' : '') + (dessortedEntries[j].Category || '');
-            } else {
-              sumI += dessortedEntries[j].IncomeAmount || 0;
-              catI += (catI ? ',' : '') + (dessortedEntries[j].Category || '');
-            }
+    try {
+      setLoading2(true)
+      const combined = [...expenseEntries, ...incomeEntries];
+      const dessortedEntries = combined.sort((a, b) => new Date(a.Date) - new Date(b.Date));
+      setDesCombinedEntries(dessortedEntries);
+      if (dessortedEntries.length > 0) {
+        const newMiddleData = [];
+        let i = 0;
+        while (i < dessortedEntries.length) {
+          let sumE = 0;
+          let sumI = 0;
+          let catE = '';
+          let catI = '';
+          if (dessortedEntries[i]?.hasOwnProperty('ExpenseAmount')) {
+            sumE += dessortedEntries[i].ExpenseAmount || 0;
+            catE += (catE ? ',' : '') + (dessortedEntries[i].Category || '');
           } else {
-            break;
+            sumI += dessortedEntries[i].IncomeAmount || 0;
+            catI += (catI ? ',' : '') + (dessortedEntries[i].Category || '');
           }
-          j++;
+          // const day = new Date(dessortedEntries[i]?.Date).getDate();
+          const day = dessortedEntries[i]?.Date.split("T")[0].split("-")[2];
+          // console.log(day);
+
+          let j = i + 1;
+          while (j < dessortedEntries.length) {
+            // if (new Date(dessortedEntries[j]?.Date).getDate() === day) {
+            if (dessortedEntries[j]?.Date.split("T")[0].split("-")[2] === day) {
+              if (dessortedEntries[j]?.hasOwnProperty('ExpenseAmount')) {
+                sumE += dessortedEntries[j].ExpenseAmount || 0;
+                catE += (catE ? ',' : '') + (dessortedEntries[j].Category || '');
+              } else {
+                sumI += dessortedEntries[j].IncomeAmount || 0;
+                catI += (catI ? ',' : '') + (dessortedEntries[j].Category || '');
+              }
+            } else {
+              break;
+            }
+            j++;
+          }
+          newMiddleData.push({
+            date: day,
+            spend: sumE,
+            spendCategory: catE,
+            cashback: sumI,
+            cashbackCategory: catI,
+          });
+          i = j;
         }
-        newMiddleData.push({
-          date: day,
-          spend: sumE,
-          spendCategory: catE,
-          cashback: sumI,
-          cashbackCategory: catI,
-        });
-        i = j;
+        setMiddleData(newMiddleData);
       }
-      setMiddleData(newMiddleData);
-      // console.log(newMiddleData);
+    } catch (err) {
+
+    } finally {
+      setLoading2(false);
     }
   }, [combinedEntries]);
-
 
   // switch for 
   const getCategoryIcon = (category) => {
@@ -505,7 +528,6 @@ function Home() {
 
         {/* Profile Picture */}
         <div className="absolute top-1 right-[0.3rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20 border-red-400" onClick={showProfile}>
-        "new feature "
           <img
             src={profilePictureUrl}
             alt="Profile"
@@ -513,53 +535,91 @@ function Home() {
           />
         </div>
       </div>
-      {/* logic for profile and good morning */}
-      <div className="caret-black">
+      <div className="caret-black mt-2">
+        {loading === false ?
+          userDetails ?
+            <>
+              {
+                (() => {
+                  const currentHour = new Date().getHours();
+                  if (currentHour >= 5 && currentHour < 12) {
+                    return "Good Morning";
+                  } else if (currentHour >= 12 && currentHour < 17) {
+                    return "Good Afternoon";
+                  } else if (currentHour >= 17 && currentHour < 21) {
+                    return "Good Evening";
+                  } else {
+                    return "Good Night";
+                  }
+                })()
+              } {" "} {userDetails.name}
+            </>
+            :
+            <>
+              <NavLink
+                to="/login"
+                className="text-blue-600 hover:underline px-2" >Login</NavLink>
+              <span> or </span>
+              <NavLink
+                to="/signup"
+                className="text-blue-600 hover:underline px-2">Signup</NavLink>
+            </>
+          :
+          <>
+            <div className="space-y-3 animate-pulse">
+              <div className="h-5 w-[170px] bg-gray-200 rounded-md transition-colors duration-700 ease-in-out"></div>
+            </div>
+          </>
 
-        {userDetails ? <>{(() => {
-          const currentHour = new Date().getHours();
-          if (currentHour >= 5 && currentHour < 12) {
-            return "Good Morning";
-          } else if (currentHour >= 12 && currentHour < 17) {
-            return "Good Afternoon";
-          } else if (currentHour >= 17 && currentHour < 21) {
-            return "Good Evening";
-          } else {
-            return "Good Night";
-          }
-        })()}{" "} {userDetails.name} </> : <><NavLink
-          to="/login"
-          className="text-blue-600 hover:underline px-2" >Login</NavLink>
-          <span> or </span>
-          <NavLink
-            to="/signup"
-            className="text-blue-600 hover:underline px-2">Signup</NavLink></>}
+        }
       </div>
 
-      <div className="flex flex-wrap w-full gap-4 p-4">
-        <div className="bg-blue-200 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
-          <div className="mb-2 text-lg font-semibold">Total Income</div>
-          <div
-            className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >{`₹ ${income}`}</div>
-        </div>
+      {loading1 === false ?
+        userDetails ?
+          <>
+            {/* actual  */}
+            <div className="flex flex-wrap w-full gap-4 p-4">
+              <div className="bg-blue-200 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
+                <div className="mb-2 text-lg font-semibold">Total Income</div>
+                <div
+                  className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >{`₹ ${income}`}</div>
+              </div>
+              <div className="bg-purple-200 p-6 text-white rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
+                <div className="mb-2 text-lg font-semibold">Total Expense</div>
+                <div
+                  className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >{`₹ ${expenses}`}</div>
+              </div>
+              <div className="bg-green-200 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
+                <div className="mb-2 text-lg font-semibold">Remaining Balance</div>
+                {(income > expenses) ? <div
+                  className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >{`₹ ${income - expenses}`}</div> : <div
+                  className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >{`₹ ${expenses - income}`}</div>}
+              </div>
+            </div>
+          </>
+          :
+          <>
+            <div className="flex flex-wrap w-full gap-4 p-4">
+              <SkeletonIncomeCard color={"blue"} />
+              <SkeletonIncomeCard color={"purple"} />
+              <SkeletonIncomeCard color={"green"} />
+            </div>
+          </>
+        :
+        <>
+          {/* skeleton*/}
+          <div className="flex flex-wrap w-full gap-4 p-4">
+            <SkeletonIncomeCard color={"blue"} />
+            <SkeletonIncomeCard color={"purple"} />
+            <SkeletonIncomeCard color={"green"} />
+          </div>
+        </>
 
-        <div className="bg-purple-200 p-6 text-white rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
-          <div className="mb-2 text-lg font-semibold">Total Expense</div>
-          <div
-            className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >{`₹ ${expenses}`}</div>
-        </div>
-
-        <div className="bg-green-200 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
-          <div className="mb-2 text-lg font-semibold">Remaining Balance</div>
-          {(income > expenses) ? <div
-            className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >{`₹ ${income - expenses}`}</div> : <div
-            className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >{`₹ ${expenses - income}`}</div>}
-        </div>
-      </div>
+      }
 
 
       {/* Middle Box */}
@@ -567,81 +627,95 @@ function Home() {
         <CustomAreaChart
           data={middleData}
         />
-
       </div>
 
       {/* Lowest Box */}
       <div className="relative w-full flex flex-col md:flex-row justify-between top-[-0.6rem]">
 
         {/* <!-- Recent Transactions Section --> */}
-        <div className="w-full md:w-3/6 h-auto md:h-[20rem] bg-white rounded-lg shadow-md m-2 md:m-4 border border-gray-200 p-4 relative">
-          <div className="text-lg md:text-[1.18rem] font-bold mt-2 md:mt-4">Recent Transactions</div>
+        {
+          loading2 === false ?
+            userDetails ?
+              <>
+                <div className="w-full md:w-3/6 h-auto md:h-[20rem] bg-white rounded-lg shadow-md m-2 md:m-4 border border-gray-200 p-4 relative">
+                  <div className="text-lg md:text-[1.18rem] font-bold mt-2 md:mt-4">Recent Transactions</div>
 
-          {/* Transaction Entries */}
-          <div className="overflow-y-auto  min-h-[13rem] max-h-[13rem]">
-            {combinedEntries.slice(indexT, indexT + 3).map((entry, index) => (
-              <div
-                key={index}
-                className="flex justify-between bg-white p-2 border-b border-gray-300"
-              >
-                <div className="flex space-x-2">
-                  <div className="box1">
-                    <div className="flex-1 text-center">
-                      <div className="text-center text-black rounded-full w-12 h-12 flex items-center justify-center">
-                        <FontAwesomeIcon icon={getCategoryIcon(entry.Category)} style={{ color: categoryColors[entry.Category], fontSize: "1.4rem" }} />
+                  {/* Transaction Entries */}
+                  <div className="overflow-y-auto  min-h-[13rem] max-h-[13rem]">
+                    {combinedEntries.slice(indexT, indexT + 3).map((entry, index) => (
+                      <div
+                        key={index}
+                        className="flex justify-between bg-white p-2 border-b border-gray-300"
+                      >
+                        <div className="flex space-x-2">
+                          <div className="box1">
+                            <div className="flex-1 text-center">
+                              <div className="text-center text-black rounded-full w-12 h-12 flex items-center justify-center">
+                                <FontAwesomeIcon icon={getCategoryIcon(entry.Category)} style={{ color: categoryColors[entry.Category], fontSize: "1.4rem" }} />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="box2">
+                            <div className="flex-1 text-center">
+                              <div className="font-bold">{entry.Category}</div>
+                              <div className='text-gray-500 text-sm'>
+                                {/* {entry?.Date.split("T")[0].split("-")[2]} */}
+                                {new Date(entry.Date).toLocaleDateString('en-GB', {
+                                  day: '2-digit',
+                                  month: 'short',
+                                  year: '2-digit',
+                                  timeZone: 'UTC',
+                                })}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="box3">
+                          <div className="flex-1 text-center">
+                            {entry.ExpenseAmount ? (
+                              <div className="text-red-600 font-bold-400"><span>  </span><FontAwesomeIcon icon={faIndianRupee} />{entry.ExpenseAmount}</div>
+                            ) : (
+                              <div className="text-green-500 font-bold-400"><span>  </span><FontAwesomeIcon icon={faIndianRupee} />{entry.IncomeAmount}</div>
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    ))}
                   </div>
-                  <div className="box2">
-                    <div className="flex-1 text-center">
-                      <div className="font-bold">{entry.Category}</div>
-                      <div className='text-gray-500 text-sm'>
-                        {/* {entry?.Date.split("T")[0].split("-")[2]} */}
-                        {new Date(entry.Date).toLocaleDateString('en-GB', {
-                          day: '2-digit',
-                          month: 'short',
-                          year: '2-digit',
-                          timeZone: 'UTC',
-                        })}
+                  {/* Navigation Arrows */}
+                  <div className='flex justify-between w-full'>
+                    {leftT ? (
+                      <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={LeftArrowT}>
+                        <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
                       </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="box3">
-                  <div className="flex-1 text-center">
-                    {entry.ExpenseAmount ? (
-                      <div className="text-red-600 font-bold-400"><span>  </span><FontAwesomeIcon icon={faIndianRupee} />{entry.ExpenseAmount}</div>
                     ) : (
-                      <div className="text-green-500 font-bold-400"><span>  </span><FontAwesomeIcon icon={faIndianRupee} />{entry.IncomeAmount}</div>
+                      <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                        <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
+                      </div>
+                    )}
+
+                    {rightT && endingIndex >= 0 ? (
+                      <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={RightArrowT}>
+                        <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
+                      </div>
+                    ) : (
+                      <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                        <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
+                      </div>
                     )}
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          {/* Navigation Arrows */}
-          <div className='flex justify-between w-full'>
-            {leftT ? (
-              <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={LeftArrowT}>
-                <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
-              </div>
-            ) : (
-              <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
-                <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
-              </div>
-            )}
-
-            {rightT && endingIndex >= 0 ? (
-              <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={RightArrowT}>
-                <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
-              </div>
-            ) : (
-              <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
-                <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
-              </div>
-            )}
-          </div>
-        </div>
+              </>
+              :
+              <>
+                <SkeletonRecentCard />
+              </>
+            :
+            <>
+              {/* skeleton*/}
+              <SkeletonRecentCard />
+            </>
+        }
 
         {/* <!-- Categories Section --> */}
         <div className="w-full md:w-3/6 h-auto md:h-[20rem] bg-white p-4 md:p-10 rounded-lg shadow-md m-2 md:m-4 border border-gray-200">
