@@ -505,6 +505,7 @@ function Home() {
 
         {/* Profile Picture */}
         <div className="absolute top-1 right-[0.3rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20 border-red-400" onClick={showProfile}>
+        "new feature "
           <img
             src={profilePictureUrl}
             alt="Profile"
