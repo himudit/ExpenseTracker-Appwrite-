@@ -3,16 +3,17 @@ import { databases, account, storage } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid';
 import { Query } from 'appwrite';
 import conf from '../conf/conf';
-import { useNavigate, Link, NavLink, Navigate } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faCartShopping, faPlane, faXmark, faWallet, faChevronLeft, faBurger, faPenToSquare, faCamera, faUpload } from '@fortawesome/free-solid-svg-icons';
-import { PieChart, Pie } from 'recharts';
+import { faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faCartShopping, faPlane, faXmark, faWallet, faChevronLeft, faBurger, faPenToSquare, faCamera, faUpload, faArrowTrendUp, faArrowTrendDown } from '@fortawesome/free-solid-svg-icons';
 import PieChartComponent from './PieChartComponent';
+import NoTransactions from './NoTransactions';
 import CustomAreaChart from './CustomAreaChart';
 import SkeletonIncomeCard from '../skeleton/SkeletonIncomeCard';
 import { useSelector, useDispatch } from "react-redux";
 import { fetchUserProfile } from "../utils/userSlice";
 import SkeletonRecentCard from '../skeleton/SkeletonRecentCard';
+import SkeletonPieChart from '../skeleton/SkeletonPieChart';
 
 function Home() {
   const dispatch = useDispatch();
@@ -151,8 +152,8 @@ function Home() {
         if (userDetails == null) {
           return;
         }
-        
-      setLoading2(true);
+
+        setLoading2(true);
         setLoading1(true);
         const userDataInc = await databases.listDocuments(
           conf.appwriteDatabaseId,
@@ -555,15 +556,33 @@ function Home() {
               } {" "} {userDetails.name}
             </>
             :
+            // <>
+            //   <NavLink
+            //     to="/login"
+            //     className="text-blue-600 hover:underline px-2" >Login</NavLink>
+            //   <span> or </span>
+            //   <NavLink
+            //     to="/signup"
+            //     className="text-blue-600 hover:underline px-2">Signup</NavLink>
+            // </>
             <>
-              <NavLink
-                to="/login"
-                className="text-blue-600 hover:underline px-2" >Login</NavLink>
-              <span> or </span>
-              <NavLink
-                to="/signup"
-                className="text-blue-600 hover:underline px-2">Signup</NavLink>
+              <div className="text-sm text-center text-gray-600">
+                <NavLink
+                  to="/login"
+                  className="text-blue-600 font-medium hover:underline px-2"
+                >
+                  Login
+                </NavLink>
+                <span className="text-gray-500">or</span>
+                <NavLink
+                  to="/signup"
+                  className="text-blue-600 font-medium hover:underline px-2"
+                >
+                  Signup
+                </NavLink>
+              </div>
             </>
+
           :
           <>
             <div className="space-y-3 animate-pulse">
@@ -604,9 +623,25 @@ function Home() {
           :
           <>
             <div className="flex flex-wrap w-full gap-4 p-4">
-              <SkeletonIncomeCard color={"blue"} />
-              <SkeletonIncomeCard color={"purple"} />
-              <SkeletonIncomeCard color={"green"} />
+              <div className="bg-blue-200 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
+                <div className="mb-2 text-lg font-semibold">Total Income</div>
+                <div
+                  className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >{`₹ 0`}</div>
+              </div>
+              <div className="bg-purple-200 p-6 text-white rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
+                <div className="mb-2 text-lg font-semibold">Total Expense</div>
+                <div
+                  className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >{`₹ 0`}</div>
+              </div>
+              <div className="bg-green-200 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
+                <div className="mb-2 text-lg font-semibold">Remaining Balance</div>
+                <div
+                  className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >{`₹ 0`}</div>
+
+              </div>
             </div>
           </>
         :
@@ -635,7 +670,7 @@ function Home() {
         {/* <!-- Recent Transactions Section --> */}
         {
           loading2 === false ?
-            userDetails ?
+            userDetails != null ?
               <>
                 <div className="w-full md:w-3/6 h-auto md:h-[20rem] bg-white rounded-lg shadow-md m-2 md:m-4 border border-gray-200 p-4 relative">
                   <div className="text-lg md:text-[1.18rem] font-bold mt-2 md:mt-4">Recent Transactions</div>
@@ -673,9 +708,12 @@ function Home() {
                         <div className="box3">
                           <div className="flex-1 text-center">
                             {entry.ExpenseAmount ? (
-                              <div className="text-red-600 font-bold-400"><span>  </span><FontAwesomeIcon icon={faIndianRupee} />{entry.ExpenseAmount}</div>
+                              <div className="text-red-600 font-bold-400"><span>  </span>  <span>  </span> <FontAwesomeIcon icon={faIndianRupee} />{entry.ExpenseAmount} <FontAwesomeIcon icon={faArrowTrendDown} /> </div>
                             ) : (
-                              <div className="text-green-500 font-bold-400"><span>  </span><FontAwesomeIcon icon={faIndianRupee} />{entry.IncomeAmount}</div>
+                              <div className="text-green-500 font-bold-400"><span>  </span>
+                                <span>  </span>
+                                <FontAwesomeIcon icon={faIndianRupee} />
+                                {entry.IncomeAmount} <FontAwesomeIcon icon={faArrowTrendUp} /></div>
                             )}
                           </div>
                         </div>
@@ -708,7 +746,7 @@ function Home() {
               </>
               :
               <>
-                <SkeletonRecentCard />
+                <NoTransactions />
               </>
             :
             <>
@@ -717,159 +755,172 @@ function Home() {
             </>
         }
 
-        {/* <!-- Categories Section --> */}
-        <div className="w-full md:w-3/6 h-auto md:h-[20rem] bg-white p-4 md:p-10 rounded-lg shadow-md m-2 md:m-4 border border-gray-200">
-          <div>
-            <div className="text-lg font-bold flex ml-[-0.8rem] mt-[-1.2rem] ">Category</div>
-            <div className='flex flex-wrap justify-center items-center gap-10'>
-              <div>{
-                leftC ? <div className=' w-[160px] h-[160px]'><PieChartComponent data1={data1} /> </div> : <div className=' w-[160px] h-[160px]'><PieChartComponent data1={data2} /> </div>
-              }</div>
-              <div>{
-                leftC ? <div className=' w-[160px] h-[160px]'><div>
-                  {/* here expense */}
-                  <div className="flex flex-col flex-wrap-reverse ml-4">
+        {/* <!--  Category Section --> */}
+        {
+          loading2 === false ?
+            userDetails != null ?
+              <>
+                <div className="w-full md:w-3/6 h-auto md:h-[20rem] bg-white p-4 md:p-10 rounded-lg shadow-md m-2 md:m-4 border border-gray-200">
+                  <div>
+                    <div className="text-lg font-bold flex ml-[-0.8rem] mt-[-1.2rem] ">Category</div>
+                    <div className='flex flex-wrap justify-center items-center gap-10'>
+                      <div>{
+                        leftC ? <div className=' w-[160px] h-[160px]'><PieChartComponent data1={data1} /> </div> : <div className=' w-[160px] h-[160px]'><PieChartComponent data1={data2} /> </div>
+                      }</div>
+                      <div>{
+                        leftC ? <div className=' w-[160px] h-[160px]'><div>
+                          {/* here expense */}
+                          <div className="flex flex-col flex-wrap-reverse ml-4">
 
-                    <div className="flex items-center mb-2">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: "#A9A9A9" }}
-                      ></div>
-                      <span className="ml-2 text-sm">others</span>
+                            <div className="flex items-center mb-2">
+                              <div
+                                className="w-4 h-4 rounded-full"
+                                style={{ backgroundColor: "#A9A9A9" }}
+                              ></div>
+                              <span className="ml-2 text-sm">others</span>
+                            </div>
+
+                            <div className="flex items-center mb-2">
+                              <div
+                                className="w-4 h-4 rounded-full"
+                                style={{ backgroundColor: "#FFBF00" }}
+                              ></div>
+                              <span className="ml-2 text-sm">Food</span>
+                            </div>
+
+                            <div className="flex items-center">
+                              <div
+                                className="w-4 h-4 rounded-full"
+                                style={{ backgroundColor: "#0000ff" }}
+                              ></div>
+                              <span className="ml-2 text-sm">Shopping</span>
+                            </div>
+
+                            <div className="flex items-center">
+                              <div
+                                className="w-4 h-4 rounded-full"
+                                style={{ backgroundColor: "purple" }} // Others Color
+                              ></div>
+                              <span className="ml-2 text-sm">Travelling</span>
+                            </div>
+
+                            <div className="flex items-center">
+                              <div
+                                className="w-4 h-4 rounded-full"
+                                style={{ backgroundColor: "#FF6F61" }} // Others Color
+                              ></div>
+                              <span className="ml-2 text-sm">Entertainment</span>
+                            </div>
+
+                            <div className="flex items-center">
+                              <div
+                                className="w-4 h-4 rounded-full"
+                                style={{ backgroundColor: "red" }} // Others Color
+                              ></div>
+                              <span className="ml-2 text-sm">Medical</span>
+                            </div>
+
+                            <div className="flex items-center">
+                              <div
+                                className="w-4 h-4 rounded-full"
+                                style={{ backgroundColor: "#797982" }} // Others Color
+                              ></div>
+                              <span className="ml-2 text-sm">Bills</span>
+                            </div>
+
+                            <div className="flex items-center">
+                              <div
+                                className="w-4 h-4 rounded-full"
+                                style={{ backgroundColor: "#005F6A" }}
+                              ></div>
+                              <span className="ml-2 text-sm">Rent</span>
+                            </div>
+
+                            <div className="flex items-center">
+                              <div
+                                className="w-4 h-4 rounded-full"
+                                style={{ backgroundColor: "#721322" }}
+                              ></div>
+                              <span className="ml-2 text-sm">Taxes</span>
+                            </div>
+
+                            <div className="flex items-center">
+                              <div
+                                className="w-4 h-4 rounded-full"
+                                style={{ backgroundColor: "#32CD32" }}
+                              ></div>
+                              <span className="ml-2 text-sm">Investments</span>
+                            </div>
+                          </div>
+                          {/* above */}
+                        </div></div> : <div className=' w-[160px] h-[160px]'><div>
+                          {/* here Income */}
+                          <div className="flex flex-col ml-4">
+                            {/* Legend Item for Salary */}
+                            <div className="flex items-center mb-2">
+                              <div
+                                className="w-4 h-4 rounded-full"
+                                style={{ backgroundColor: "#4caf50" }} // Salary Color
+                              ></div>
+                              <span className="ml-2 text-sm">Salary</span>
+                            </div>
+
+                            {/* Legend Item for Sold */}
+                            <div className="flex items-center mb-2">
+                              <div
+                                className="w-4 h-4 rounded-full"
+                                style={{ backgroundColor: "#2196f3" }} // Sold Color
+                              ></div>
+                              <span className="ml-2 text-sm">Sold</span>
+                            </div>
+
+                            {/* Legend Item for Others */}
+                            <div className="flex items-center">
+                              <div
+                                className="w-4 h-4 rounded-full"
+                                style={{ backgroundColor: "#ff9800" }} // Others Color
+                              ></div>
+                              <span className="ml-2 text-sm">Others</span>
+                            </div>
+                          </div>
+                          {/* above */}
+                        </div></div>
+                      }</div>
                     </div>
 
-                    <div className="flex items-center mb-2">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: "#FFBF00" }}
-                      ></div>
-                      <span className="ml-2 text-sm">Food</span>
-                    </div>
+                    <div className='flex justify-between m-2 mt-[4rem] w-full'>
+                      {leftC ? (
+                        <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={LeftArrowC}>
+                          <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
+                        </div>
+                      ) : (
+                        <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                          <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
+                        </div>
+                      )}
 
-                    <div className="flex items-center">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: "#0000ff" }}
-                      ></div>
-                      <span className="ml-2 text-sm">Shopping</span>
-                    </div>
-
-                    <div className="flex items-center">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: "purple" }} // Others Color
-                      ></div>
-                      <span className="ml-2 text-sm">Travelling</span>
-                    </div>
-
-                    <div className="flex items-center">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: "#FF6F61" }} // Others Color
-                      ></div>
-                      <span className="ml-2 text-sm">Entertainment</span>
-                    </div>
-
-                    <div className="flex items-center">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: "red" }} // Others Color
-                      ></div>
-                      <span className="ml-2 text-sm">Medical</span>
-                    </div>
-
-                    <div className="flex items-center">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: "#797982" }} // Others Color
-                      ></div>
-                      <span className="ml-2 text-sm">Bills</span>
-                    </div>
-
-                    <div className="flex items-center">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: "#005F6A" }}
-                      ></div>
-                      <span className="ml-2 text-sm">Rent</span>
-                    </div>
-
-                    <div className="flex items-center">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: "#721322" }}
-                      ></div>
-                      <span className="ml-2 text-sm">Taxes</span>
-                    </div>
-
-                    <div className="flex items-center">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: "#32CD32" }}
-                      ></div>
-                      <span className="ml-2 text-sm">Investments</span>
+                      {rightC ? (
+                        <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={RightArrowC}>
+                          <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
+                        </div>
+                      ) : (
+                        <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                          <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
+                        </div>
+                      )}
                     </div>
                   </div>
-                  {/* above */}
-                </div></div> : <div className=' w-[160px] h-[160px]'><div>
-                  {/* here Income */}
-                  <div className="flex flex-col ml-4">
-                    {/* Legend Item for Salary */}
-                    <div className="flex items-center mb-2">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: "#4caf50" }} // Salary Color
-                      ></div>
-                      <span className="ml-2 text-sm">Salary</span>
-                    </div>
-
-                    {/* Legend Item for Sold */}
-                    <div className="flex items-center mb-2">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: "#2196f3" }} // Sold Color
-                      ></div>
-                      <span className="ml-2 text-sm">Sold</span>
-                    </div>
-
-                    {/* Legend Item for Others */}
-                    <div className="flex items-center">
-                      <div
-                        className="w-4 h-4 rounded-full"
-                        style={{ backgroundColor: "#ff9800" }} // Others Color
-                      ></div>
-                      <span className="ml-2 text-sm">Others</span>
-                    </div>
-                  </div>
-                  {/* above */}
-                </div></div>
-              }</div>
-            </div>
-
-            <div className='flex justify-between m-2 mt-[4rem] w-full'>
-              {leftC ? (
-                <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={LeftArrowC}>
-                  <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
                 </div>
-              ) : (
-                <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
-                  <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
-                </div>
-              )}
-
-              {rightC ? (
-                <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={RightArrowC}>
-                  <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
-                </div>
-              ) : (
-                <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
-                  <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
+              </>
+              :
+              <>
+                <NoTransactions />
+              </>
+            :
+            <>
+              <SkeletonPieChart />
+            </>
+        }
       </div >
 
     </div >
