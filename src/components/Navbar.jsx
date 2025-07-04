@@ -39,7 +39,9 @@ function Navbar() {
       <div className="fixed top-0 left-0 h-full w-25 bg-dark-white flex flex-col items-center py-4 border-r-2 border-gray-300 bg-white">
 
         {/* logo */}
-        <div className="mb-8 flex flex-col items-center">
+        <div className="mb-8 flex flex-col items-center cursor-pointer" onClick={() => {
+          navigate('/');
+        }}>
           <img
             src={Logo}
             className="w-9 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl object-contain"
@@ -76,7 +78,7 @@ function Navbar() {
               <div>
                 <button
                   className={`rounded-full w-16 h-9 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black
-        ${clicked ? "bg-blue-300" : "bg-blue-500 hover:bg-blue-300"}`}
+        ${clicked ? "bg-blue-300" : "bg-blue-300 hover:bg-blue-300"}`}
                   onClick={() => {
                     setClicked(true);
                     handleLogout();
