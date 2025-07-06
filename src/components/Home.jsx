@@ -230,7 +230,6 @@ function Home() {
           // Query.offset(20)
         ]
       );
-      console.log(userDataExpense);
       setExpenseEntries(userDataExpense.documents);
     };
 
@@ -248,8 +247,6 @@ function Home() {
           // Query.offset(20)
         ]
       );
-
-      console.log(userDataIncome);
       setRightC(true);
       setIncomeEntries(userDataIncome.documents);
     };
@@ -465,7 +462,7 @@ function Home() {
   }, [userDetails]);
 
   return (
-    <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 ml-[7rem] ">
+    <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 md:ml-[7rem] ">
 
       <div className='flex w-full h-[4rem] space-x-4 p-4 border-b-2 border-black-500'>
         <div className='caret-black font-bold'>Dashboard</div>
@@ -529,11 +526,11 @@ function Home() {
             } </>)}
 
         {/* Profile Picture */}
-        <div className="absolute top-1 right-[0.3rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20 border-red-400" onClick={showProfile}>
+        <div className="absolute top-[4rem] right-[0.3rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20 border-red-400" onClick={showProfile}>
           <img
             src={profilePictureUrl}
             alt="Profile"
-            className="h-10 w-10 md:h-12 md:w-12 lg:h-14 lg:w-14 rounded-full cursor-pointer"
+            className="h-[3rem] w-[3rem] md:h-12 md:w-12 lg:h-14 lg:w-14 rounded-full cursor-pointer"
           />
         </div>
       </div>
