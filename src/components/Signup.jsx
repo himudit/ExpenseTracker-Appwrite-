@@ -2,11 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { account } from '../appwrite/appwriteConfig';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import Logo from '../assets/Logo.jpg';
 import isEmail from 'validator/lib/isEmail';
-import LottieDot from './LottieDot'
-import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from '../utils/userSlice'
 
 function Signup() {
   const navigate = useNavigate();
@@ -17,8 +13,6 @@ function Signup() {
     password: ''
   });
   const [loading, setLoading] = useState(false);
-
-  const [dotAnimation, setDotAnimation] = useState(false);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -35,8 +29,6 @@ function Signup() {
   const signupUser = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setDotAnimation(true);
-
     // Password validation
     if (user.password.length < 8) {
       setPasswordError('Password must be at least 8 characters long.');
@@ -57,12 +49,8 @@ function Signup() {
 
       // Log in the user
       await account.createEmailPasswordSession(user.email, user.password);
-      setDotAnimation(false);
-      // Redirect to the home page
       navigate('/');
     } catch (err) {
-      // console.error('Error during signup or login:', err);
-      setDotAnimation(false);
       alert(err.message || 'An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
@@ -71,7 +59,7 @@ function Signup() {
 
   return (
     <div className='flex justify-center items-center'>
-      <div className="h-full w-[70%] flex flex-col justify-center mt-[3rem] ml-[6rem]">
+      <div className="h-full w-[70%] flex flex-col justify-center mt-[3rem] md:ml-[7rem]">
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
             <form className="space-y-6" onSubmit={signupUser}>
@@ -148,18 +136,23 @@ function Signup() {
                   {passwordError && <p style={{ color: 'red' }}>{passwordError}</p>}
                 </div>
               </div>
+
               <button
                 type="submit"
                 disabled={loading}
                 onClick={signupUser}
-                className={`w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-3 transition-colors ${loading ? 'bg-purple-500 cursor-not-allowed' : ''
-                  }`}
+                className={`mt-4 w-full px-6 py-2 flex items-center justify-center gap-2 rounded-md text-white font-medium
+    transition-colors duration-300
+    ${loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'}
+  `}
               >
                 {loading && (
-                  <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                 )}
                 {loading ? 'Creating Account...' : 'Create Account'}
               </button>
+
+
             </form>
           </div>
         </div>

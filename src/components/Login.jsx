@@ -1,10 +1,7 @@
 import React, { useState } from 'react'
 import { account } from '../appwrite/appwriteConfig'
 import { NavLink, useNavigate } from 'react-router-dom'
-import LottieDot from './LottieDot'
-import { height } from '@fortawesome/free-solid-svg-icons/fa0'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from '../utils/userSlice'
 
 function Login() {
   const navigate = useNavigate()
@@ -16,7 +13,6 @@ function Login() {
   const userContext = useSelector((store) => store.user.user)
   const dispatch = useDispatch();
 
-  const [dotAnimation, setDotAnimation] = useState(false);
   const loginUser = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -24,10 +20,8 @@ function Login() {
       const response = await account.createEmailPasswordSession(user.email, user.password);
       // dispatch(setUser("NotNull"));
       dispatch({ type: 'user/setUser', payload: 'NotNull' });
-      setDotAnimation(false);
       navigate("/");
     } catch (error) {
-      setDotAnimation(false);
       console.log(error);
       alert(error);
     } finally {
@@ -39,7 +33,7 @@ function Login() {
   return (
     <>
       <div className={`flex justify-center items-center`}>
-        <div className="h-full w-[70%] flex flex-col justify-center  mt-[4rem] ml-[6rem]">
+        <div className="h-full w-[70%] flex flex-col justify-center  mt-[4rem] md:ml-[7rem]">
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
             <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
               <form className="space-y-6" action="#" method="POST">
@@ -110,11 +104,13 @@ function Login() {
                     type="submit"
                     disabled={loading}
                     onClick={loginUser}
-                    className={`w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-3 transition-colors ${loading ? 'bg-indigo-400 cursor-not-allowed' : ''
-                      }`}
+                    className={`mt-4 w-full px-6 py-2 flex items-center justify-center gap-2 rounded-md text-white font-medium 
+    transition-colors duration-300
+    ${loading ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'}
+  `}
                   >
                     {loading && (
-                      <span className="w-5 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                     )}
                     {loading ? 'Logging in...' : 'Login'}
                   </button>

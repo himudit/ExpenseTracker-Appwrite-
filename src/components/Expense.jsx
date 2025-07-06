@@ -346,7 +346,7 @@ function Expense() {
     return (
         <>
             <div
-                className={`flex flex-wrap justify-center h-screen ml-[7rem] bg-gradient-to-r items-center`}
+                className={`flex flex-wrap justify-center h-screen md:ml-[7rem] bg-gradient-to-r items-center`}
                 style={{ filter: (animation1 || animation2) ? "blur(1px)" : "none" }}
             >
 
