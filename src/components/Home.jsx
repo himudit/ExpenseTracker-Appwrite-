@@ -25,18 +25,14 @@ function Home() {
   const [rightC, setRightC] = useState(false);
   const userDetails = useSelector((store) => store.user.user)
   const loading = useSelector((store) => store.user.loading)
-  // const [loading, setLoading] = useState(true);
-  // console.log(userDetails);
-  const [userId, setUserId] = useState(null);
   const [income, setIncome] = useState('');
   const [expenses, setExpenses] = useState('');
-  const [budget, setBudget] = useState('');
   const [profilePictureUrl, setProfilePictureUrl] = useState('/image.png');
   const [middleData, setMiddleData] = useState([]);
+  const [days, setDays] = useState(30);
   const [descombinedEntries, setDesCombinedEntries] = useState([]);
   const [loading1, setLoading1] = useState(true);
   const [loading2, setLoading2] = useState(true);
-  const [loading3, setLoading3] = useState(true);
 
   const [openProfile, setOpenProfile] = useState(false);
 
@@ -204,11 +200,11 @@ function Home() {
   const [expenseEntries, setExpenseEntries] = useState([]);
   const [incomeEntries, setIncomeEntries] = useState([]);
   const [combinedEntries, setCombinedEntries] = useState([]);
-  const [startingIndex, setStartingIndex] = useState(0);
   const [endingIndex, setEndingIndex] = useState(0);
   const [leftT, setLeftT] = useState(false);
   const [rightT, setRightT] = useState(false);
   const [indexT, setindexT] = useState(0);
+
 
   const [selectedCategory, setSelectedCategory] = useState();
   const settingCategory = (icon, text) => {
@@ -275,6 +271,10 @@ function Home() {
     }
   }, [expenseEntries, incomeEntries]);
 
+  const handleSelect = (range) => {
+    console.log("Selected range:", range);
+  };
+
   useEffect(() => {
     try {
       setLoading2(true)
@@ -297,13 +297,15 @@ function Home() {
             catI += (catI ? ',' : '') + (dessortedEntries[i].Category || '');
           }
           // const day = new Date(dessortedEntries[i]?.Date).getDate();
-          const day = dessortedEntries[i]?.Date.split("T")[0].split("-")[2];
+          // const day = dessortedEntries[i]?.Date.split("T")[0].split("-")[2];
+          const day = `${new Date(dessortedEntries[i]?.Date).getDate()} ${new Date(dessortedEntries[i]?.Date).toLocaleString('en-US', { month: 'short' })}`;
           // console.log(day);
 
           let j = i + 1;
           while (j < dessortedEntries.length) {
             // if (new Date(dessortedEntries[j]?.Date).getDate() === day) {
-            if (dessortedEntries[j]?.Date.split("T")[0].split("-")[2] === day) {
+            const entry = `${new Date(dessortedEntries[j]?.Date).getDate()} ${new Date(dessortedEntries[i]?.Date).toLocaleString('en-US', { month: 'short' })}`;
+            if (entry === day) {
               if (dessortedEntries[j]?.hasOwnProperty('ExpenseAmount')) {
                 sumE += dessortedEntries[j].ExpenseAmount || 0;
                 catE += (catE ? ',' : '') + (dessortedEntries[j].Category || '');
@@ -326,6 +328,7 @@ function Home() {
           i = j;
         }
         setMiddleData(newMiddleData);
+        // console.log(middleData)
       }
     } catch (err) {
 
@@ -460,6 +463,26 @@ function Home() {
     };
     fetchFromExpenseCategory();
   }, [userDetails]);
+
+  const options = [
+    { value: "last7", label: "Last 7 Days", required: 7 },
+    { value: "last30", label: "Last 30 Days", required: 30 },
+    { value: "all", label: "All Time", required: 0 },
+  ];
+
+  const [selected, setSelected] = useState("last30");
+
+  const handleChange = (e) => {
+    setSelected(e.target.value);
+    if (e.target.value === "last7") {
+      setDays(7);
+    } else if (e.target.value === "last30") {
+      setDays(30);
+    } else {
+      setDays(0);
+    }
+    console.log(selected);
+  };
 
   return (
     <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 md:ml-[7rem] ">
@@ -655,10 +678,33 @@ function Home() {
       }
 
       {/* Middle Box */}
-      <div className="bg-black p-10  rounded-lg shadow-md flex-grow w-[95%] m-4">
-        <CustomAreaChart
-          data={middleData}
-        />
+      <div className="bg-black p-10 rounded-lg shadow-md flex-grow w-[95%] m-4">
+        <div className="flex justify-between items-start">
+          {/* Select Dropdown aligned right */}
+          <div className="w-[10rem] ml-auto">
+            <label
+              htmlFor="time-range"
+              className="block text-sm font-medium text-gray-400 mb-2"
+            >
+              Select Time Range
+            </label>
+            <select
+              id="time-range"
+              value={selected}
+              onChange={handleChange}
+              className="w-full px-3 py-2 bg-[#1f1f1f] text-gray-200 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-500"
+            >
+              {options.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Keep your chart untouched */}
+        <CustomAreaChart data={middleData} days={days} />
       </div>
 
 

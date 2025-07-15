@@ -1,3 +1,11 @@
+/* body {
+  font-family: "GeistMono_c1e5c9", ui-monospace, SFMono-Regular, "Roboto Mono",
+    Menlo, Monaco, "Liberation Mono", "DejaVu Sans Mono",
+    "Courier New", monospace;
+    font-weight: 400;
+    font-optical-sizing: auto;
+    font-stretch: 100%;
+} */
 
 /* #root {
   max-width: 1280px;
@@ -43,7 +51,8 @@
 } */
 
 /* In your global CSS or App.css */
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }

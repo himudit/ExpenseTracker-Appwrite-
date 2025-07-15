@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import useLastNDays from '../hooks/useLastNDays';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
@@ -22,10 +23,11 @@ const CustomTooltip = ({ active, payload, label }) => {
   return null;
 };
 
-const CustomAreaChart = ({ data }) => {
+const CustomAreaChart = ({ data, days }) => {
+  const last7DaysData = useLastNDays(data, days);
   return (
-    <ResponsiveContainer width="95%" height={300}>
-      <AreaChart data={data} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+    <ResponsiveContainer width="95%" height={350}>
+      <AreaChart data={last7DaysData} margin={{ top: 50, right: 30, left: 10, bottom: 0 }}>
         <defs>
           <linearGradient id="colorSpend" x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="#ff0000" stopOpacity={0.4} />
