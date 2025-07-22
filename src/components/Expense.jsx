@@ -47,7 +47,7 @@ function Expense() {
         };
     }, []);
     const handleIconClick = () => {
-        setIsOpen(!isOpen);
+        setIsOpen((prev) => (!prev));
     };
 
     // for Date
@@ -119,6 +119,34 @@ function Expense() {
         }
         setanimation1(true);
 
+        if (isRecurring === true) {
+            try {
+                const payload = {
+                    userid: userId,
+                    amount: parseInt(amount),
+                    type: choice.toLowerCase(),
+                    category: selectedCategory.text.toLowerCase(),
+                    frequency: interval.toLowerCase(),
+                    startDate: new Date(new Date()).toISOString(),
+                    endDate: null,
+                    isActive: true,
+                };
+                console.log(payload);
+                const response = await databases.createDocument(
+                    conf.appwriteDatabaseId,
+                    conf.appwriteCollection7Id,
+                    uuidv4(),
+                    payload
+                );
+
+                console.log("Recurring transaction created:", response);
+                // Optional: show toast / reset form / navigate
+            } catch (error) {
+                console.error("Error creating recurring transaction:", error);
+                // Optional: show error message to user
+            }
+        }
+
         if (choice == 'Income') {
             // checking collection6(categoryIncome)
             const res = await databases.listDocuments(
@@ -145,7 +173,6 @@ function Expense() {
                     if(selectedFile) {
                         ReceiptId: fileId
                     }
-
                 }
                 const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection5Id, uuidv4(), income)
                 promise.then(() => {
@@ -169,7 +196,6 @@ function Expense() {
                         }, 1000);
 
                     })
-
                 })
             } else {
                 console.log('Entry does not exist');
@@ -343,6 +369,11 @@ function Expense() {
         setAmount('');
         setSelectedCategory({ icon: faEllipsis, text: 'others', col: '#94969B' });
     }
+
+    // Recurring Transaction
+    const [isRecurring, setIsRecurring] = useState(false);
+    const [interval, setInterval] = useState('');
+
     return (
         <>
             <div
@@ -351,7 +382,7 @@ function Expense() {
             >
 
                 {/* first div */}
-                <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-2xl flex flex-col mr-6  bg-white/30  border border-white/50  p-6">
+                <div className="w-full h-[95%] max-w-md bg-white rounded-lg shadow-2xl flex flex-col mr-6  bg-white/30  border border-white/50  p-6">
                     <div className="p-4 border-b">
                         <div className="flex justify-between items-center">
                             <div className="text-sm text-[20px]  text-black">{fD}</div>
@@ -380,7 +411,7 @@ function Expense() {
                                 </div></>}
                         </div>
                     </div>
-                    <div className="flex-grow overflow-y-auto p-4">
+                    <div className="flex-grow overflow-y-scroll p-4">
                         <div className="mb-4">
                             <div className="text-sm font-medium text-gray-700 mb-1">
                                 <div className="flex text-[0.7rem]">Amount</div>
@@ -404,7 +435,14 @@ function Expense() {
                                         <span>  </span>
                                         <span>{selectedCategory.text}</span>
                                     </div>
-                                    <div className='cursor-pointer' onClick={handleIconClick}>{isOpen ? <FontAwesomeIcon icon={faAngleDown} /> : <FontAwesomeIcon icon={faChevronRight} />}</div>
+                                    <button
+                                        type="button"
+                                        className="w-5 h-5  p-2 rounded inline-flex items-center justify-center"
+                                        onClick={handleIconClick}
+                                    >
+                                        <FontAwesomeIcon icon={isOpen ? faAngleDown : faChevronRight} className="text-lg" />
+                                    </button>
+
                                 </div>
                                 {isOpen && (
                                     <div
@@ -468,9 +506,45 @@ function Expense() {
                                 )}
                             </div>
                         </div>)}
-                        {/* middle */}
-                        {/* {animation1 && <LottieLoader />} */}
-                        {/* {animation2 && <LottieAnimation />} */}
+                        <div className="-mt-3 -ml-[1.8rem] max-w-lg p-6 border-none bg-white/30 border  space-y-6">
+                            {/* Toggle */}
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h2 className="text-lg font-semibold text-gray-900">Recurring Transaction</h2>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => setIsRecurring(!isRecurring)}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${isRecurring ? 'bg-gray-700' : 'bg-gray-300'
+                                        }`}
+                                >
+                                    <span
+                                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${isRecurring ? 'translate-x-6' : 'translate-x-1'
+                                            }`}
+                                    />
+                                </button>
+                            </div>
+
+                            {/* Recurring Interval Dropdown */}
+                            {isRecurring && (
+                                <div>
+                                    <select
+                                        id="interval"
+                                        className="block w-full rounded-md border border-gray-300 shadow-sm py-2 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-gray-700 focus:border-gray-700 text-sm"
+                                        value={interval}
+                                        onChange={(e) => setInterval(e.target.value)}
+                                    >
+                                        <option value="" disabled hidden>
+                                            Select interval
+                                        </option>
+                                        <option>Daily</option>
+                                        <option>Weekly</option>
+                                        <option>Monthly</option>
+                                        <option>Yearly</option>
+                                    </select>
+                                </div>
+                            )}
+                        </div>
                     </div>
                     <div className='flex justify-between m-2 w-full' onClick={cancelAll}>
                         <div className='p-2 cursor-pointer'>
@@ -484,7 +558,7 @@ function Expense() {
                 </div>
 
                 {/* second div */}
-                <div className="w-full h-[90%] max-w-md bg-white rounded-lg shadow-2xl flex flex-col items-center justify-center p-4 bg-white/30 border-white/50">
+                <div className="w-full h-[95%] max-w-md bg-white rounded-lg shadow-2xl flex flex-col items-center justify-center p-4 bg-white/30 border-white/50">
                     <div className="w-[95%] h-[90%] bg-white rounded-lg flex flex-col justify-center items-center border-2 border-dotted border-gray-500 p-4 bg-white/30 backdrop-blur-md border-white/50 hover:border-gray-600 hover:shadow-[0_0_20px_5px_rgba(0, 68, 255, 0.8)] transition-all duration-300 ease-in-out">
                         <div className='text-[2rem]'> Add Receipt</div>
                         <div>Upload your receipt for better tracking</div>
