@@ -94,15 +94,15 @@ function Home() {
           documentId,
           { image_id: String(fileId), }
         );
-        console.log('Document updated successfully:', updatedDocument);
+        // console.log('Document updated successfully:', updatedDocument);
         const fileUrl = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/view?project=${conf.appwriteProjectId}&mode=admin`;
         setProfilePictureUrl(fileUrl);
 
         promise.then(() => {
           setEditProfile(false);
           setOpenProfile(false);
-          console.log(openProfile);
-          console.log(editProfile);
+          // console.log(openProfile);
+          // console.log(editProfile);
           setTryProfilePictureUrl('');
         });
 
@@ -121,10 +121,10 @@ function Home() {
           // Get the file URL
           const fileUrl = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/view?project=${conf.appwriteProjectId}&mode=admin`;
 
-          console.log(fileUrl);
+          // console.log(fileUrl);
           setProfilePictureUrl(fileUrl);
         } catch (error) {
-          console.error('Error uploading file:', error);
+          // console.error('Error uploading file:', error);
         }
       }
     }
@@ -139,7 +139,7 @@ function Home() {
         const res = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection3Id, [Query.equal('user_id', userDetails.$id)]);
         setProfilePictureUrl(`${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${res.documents[0].image_id}/view?project=${conf.appwriteProjectId}&mode=admin`);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
 
@@ -272,7 +272,7 @@ function Home() {
   }, [expenseEntries, incomeEntries]);
 
   const handleSelect = (range) => {
-    console.log("Selected range:", range);
+    // console.log("Selected range:", range);
   };
 
   useEffect(() => {
@@ -481,7 +481,7 @@ function Home() {
     } else {
       setDays(0);
     }
-    console.log(selected);
+    // console.log(selected);
   };
 
   return (
@@ -549,13 +549,25 @@ function Home() {
             } </>)}
 
         {/* Profile Picture */}
-        <div className="absolute top-[4rem] right-[0.3rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20 border-red-400" onClick={showProfile}>
+        {/* <div className="absolute top-[4rem] right-[0.3rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20 border-red-400" onClick={showProfile}>
           <img
             src={profilePictureUrl}
             alt="Profile"
             className="h-[3rem] w-[3rem] md:h-12 md:w-12 lg:h-14 lg:w-14 rounded-full cursor-pointer"
           />
-        </div>
+        </div> */}
+        <button
+          onClick={showProfile}
+          aria-label="Open profile"
+          className="absolute top-[4rem] right-[0.3rem] md:top-3 md:right-6 lg:top-[0.2rem] lg:right-20"
+        >
+          <img
+            src={profilePictureUrl}
+            alt=""
+            className="h-[3rem] w-[3rem] md:h-12 md:w-12 lg:h-14 lg:w-14 rounded-full cursor-pointer"
+          />
+        </button>
+
       </div>
 
       <div className="caret-black mt-2">
@@ -618,33 +630,20 @@ function Home() {
           <>
             {/* actual  */}
             <div className="flex flex-wrap w-full gap-4 p-4">
-              <div className="bg-blue-300 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
+              <div className="bg-blue-400 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
                 <div className="mb-2 text-lg font-semibold">Total Income</div>
-                {/* <div
-                  className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >{`₹ ${income}`}</div> */}
                 <AnimatedIncome amount={income} />
                 {/* <AnimatedIncome */}
               </div>
-              <div className="bg-purple-300 p-6 text-white rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
+              <div className="bg-purple-400 p-6 text-white rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
                 <div className="mb-2 text-lg font-semibold">Total Expense</div>
-                {/* <div
-                  className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >{`₹ ${expenses}`}</div> */}
                 <AnimatedIncome amount={expenses} />
               </div>
-              <div className="bg-green-300 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
+              <div className="bg-green-400 text-white p-6 rounded-lg shadow-md flex-1 min-w-[250px] sm:min-w-[300px]">
                 <div className="mb-2 text-lg font-semibold">Remaining Balance</div>
                 {(income > expenses) ? (
-                  //   <div
-                  //   className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  // >{`₹ ${income - expenses}`}</div>
                   <AnimatedIncome amount={income - expenses} />
                 ) : (
-                  //    <div
-                  //   className="w-full p-2 border bg-white text-black border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  // >{`₹ ${expenses - income}`}
-                  // </div>
                   <AnimatedIncome amount={expenses - income} />
                 )}
               </div>

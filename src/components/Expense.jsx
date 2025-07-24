@@ -77,7 +77,7 @@ function Expense() {
                 const response = await account.get();
                 setUserId(response.$id);
             } catch (error) {
-                console.error('Failed to get user:', error);
+                // console.error('Failed to get user:', error);
             }
         };
         getUser();
@@ -112,7 +112,7 @@ function Expense() {
     // adding New in collections
     const addNew = async () => {
         if (!userId) return;
-        console.log('User ID being queried:', userId);
+        // console.log('User ID being queried:', userId);
         if (amount === "0" || amount === "") {
             alert("Amount cannot be zero!");
             return;
@@ -131,7 +131,7 @@ function Expense() {
                     endDate: null,
                     isActive: true,
                 };
-                console.log(payload);
+                // console.log(payload);
                 const response = await databases.createDocument(
                     conf.appwriteDatabaseId,
                     conf.appwriteCollection7Id,
@@ -139,10 +139,10 @@ function Expense() {
                     payload
                 );
 
-                console.log("Recurring transaction created:", response);
+                // console.log("Recurring transaction created:", response);
                 // Optional: show toast / reset form / navigate
             } catch (error) {
-                console.error("Error creating recurring transaction:", error);
+                // console.error("Error creating recurring transaction:", error);
                 // Optional: show error message to user
             }
         }
@@ -157,7 +157,7 @@ function Expense() {
                 ]
             )
             if (res.total > 0) {
-                console.log('Entry exists');
+                // console.log('Entry exists');
 
                 // for bucket 3
                 if (selectedFile) {
@@ -186,7 +186,7 @@ function Expense() {
                     const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection6Id, documentId, updatedData);
 
                     promise4.then(() => {
-                        console.log("Done");
+                        // console.log("Done");
                         setIsSubmitting(true);
                         setanimation1(false);
                         setanimation2(true);
@@ -198,7 +198,7 @@ function Expense() {
                     })
                 })
             } else {
-                console.log('Entry does not exist');
+                // console.log('Entry does not exist');
 
                 // for bucket 3
                 if (selectedFile) {
@@ -229,7 +229,7 @@ function Expense() {
 
                 const promise4 = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection6Id, uuidv4(), data);
                 promise4.then(() => {
-                    console.log("Done");
+                    // console.log("Done");
                     setanimation1(false);
                     setIsSubmitting(true);
                     setanimation2(true);
@@ -250,7 +250,7 @@ function Expense() {
                 ]
             )
             if (res.total > 0) {
-                console.log('Entry exists');
+                // console.log('Entry exists');
 
                 // for bucket 2
                 if (selectedFile) {
@@ -280,7 +280,7 @@ function Expense() {
                         };
                         const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
                         promise.then(() => {
-                            console.log("Done");
+                            // console.log("Done");
                             setanimation1(false);
                             setIsSubmitting(true);
                             setanimation2(true);
@@ -299,7 +299,7 @@ function Expense() {
                         const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
 
                         promise4.then(() => {
-                            console.log("Done");
+                            // console.log("Done");
                             setanimation1(false);
                             setanimation2(true);
                             setIsSubmitting(true);
@@ -312,7 +312,7 @@ function Expense() {
                     }
                 })
             } else {
-                console.log('Entry does not exist');
+                // console.log('Entry does not exist');
 
                 // for bucket 2
                 if (selectedFile) {
@@ -353,7 +353,7 @@ function Expense() {
                 }
                 const promise4 = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, uuidv4(), data);
                 promise4.then(() => {
-                    console.log("Done");
+                    // console.log("Done");
                     setanimation1(false);
                     setanimation2(true);
                     setIsSubmitting(true);

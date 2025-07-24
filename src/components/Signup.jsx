@@ -20,7 +20,7 @@ function Signup() {
         const response = await account.get();
         navigate('/');
       } catch (error) {
-        console.log('No logged-in user:', error);
+        // console.log('No logged-in user:', error);
       }
     };
     checkUser();

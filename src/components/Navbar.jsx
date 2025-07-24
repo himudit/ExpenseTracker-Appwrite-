@@ -32,7 +32,7 @@ const Navbar = () => {
       dispatch(removeUser());
       navigate("/login");
     } catch (error) {
-      console.log("Logout failed:", error);
+      // console.log("Logout failed:", error);
     }
   };
 
@@ -53,6 +53,7 @@ const Navbar = () => {
 
           <div className="flex flex-col items-center space-y-8">
             <NavLink
+              aria-label="Navigate to Home"
               to="/"
               className={({ isActive }) =>
                 isActive ? 'bg-gray-300 text-center text-black rounded-full w-16 h-9 flex items-center justify-center' : 'text-gray-300 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
@@ -62,6 +63,7 @@ const Navbar = () => {
             </NavLink>
 
             <NavLink
+              aria-label="Add Transactions"
               to="/add"
               className={({ isActive }) =>
                 isActive ? 'bg-gray-300 text-center text-black rounded-full w-16 h-9 flex items-center justify-center' : 'text-gray-400 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
@@ -71,6 +73,7 @@ const Navbar = () => {
             </NavLink>
 
             <NavLink
+              aria-label="Recurring Transactions"
               to="/recurring"
               className={({ isActive }) =>
                 isActive ? 'bg-gray-300 text-center text-black rounded-full w-16 h-9 flex items-center justify-center' : 'text-gray-400 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
@@ -82,6 +85,7 @@ const Navbar = () => {
 
             {userContext ? (
               <button
+                aria-label="Log out your account"
                 className={`rounded-full w-16 h-9 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black
                     ${clicked ? "bg-blue-300" : "bg-blue-300 hover:bg-blue-300"}`}
                 onClick={() => {
@@ -94,12 +98,14 @@ const Navbar = () => {
             ) : (
               <>
                 <NavLink
+                  aria-label="Navigate to Login"
                   to="/login"
                   className="rounded-full bg-lime-green px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-lime-green/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                 >
                   Login
                 </NavLink>
                 <NavLink
+                  aria-label="Navigate to Signup"
                   to="/signup"
                   className="rounded-full bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                 >
@@ -114,7 +120,7 @@ const Navbar = () => {
       {/* ---------------------------- MOBILE NAVBAR ---------------------------- */}
       <div className="block md:hidden">
         <div className="flex justify-between items-center px-4 py-3">
-          <button onClick={toggleMenu}>
+          <button onClick={toggleMenu} aria-label="Toggle navigation">
             <FontAwesomeIcon icon={faBars} className="text-xl" />
           </button>
           <img
@@ -139,13 +145,14 @@ const Navbar = () => {
                 toggleMenu();
               }}
             />
-            <button onClick={toggleMenu}>
+            <button onClick={toggleMenu} aria-label="Go to home page">
               <FontAwesomeIcon icon={faXmark} className="text-xl" />
             </button>
           </div>
 
           <div className="p-6 flex flex-col gap-4">
             <NavLink
+              aria-label="Navigate to Home"
               to="/"
               onClick={toggleMenu}
               className="text-black hover:text-lime-600 font-medium"
@@ -154,6 +161,7 @@ const Navbar = () => {
             </NavLink>
 
             <NavLink
+              aria-label="Add Transactions"
               to="/add"
               onClick={toggleMenu}
               className="text-black hover:text-lime-600 font-medium"
@@ -162,6 +170,7 @@ const Navbar = () => {
             </NavLink>
 
             <NavLink
+              aria-label="Recurring Transactions"
               to="/recurring"
               className={({ isActive }) =>
                 isActive ? 'bg-gray-300 text-center text-black rounded-full w-16 h-9 flex items-center justify-center' : 'text-gray-400 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
@@ -172,6 +181,7 @@ const Navbar = () => {
 
             {userContext ? (
               <button
+                aria-label="Login to your account"
                 onClick={() => {
                   toggleMenu();
                   handleLogout();
@@ -183,6 +193,7 @@ const Navbar = () => {
             ) : (
               <>
                 <NavLink
+                  aria-label="Navigate to Login"
                   to="/login"
                   onClick={toggleMenu}
                   className="bg-lime-400 text-black px-4 py-2 rounded-full font-medium"
@@ -190,6 +201,7 @@ const Navbar = () => {
                   Login
                 </NavLink>
                 <NavLink
+                  aria-label="Navigate to Signup"
                   to="/signup"
                   onClick={toggleMenu}
                   className="bg-black text-white px-4 py-2 rounded-full font-medium"

@@ -8,7 +8,7 @@ export const fetchUserProfile = createAsyncThunk(
             const response = await account.get();
             return response;
         } catch (error) {
-            console.error("Error fetching user:", error.message);
+            // console.error("Error fetching user:", error.message);
             return rejectWithValue(error.message || "Failed to fetch user profile");
         }
     }
@@ -42,7 +42,7 @@ export const userSlice = createSlice({
                 state.loading = false;
             })
             .addCase(fetchUserProfile.rejected, (state, action) => {
-                console.error("Profile fetch failed:", action.payload);
+                // console.error("Profile fetch failed:", action.payload);
                 state.error = action.payload;
                 state.loading = false;
             });

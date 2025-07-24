@@ -60,7 +60,7 @@ const Recurring = () => {
 
                 setTransactions(formatted);
             } catch (err) {
-                console.error('Error fetching recurring transactions:', err);
+                // console.error('Error fetching recurring transactions:', err);
             } finally {
                 setLoading(false); // <-- Done loading
             }
