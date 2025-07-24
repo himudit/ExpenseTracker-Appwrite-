@@ -801,132 +801,134 @@ function Home() {
                   <div className="text-lg font-bold flex ml-[-0.8rem] mt-[-1.2rem] ">Category</div>
                   <div className='flex flex-wrap justify-center items-center gap-10'>
                     <div>{
-                      leftC ? <div className=' w-[160px] h-[160px]'><PieChartComponent data1={data1} /> </div> : <div className=' w-[160px] h-[160px]'><PieChartComponent data1={data2} /> </div>
+                      leftC ? <div className='w-[160px] h-[160px]'><PieChartComponent data1={data1} /> </div> : <div className=' w-[160px] h-[160px]'><PieChartComponent data1={data2} /> </div>
                     }</div>
                     <div>{
-                      leftC ? <div className=' w-[160px] h-[160px]'><div>
-                        {/* here expense */}
-                        <div className="flex flex-col flex-wrap-reverse ml-4">
+                      leftC ?
+                        <div className='w-[160px] h-[160px]'>
+                          <div>
+                            {/* here expense */}
+                            <div className=" flex flex-col flex-wrap-reverse ml-4 mt-4 md:mt-0">
 
-                          <div className="flex items-center mb-2">
-                            <div
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: "#A9A9A9" }}
-                            ></div>
-                            <span className="ml-2 text-sm">others</span>
-                          </div>
+                              <div className="flex items-center mb-2">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ backgroundColor: "#A9A9A9" }}
+                                ></div>
+                                <span className="ml-2 text-sm">others</span>
+                              </div>
 
-                          <div className="flex items-center mb-2">
-                            <div
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: "#FFBF00" }}
-                            ></div>
-                            <span className="ml-2 text-sm">Food</span>
-                          </div>
+                              <div className="flex items-center mb-2">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ backgroundColor: "#FFBF00" }}
+                                ></div>
+                                <span className="ml-2 text-sm">Food</span>
+                              </div>
 
-                          <div className="flex items-center">
-                            <div
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: "#0000ff" }}
-                            ></div>
-                            <span className="ml-2 text-sm">Shopping</span>
-                          </div>
+                              <div className="flex items-center">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ backgroundColor: "#0000ff" }}
+                                ></div>
+                                <span className="ml-2 text-sm">Shopping</span>
+                              </div>
 
-                          <div className="flex items-center">
-                            <div
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: "purple" }} // Others Color
-                            ></div>
-                            <span className="ml-2 text-sm">Travelling</span>
-                          </div>
+                              <div className="flex items-center">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ backgroundColor: "purple" }} // Others Color
+                                ></div>
+                                <span className="ml-2 text-sm">Travelling</span>
+                              </div>
 
-                          <div className="flex items-center">
-                            <div
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: "#FF6F61" }} // Others Color
-                            ></div>
-                            <span className="ml-2 text-sm">Entertainment</span>
-                          </div>
+                              <div className="flex items-center">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ backgroundColor: "#FF6F61" }} // Others Color
+                                ></div>
+                                <span className="ml-2 text-sm">Entertainment</span>
+                              </div>
 
-                          <div className="flex items-center">
-                            <div
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: "red" }} // Others Color
-                            ></div>
-                            <span className="ml-2 text-sm">Medical</span>
-                          </div>
+                              <div className="flex items-center">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ backgroundColor: "red" }} // Others Color
+                                ></div>
+                                <span className="ml-2 text-sm">Medical</span>
+                              </div>
 
-                          <div className="flex items-center">
-                            <div
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: "#797982" }} // Others Color
-                            ></div>
-                            <span className="ml-2 text-sm">Bills</span>
-                          </div>
+                              <div className="flex items-center">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ backgroundColor: "#797982" }} // Others Color
+                                ></div>
+                                <span className="ml-2 text-sm">Bills</span>
+                              </div>
 
-                          <div className="flex items-center">
-                            <div
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: "#005F6A" }}
-                            ></div>
-                            <span className="ml-2 text-sm">Rent</span>
-                          </div>
+                              <div className="flex items-center">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ backgroundColor: "#005F6A" }}
+                                ></div>
+                                <span className="ml-2 text-sm">Rent</span>
+                              </div>
 
-                          <div className="flex items-center">
-                            <div
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: "#721322" }}
-                            ></div>
-                            <span className="ml-2 text-sm">Taxes</span>
-                          </div>
+                              <div className="flex items-center">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ backgroundColor: "#721322" }}
+                                ></div>
+                                <span className="ml-2 text-sm">Taxes</span>
+                              </div>
 
-                          <div className="flex items-center">
-                            <div
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: "#32CD32" }}
-                            ></div>
-                            <span className="ml-2 text-sm">Investments</span>
-                          </div>
-                        </div>
-                        {/* above */}
-                      </div></div> : <div className=' w-[160px] h-[160px]'><div>
-                        {/* here Income */}
-                        <div className="flex flex-col ml-4">
-                          {/* Legend Item for Salary */}
-                          <div className="flex items-center mb-2">
-                            <div
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: "#4caf50" }} // Salary Color
-                            ></div>
-                            <span className="ml-2 text-sm">Salary</span>
-                          </div>
+                              <div className="flex items-center">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ backgroundColor: "#32CD32" }}
+                                ></div>
+                                <span className="ml-2 text-sm">Investments</span>
+                              </div>
+                            </div>
+                            {/* above */}
+                          </div></div> : <div className=' w-[160px] h-[160px]'><div>
+                            {/* here Income */}
+                            <div className="flex flex-col ml-4 mt-4 md:mt-0">
+                              {/* Legend Item for Salary */}
+                              <div className="flex items-center mb-2 ">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ backgroundColor: "#4caf50" }} // Salary Color
+                                ></div>
+                                <span className="ml-2 text-sm">Salary</span>
+                              </div>
 
-                          {/* Legend Item for Sold */}
-                          <div className="flex items-center mb-2">
-                            <div
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: "#2196f3" }} // Sold Color
-                            ></div>
-                            <span className="ml-2 text-sm">Sold</span>
-                          </div>
+                              {/* Legend Item for Sold */}
+                              <div className="flex items-center mb-2">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ backgroundColor: "#2196f3" }} // Sold Color
+                                ></div>
+                                <span className="ml-2 text-sm">Sold</span>
+                              </div>
 
-                          {/* Legend Item for Others */}
-                          <div className="flex items-center">
-                            <div
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: "#ff9800" }} // Others Color
-                            ></div>
-                            <span className="ml-2 text-sm">Others</span>
-                          </div>
-                        </div>
-                        {/* above */}
-                      </div></div>
+                              {/* Legend Item for Others */}
+                              <div className="flex items-center">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ backgroundColor: "#ff9800" }} // Others Color
+                                ></div>
+                                <span className="ml-2 text-sm">Others</span>
+                              </div>
+                            </div>
+                            {/* above */}
+                          </div></div>
                     }</div>
                   </div>
 
                   <div className='flex justify-between m-2 mt-[4rem] w-full'>
                     {leftC ? (
-                      <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={LeftArrowC}>
+                      <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer z-[999] relative' onClick={LeftArrowC}>
                         <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
                       </div>
                     ) : (
