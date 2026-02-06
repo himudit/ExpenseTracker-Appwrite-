@@ -42,13 +42,13 @@ const Navbar = () => {
     <nav className="relative z-50">
       {/* ---------------------------- DESKTOP SIDEBAR ---------------------------- */}
       <div className="hidden md:flex">
-        <div className="fixed top-0 left-0 h-full w-24 bg-white border-r border-gray-300 flex flex-col items-center py-4">
+        <div className="fixed top-0 left-0 h-full w-24 bg-white border-r border-gray-100 flex flex-col items-center py-4">
           <div
-            className="mb-8 flex flex-col items-center cursor-pointer"
+            className="mb-8 flex flex-col items-center cursor-pointer group"
             onClick={() => navigate("/")}
           >
-            <img src={Logo} alt="Logo" className="w-9 object-contain" />
-            <div className="mt-2 text-xs font-bold">ExpenseMate</div>
+            <img src={Logo} alt="Logo" className="w-9 object-contain group-hover:scale-110 transition-transform" />
+            <div className="mt-2 text-[10px] font-bold text-gray-800">ExpenseMate</div>
           </div>
 
           <div className="flex flex-col items-center space-y-8">
@@ -56,62 +56,60 @@ const Navbar = () => {
               aria-label="Navigate to Home"
               to="/"
               className={({ isActive }) =>
-                isActive ? 'bg-gray-300 text-center text-black rounded-full w-16 h-9 flex items-center justify-center' : 'text-gray-300 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
+                isActive ? 'bg-blue-600 text-white rounded-2xl w-12 h-12 flex items-center justify-center shadow-lg shadow-blue-200 transition-all' : 'text-gray-400 hover:bg-blue-50 hover:text-blue-600 w-12 h-12 flex items-center justify-center rounded-2xl transition-all'
               }
             >
-              <FontAwesomeIcon icon={faHouse} />
+              <FontAwesomeIcon icon={faHouse} className="text-lg" />
             </NavLink>
 
             <NavLink
               aria-label="Add Transactions"
               to="/add"
               className={({ isActive }) =>
-                isActive ? 'bg-gray-300 text-center text-black rounded-full w-16 h-9 flex items-center justify-center' : 'text-gray-400 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
+                isActive ? 'bg-blue-600 text-white rounded-2xl w-12 h-12 flex items-center justify-center shadow-lg shadow-blue-200 transition-all' : 'text-gray-400 hover:bg-blue-50 hover:text-blue-600 w-12 h-12 flex items-center justify-center rounded-2xl transition-all'
               }
             >
-              <FontAwesomeIcon icon={faPlus} />
+              <FontAwesomeIcon icon={faPlus} className="text-lg" />
             </NavLink>
 
             <NavLink
               aria-label="Recurring Transactions"
               to="/recurring"
               className={({ isActive }) =>
-                isActive ? 'bg-gray-300 text-center text-black rounded-full w-16 h-9 flex items-center justify-center' : 'text-gray-400 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
+                isActive ? 'bg-blue-600 text-white rounded-2xl w-12 h-12 flex items-center justify-center shadow-lg shadow-blue-200 transition-all' : 'text-gray-400 hover:bg-blue-50 hover:text-blue-600 w-12 h-12 flex items-center justify-center rounded-2xl transition-all'
               }
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-               className="lucide lucide-wallet-icon lucide-wallet"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-wallet"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></svg>
             </NavLink>
 
             {userContext ? (
               <button
                 aria-label="Log out your account"
-                className={`rounded-full w-16 h-9 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black
-                    ${clicked ? "bg-blue-300" : "bg-blue-300 hover:bg-blue-300"}`}
+                className="w-12 h-12 rounded-2xl bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center active:scale-95"
                 onClick={() => {
                   setClicked(true);
                   handleLogout();
                 }}
               >
-                <FontAwesomeIcon icon={faRightFromBracket} />
+                <FontAwesomeIcon icon={faRightFromBracket} className="text-lg" />
               </button>
             ) : (
-              <>
+              <div className="flex flex-col items-center gap-4">
                 <NavLink
                   aria-label="Navigate to Login"
                   to="/login"
-                  className="rounded-full bg-lime-green px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-lime-green/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                  className="w-12 h-12 rounded-2xl bg-blue-500 text-white flex items-center justify-center shadow-md hover:bg-blue-600 transition-all active:scale-95"
                 >
-                  Login
+                  <span className="text-[10px] font-bold">LOG</span>
                 </NavLink>
                 <NavLink
                   aria-label="Navigate to Signup"
                   to="/signup"
-                  className="rounded-full bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                  className="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center shadow-md hover:bg-gray-800 transition-all active:scale-95"
                 >
-                  Sign Up
+                  <span className="text-[10px] font-bold">SIGN</span>
                 </NavLink>
-              </>
+              </div>
             )}
           </div>
         </div>
@@ -119,104 +117,131 @@ const Navbar = () => {
 
       {/* ---------------------------- MOBILE NAVBAR ---------------------------- */}
       <div className="block md:hidden">
-        <div className="flex justify-between items-center px-4 py-3">
-          <button onClick={toggleMenu} aria-label="Toggle navigation">
-            <FontAwesomeIcon icon={faBars} className="text-xl" />
+        <div className="flex justify-between items-center px-6 py-4 bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0">
+          <button
+            onClick={toggleMenu}
+            aria-label="Toggle navigation"
+            className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-gray-100 transition-colors"
+          >
+            <FontAwesomeIcon icon={faBars} className="text-xl text-gray-700" />
           </button>
           <img
             src={Logo}
             alt="Logo"
-            className="w-9 object-contain cursor-pointer"
+            className="w-10 h-10 object-contain cursor-pointer hover:scale-105 transition-transform"
             onClick={() => navigate("/")}
           />
+          <div className="w-10"></div> {/* Spacer for symmetry */}
         </div>
 
+        {/* Sidebar */}
         <div
-          className={`fixed top-0 left-0 h-full w-64 bg-white text-black transform ${isOpen ? "translate-x-0" : "-translate-x-full"
-            } transition-transform duration-300 ease-in-out shadow-lg z-50`}
+          className={`fixed top-0 left-0 h-full w-[280px] bg-white transform ${isOpen ? "translate-x-0" : "-translate-x-full"
+            } transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] shadow-2xl z-[60] flex flex-col`}
         >
-          <div className="flex justify-between items-center p-4 border-b border-gray-200">
-            <img
-              src={Logo}
-              alt="Logo"
-              className="w-9 object-contain cursor-pointer"
-              onClick={() => {
-                navigate("/");
-                toggleMenu();
-              }}
-            />
-            <button onClick={toggleMenu} aria-label="Go to home page">
+          {/* Sidebar Header */}
+          <div className="p-6 flex justify-between items-center border-b border-gray-50">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-50 rounded-xl">
+                <img src={Logo} alt="Logo" className="w-6 h-6 object-contain" />
+              </div>
+              <span className="font-bold text-lg tracking-tight text-gray-800">ExpenseMate</span>
+            </div>
+            <button
+              onClick={toggleMenu}
+              aria-label="Close menu"
+              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-all"
+            >
               <FontAwesomeIcon icon={faXmark} className="text-xl" />
             </button>
           </div>
 
-          <div className="p-6 flex flex-col gap-4">
+          {/* Navigation Links */}
+          <div className="flex-1 overflow-y-auto py-6 px-4 flex flex-col gap-2">
             <NavLink
-              aria-label="Navigate to Home"
               to="/"
               onClick={toggleMenu}
-              className="text-black hover:text-lime-600 font-medium"
-            >
-              Home
-            </NavLink>
-
-            <NavLink
-              aria-label="Add Transactions"
-              to="/add"
-              onClick={toggleMenu}
-              className="text-black hover:text-lime-600 font-medium"
-            >
-              Add Expense
-            </NavLink>
-
-            <NavLink
-              aria-label="Recurring Transactions"
-              to="/recurring"
               className={({ isActive }) =>
-                isActive ? 'bg-gray-300 text-center text-black rounded-full w-16 h-9 flex items-center justify-center' : 'text-gray-400 hover:bg-lime-green w-11.4 h-11 hover:text-black px-4 py-2 rounded-full'
+                `flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
+                  ? "bg-blue-50 text-blue-700 font-semibold"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                }`
               }
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-wallet-icon lucide-wallet"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></svg>
+              <FontAwesomeIcon icon={faHouse} className="text-lg opacity-80 group-hover:scale-110 transition-transform" />
+              <span>Home</span>
             </NavLink>
 
+            <NavLink
+              to="/add"
+              onClick={toggleMenu}
+              className={({ isActive }) =>
+                `flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
+                  ? "bg-blue-50 text-blue-700 font-semibold"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                }`
+              }
+            >
+              <FontAwesomeIcon icon={faPlus} className="text-lg opacity-80 group-hover:scale-110 transition-transform" />
+              <span>Add Expense</span>
+            </NavLink>
+
+            <NavLink
+              to="/recurring"
+              onClick={toggleMenu}
+              className={({ isActive }) =>
+                `flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group ${isActive
+                  ? "bg-blue-50 text-blue-700 font-semibold"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                }`
+              }
+            >
+              <div className="w-[18px] flex justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-wallet"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1" /><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4" /></svg>
+              </div>
+              <span>Recurring</span>
+            </NavLink>
+          </div>
+
+          {/* User Section (Bottom) */}
+          <div className="p-6 border-t border-gray-50 bg-gray-50/50">
             {userContext ? (
               <button
-                aria-label="Login to your account"
                 onClick={() => {
                   toggleMenu();
                   handleLogout();
                 }}
-                className="bg-blue-500 text-white px-4 py-2 rounded-full font-medium"
+                className="w-full flex items-center justify-center gap-3 bg-red-500 text-white px-4 py-3 rounded-xl font-bold shadow-md shadow-red-100 hover:bg-red-600 transition-all active:scale-[0.98]"
               >
-                Logout
+                <FontAwesomeIcon icon={faRightFromBracket} />
+                <span>Logout</span>
               </button>
             ) : (
-              <>
+              <div className="flex flex-col gap-3">
                 <NavLink
-                  aria-label="Navigate to Login"
                   to="/login"
                   onClick={toggleMenu}
-                  className="bg-lime-400 text-black px-4 py-2 rounded-full font-medium"
+                  className="w-full flex items-center justify-center bg-blue-500 text-white px-4 py-3 rounded-xl font-bold shadow-md shadow-blue-100 hover:bg-blue-600 transition-all active:scale-[0.98]"
                 >
                   Login
                 </NavLink>
                 <NavLink
-                  aria-label="Navigate to Signup"
                   to="/signup"
                   onClick={toggleMenu}
-                  className="bg-black text-white px-4 py-2 rounded-full font-medium"
+                  className="w-full flex items-center justify-center bg-black text-white px-4 py-3 rounded-xl font-bold shadow-sm hover:bg-gray-800 transition-all active:scale-[0.98]"
                 >
                   Sign Up
                 </NavLink>
-              </>
+              </div>
             )}
           </div>
         </div>
 
+        {/* Backdrop */}
         {isOpen && (
           <div
             onClick={toggleMenu}
-            className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
+            className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-50 transition-opacity duration-500"
           />
         )}
       </div>
