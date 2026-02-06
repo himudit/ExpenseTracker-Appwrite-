@@ -201,38 +201,19 @@ const Navbar = () => {
               </div>
               <span>Recurring</span>
             </NavLink>
-          </div>
-
-          {/* User Section (Bottom) */}
-          <div className="p-6 border-t border-gray-50 bg-gray-50/50">
-            {userContext ? (
+            {userContext && (
               <button
                 onClick={() => {
                   toggleMenu();
                   handleLogout();
                 }}
-                className="w-full flex items-center justify-center gap-3 bg-red-500 text-white px-4 py-3 rounded-xl font-bold shadow-md shadow-red-100 hover:bg-red-600 transition-all active:scale-[0.98]"
+                className="flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group text-slate-600 hover:text-rose-600 hover:bg-rose-50/80 active:scale-95 mt-4 border-t border-gray-50 pt-6"
               >
-                <FontAwesomeIcon icon={faRightFromBracket} />
-                <span>Logout</span>
+                <div className="w-6 h-6 flex items-center justify-center rounded-lg bg-rose-50 text-rose-500 group-hover:bg-rose-100 transition-colors">
+                  <FontAwesomeIcon icon={faRightFromBracket} className="text-sm" />
+                </div>
+                <span className="font-medium">Logout</span>
               </button>
-            ) : (
-              <div className="flex flex-col gap-3">
-                <NavLink
-                  to="/login"
-                  onClick={toggleMenu}
-                  className="w-full flex items-center justify-center bg-blue-500 text-white px-4 py-3 rounded-xl font-bold shadow-md shadow-blue-100 hover:bg-blue-600 transition-all active:scale-[0.98]"
-                >
-                  Login
-                </NavLink>
-                <NavLink
-                  to="/signup"
-                  onClick={toggleMenu}
-                  className="w-full flex items-center justify-center bg-black text-white px-4 py-3 rounded-xl font-bold shadow-sm hover:bg-gray-800 transition-all active:scale-[0.98]"
-                >
-                  Sign Up
-                </NavLink>
-              </div>
             )}
           </div>
         </div>
