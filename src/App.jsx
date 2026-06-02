@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import './App.css'
-import Navbar from './components/Navbar'
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom'
 import Layout from './Layout.jsx'
 import Login from './components/Login';
@@ -18,6 +16,7 @@ function App() {
         <Route path='login' element={<Login />} />
         <Route path='add' element={<Expense />} />
         <Route path='recurring' element={<Recurring />} />
+        <Route path='/assistant' element={<Recurring />} />
       </Route>
     )
   );

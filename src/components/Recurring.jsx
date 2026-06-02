@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { faSync, faClock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Query } from 'appwrite';
-import { account, databases, storage } from '../appwrite/appwriteConfig';
+import { databases } from '../appwrite/appwriteConfig';
 import conf from '../conf/conf';
 import SkeletonRecurring from '../skeleton/SkeletonRecurring';
 

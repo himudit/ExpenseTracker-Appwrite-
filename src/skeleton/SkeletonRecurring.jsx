@@ -1,5 +1,4 @@
 // SkeletonRecurring.jsx
-import React from 'react';
 
 const SkeletonRecurring = () => {
     return (

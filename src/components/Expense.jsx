@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartBar, faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faPizzaSlice, faBurger, faCartShopping, faPlane, faCircle, faCirclePlus, faCheck, faXmark, faRupee, faWallet, faAngleDown, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faChartSimple, faChevronRight, faEllipsis, faHouseCircleCheck, faIndianRupee, faReceipt, faSuitcaseMedical, faVideo, faBurger, faCartShopping, faPlane, faCirclePlus, faCheck, faXmark, faWallet, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import LottieAnimation from './LottieAnimation';
 import { account, databases, storage } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid'
@@ -171,7 +171,7 @@ function Expense() {
                     Category: String(selectedCategory.text),
                     Date: String(formattedDateTime),
                     if(selectedFile) {
-                        ReceiptId: fileId
+                        fileId
                     }
                 }
                 const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection5Id, uuidv4(), income)
@@ -211,7 +211,7 @@ function Expense() {
                     Category: String(selectedCategory.text),
                     Date: String(formattedDateTime),
                     if(selectedFile) {
-                        ReceiptId: fileId
+                        fileId
                     }
                 }
                 const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection5Id, uuidv4(), income)
@@ -264,7 +264,7 @@ function Expense() {
                     Category: String(selectedCategory.text),
                     Date: String(formattedDateTime),
                     if(selectedFile) {
-                        ReceiptId: fileId
+                        fileId
                     }
 
                 }
@@ -325,7 +325,7 @@ function Expense() {
                     Category: String(selectedCategory.text),
                     Date: String(formattedDateTime),
                     if(selectedFile) {
-                        ReceiptId: fileId
+                        fileId
                     }
                 }
                 const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)

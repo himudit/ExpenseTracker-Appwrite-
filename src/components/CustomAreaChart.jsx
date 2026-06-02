@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import useLastNDays from '../hooks/useLastNDays';
 

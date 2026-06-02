@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { databases, account, storage } from '../appwrite/appwriteConfig';
+import { useEffect, useState, useRef } from 'react'
+import { databases, storage } from '../appwrite/appwriteConfig';
 import { v4 as uuidv4 } from 'uuid';
 import { Query } from 'appwrite';
 import conf from '../conf/conf';
@@ -30,9 +30,6 @@ function Home() {
   const [profilePictureUrl, setProfilePictureUrl] = useState('/image.png');
   const [middleData, setMiddleData] = useState([]);
   const [days, setDays] = useState(30);
-  const [descombinedEntries, setDesCombinedEntries] = useState([]);
-  const [loading1, setLoading1] = useState(true);
-  const [loading2, setLoading2] = useState(true);
 
   const [openProfile, setOpenProfile] = useState(false);
 
@@ -82,13 +79,9 @@ function Home() {
         const oldImageId = response.documents[0].image_id;
         await storage.deleteFile(conf.appwriteBucketId, oldImageId);
 
-        const promise = await storage.createFile(conf.appwriteBucketId, fileId, selectedFile);
+        await storage.createFile(conf.appwriteBucketId, fileId, selectedFile);
 
-        const documentData = {
-          user_id: String(userDetails.$id),
-          image_id: String(fileId),
-        };
-        const updatedDocument = await databases.updateDocument(
+        await databases.updateDocument(
           conf.appwriteDatabaseId,
           conf.appwriteCollection3Id,
           documentId,
@@ -98,13 +91,11 @@ function Home() {
         const fileUrl = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/view?project=${conf.appwriteProjectId}&mode=admin`;
         setProfilePictureUrl(fileUrl);
 
-        promise.then(() => {
           setEditProfile(false);
           setOpenProfile(false);
           // console.log(openProfile);
           // console.log(editProfile);
           setTryProfilePictureUrl('');
-        });
 
       } else {
         try {
@@ -116,14 +107,14 @@ function Home() {
             user_id: String(userDetails.$id),
             image_id: String(fileId),
           };
-          const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection3Id, uuidv4(), documentData);
+          await databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection3Id, uuidv4(), documentData);
 
           // Get the file URL
           const fileUrl = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/view?project=${conf.appwriteProjectId}&mode=admin`;
 
           // console.log(fileUrl);
           setProfilePictureUrl(fileUrl);
-        } catch (error) {
+        } catch {
           // console.error('Error uploading file:', error);
         }
       }
@@ -138,7 +129,7 @@ function Home() {
       try {
         const res = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection3Id, [Query.equal('user_id', userDetails.$id)]);
         setProfilePictureUrl(`${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${res.documents[0].image_id}/view?project=${conf.appwriteProjectId}&mode=admin`);
-      } catch (error) {
+      } catch {
         // console.log(error);
       }
     };
@@ -150,8 +141,6 @@ function Home() {
           return;
         }
 
-        setLoading2(true);
-        setLoading1(true);
         const userDataInc = await databases.listDocuments(
           conf.appwriteDatabaseId,
           conf.appwriteCollection6Id,
@@ -186,11 +175,9 @@ function Home() {
         const investments = userDocument?.Investments || 0;
         const totalExpense = others + food + shopping + travelling + entertainment + medicalBills + bills + rent + taxes + investments;
         setExpenses(totalExpense);
-      } catch (err) {
-
-      } finally {
-        setLoading1(false);
-      }
+      } catch {
+        // handle error
+      } 
     }
     fetchProfilePictureUrl();
     fetchTotalFromCategory();
@@ -205,11 +192,6 @@ function Home() {
   const [rightT, setRightT] = useState(false);
   const [indexT, setindexT] = useState(0);
 
-
-  const [selectedCategory, setSelectedCategory] = useState();
-  const settingCategory = (icon, text) => {
-    setSelectedCategory({ icon, text });
-  };
   // for data from collection 2 & collection 5
   useEffect(() => {
     // for collection 2 (Expense)
@@ -265,22 +247,15 @@ function Home() {
           setRightT(true);
         }
       }
-    } catch (err) {
-
-    } finally {
-    }
+    } catch {
+      // ignore
+    } 
   }, [expenseEntries, incomeEntries]);
-
-  const handleSelect = (range) => {
-    // console.log("Selected range:", range);
-  };
 
   useEffect(() => {
     try {
-      setLoading2(true)
       const combined = [...expenseEntries, ...incomeEntries];
       const dessortedEntries = combined.sort((a, b) => new Date(a.Date) - new Date(b.Date));
-      setDesCombinedEntries(dessortedEntries);
       if (dessortedEntries.length > 0) {
         const newMiddleData = [];
         let i = 0;
@@ -289,7 +264,7 @@ function Home() {
           let sumI = 0;
           let catE = '';
           let catI = '';
-          if (dessortedEntries[i]?.hasOwnProperty('ExpenseAmount')) {
+          if (Object.prototype.hasOwnProperty.call(dessortedEntries[i] || {}, 'ExpenseAmount')) {
             sumE += dessortedEntries[i].ExpenseAmount || 0;
             catE += (catE ? ',' : '') + (dessortedEntries[i].Category || '');
           } else {
@@ -306,7 +281,7 @@ function Home() {
             // if (new Date(dessortedEntries[j]?.Date).getDate() === day) {
             const entry = `${new Date(dessortedEntries[j]?.Date).getDate()} ${new Date(dessortedEntries[i]?.Date).toLocaleString('en-US', { month: 'short' })}`;
             if (entry === day) {
-              if (dessortedEntries[j]?.hasOwnProperty('ExpenseAmount')) {
+              if (Object.prototype.hasOwnProperty.call(dessortedEntries[j] || {}, 'ExpenseAmount')) {
                 sumE += dessortedEntries[j].ExpenseAmount || 0;
                 catE += (catE ? ',' : '') + (dessortedEntries[j].Category || '');
               } else {
@@ -330,12 +305,10 @@ function Home() {
         setMiddleData(newMiddleData);
         // console.log(middleData)
       }
-    } catch (err) {
-
-    } finally {
-      setLoading2(false);
-    }
-  }, [combinedEntries]);
+    } catch {
+      // ignore
+    } 
+  }, [combinedEntries, expenseEntries, incomeEntries]);
 
   // switch for 
   const getCategoryIcon = (category) => {

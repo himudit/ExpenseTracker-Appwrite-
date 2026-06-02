@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { account } from '../appwrite/appwriteConfig'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,14 +10,13 @@ function Login() {
     password: ""
   })
   const [loading, setLoading] = useState(false);
-  const userContext = useSelector((store) => store.user.user)
   const dispatch = useDispatch();
 
   const loginUser = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await account.createEmailPasswordSession(user.email, user.password);
+      await account.createEmailPasswordSession(user.email, user.password);
       // dispatch(setUser("NotNull"));
       dispatch({ type: 'user/setUser', payload: 'NotNull' });
       navigate("/");
@@ -95,7 +94,7 @@ function Login() {
                         to="/signup"
                         className="font-medium text-indigo-600 hover:text-indigo-500"
                       >
-                        Don't have Account, Sign Up
+                        Don&apos;t have Account, Sign Up
                       </NavLink>
                     </div>
                   </div>
