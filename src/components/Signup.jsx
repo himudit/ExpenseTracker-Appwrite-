@@ -17,9 +17,9 @@ function Signup() {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const response = await account.get();
+        await account.get();
         navigate('/');
-      } catch (error) {
+      } catch {
         // console.log('No logged-in user:', error);
       }
     };

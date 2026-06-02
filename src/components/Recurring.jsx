@@ -58,7 +58,7 @@ const Recurring = () => {
                     }));
 
                 setTransactions(formatted);
-            } catch (err) {
+            } catch {
                 // console.error('Error fetching recurring transactions:', err);
             } finally {
                 setLoading(false); // <-- Done loading

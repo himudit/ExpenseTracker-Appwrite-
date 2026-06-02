@@ -15,7 +15,6 @@ import Logo from "../assets/wallet.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [clicked, setClicked] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -30,7 +29,7 @@ const Navbar = () => {
       await account.deleteSession("current");
       dispatch(removeUser());
       navigate("/login");
-    } catch (error) {
+    } catch {
       // console.log("Logout failed:", error);
     }
   };
@@ -98,7 +97,6 @@ const Navbar = () => {
                 aria-label="Log out your account"
                 className="w-12 h-12 rounded-2xl bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 transition-all flex items-center justify-center active:scale-95"
                 onClick={() => {
-                  setClicked(true);
                   handleLogout();
                 }}
               >
