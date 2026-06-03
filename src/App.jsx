@@ -6,6 +6,7 @@ import Signup from './components/Signup';
 import Home from './components/Home.jsx'
 import Expense from './components/Expense.jsx'
 import Recurring from './components/Recurring.jsx'
+import Assistant from './components/Assistant/Assistant.jsx';
 
 function App() {
   const router = createBrowserRouter(
@@ -16,7 +17,7 @@ function App() {
         <Route path='login' element={<Login />} />
         <Route path='add' element={<Expense />} />
         <Route path='recurring' element={<Recurring />} />
-        <Route path='/assistant' element={<Recurring />} />
+        <Route path='/assistant' element={<Assistant />} />
       </Route>
     )
   );
