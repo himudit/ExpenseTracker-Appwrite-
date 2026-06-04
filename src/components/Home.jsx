@@ -91,11 +91,11 @@ function Home() {
         const fileUrl = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/view?project=${conf.appwriteProjectId}&mode=admin`;
         setProfilePictureUrl(fileUrl);
 
-          setEditProfile(false);
-          setOpenProfile(false);
-          // console.log(openProfile);
-          // console.log(editProfile);
-          setTryProfilePictureUrl('');
+        setEditProfile(false);
+        setOpenProfile(false);
+        // console.log(openProfile);
+        // console.log(editProfile);
+        setTryProfilePictureUrl('');
 
       } else {
         try {
@@ -177,7 +177,7 @@ function Home() {
         setExpenses(totalExpense);
       } catch {
         // handle error
-      } 
+      }
     }
     fetchProfilePictureUrl();
     fetchTotalFromCategory();
@@ -249,7 +249,7 @@ function Home() {
       }
     } catch {
       // ignore
-    } 
+    }
   }, [expenseEntries, incomeEntries]);
 
   useEffect(() => {
@@ -307,7 +307,7 @@ function Home() {
       }
     } catch {
       // ignore
-    } 
+    }
   }, [combinedEntries, expenseEntries, incomeEntries]);
 
   // switch for 
@@ -458,7 +458,7 @@ function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 md:ml-[7rem] ">
+    <div className="flex flex-col items-center justify-between min-h-screen bg-black-100 md:ml-[4rem] ">
 
       <div className='flex w-full h-[4rem] space-x-4 p-4 border-b-2 border-black-500'>
         <div className='caret-black font-bold'>Dashboard</div>

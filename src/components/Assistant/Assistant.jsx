@@ -90,22 +90,35 @@ const Assistant = () => {
     const hasMessages = messages.length > 0;
 
     return (
-        <div className="flex flex-col h-screen md:ml-[7rem] bg-slate-50 text-gray-800 font-sans overflow-hidden">
+        <div className="flex flex-col min-h-screen md:ml-[4rem] text-gray-800 font-sans overflow-hidden relative">
+            {/* Radial Gradient Background from Bottom */}
+            <div
+                className="absolute inset-0 z-0 pointer-events-none"
+                style={{
+                    background: "radial-gradient(125% 125% at 50% 90%, #fff 40%, #6366f1 100%)",
+                }}
+            />
 
-            <div className={`flex-1 flex flex-col w-full mx-auto px-4 ${hasMessages ? 'justify-between' : 'justify-center'} overflow-hidden`}>
+            <div className={`flex-1 flex flex-col w-full mx-auto px-4 ${hasMessages ? 'justify-between' : 'justify-center'} overflow-hidden relative z-10`}>
 
                 {/* Welcome Section - conditionally shown and centered */}
                 <div className={`flex flex-col items-center justify-center w-full transition-all duration-700 ease-in-out transform ${!hasMessages ? 'opacity-100 scale-100 max-h-[800px] pb-8' : 'opacity-0 scale-95 max-h-0 overflow-hidden'}`}>
-                    <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center shadow-lg shadow-blue-100 border border-blue-100 mt-[-10vh]">
-                        <FontAwesomeIcon icon={faWandMagicSparkles} className="text-2xl text-blue-600" />
+                    <div className="w-48 h-16 rounded-2xl bg-white/70 backdrop-blur-md flex items-center justify-center shadow-xl shadow-indigo-500/10 border border-white/60 mt-[-10vh]">
+                        <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-600">Your Logo</span>
                     </div>
 
+                    <h2 className="text-xl md:text-xl font-semibold tracking-tight text-center text-gray-400 mt-6">
+                        Good to See You!
+                    </h2>
                     <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-center text-gray-900 mt-6">
-                        How can I help you with your finances today?
+                        How can i be Assistance
+                    </h1>
+                    <h1 className="text-xl md:text-xl font-semibold tracking-tight text-center text-gray-400 mt-6">
+                        I am available for your help!
                     </h1>
 
                     {/* Suggestions Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl mt-8">
+                    {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl mt-8">
                         {suggestions.map((item, index) => (
                             <div
                                 key={index}
@@ -123,7 +136,7 @@ const Assistant = () => {
                                 </div>
                             </div>
                         ))}
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Messages Area - shown when chat starts */}
