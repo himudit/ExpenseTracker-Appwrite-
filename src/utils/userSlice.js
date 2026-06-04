@@ -30,6 +30,11 @@ export const userSlice = createSlice({
         removeUser: (state) => {
             state.user = null;
         },
+        setProfilePicture: (state, action) => {
+            if (state.user) {
+                state.user.profilePictureUrl = action.payload;
+            }
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -49,6 +54,6 @@ export const userSlice = createSlice({
     },
 });
 
-export const { setUser, removeUser } = userSlice.actions;
+export const { setUser, removeUser, setProfilePicture } = userSlice.actions;
 
 export default userSlice.reducer;

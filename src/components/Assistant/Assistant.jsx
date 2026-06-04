@@ -1,14 +1,18 @@
 import { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faWandMagicSparkles, faLightbulb, faCode, faPenNib, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faWandMagicSparkles, faLightbulb, faCode, faPenNib, faUser, faCopy, faCheck } from '@fortawesome/free-solid-svg-icons';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import logo from '../../../public/logo.png'
+import { useSelector } from 'react-redux';
 
 const Assistant = () => {
     const [inputText, setInputText] = useState('');
     const [messages, setMessages] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [copiedIndex, setCopiedIndex] = useState(null);
     const messagesEndRef = useRef(null);
+    const userContext = useSelector((store) => store.user.user);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -18,28 +22,17 @@ const Assistant = () => {
         scrollToBottom();
     }, [messages]);
 
-    const suggestions = [
-        {
-            title: "Analyze Spending",
-            description: "How can I reduce my monthly grocery expenses?",
-            icon: faLightbulb
-        },
-        {
-            title: "Plan Budget",
-            description: "Create a 50/30/20 budget plan for $4000/month",
-            icon: faPenNib
-        },
-        {
-            title: "Investment Ideas",
-            description: "What are some low-risk investment options for a beginner?",
-            icon: faWandMagicSparkles
-        },
-        {
-            title: "Tax Saving",
-            description: "How to maximize tax savings this year?",
-            icon: faCode
+    useEffect(() => {
+        const getChat = async () => {
+            const userId = userContext.$id;
+            const response = await fetch(`${import.meta.env.VITE_ASSISTANT_URL}/chat/${userId}`, {});
+            const data = await response.json();
+            setMessages(data);
         }
-    ];
+        if (userContext.$id) {
+            getChat();
+        }
+    }, [userContext]);
 
     const handleSend = async (overrideText = null) => {
         const textToSend = overrideText || inputText;
@@ -56,7 +49,7 @@ const Assistant = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ message: textToSend }),
+                body: JSON.stringify({ user_id: userContext.$id, message: textToSend }),
             });
             const data = await response.json();
 
@@ -87,10 +80,16 @@ const Assistant = () => {
         handleSend(description);
     };
 
+    const handleCopy = (content, idx) => {
+        navigator.clipboard.writeText(content);
+        setCopiedIndex(idx);
+        setTimeout(() => setCopiedIndex(null), 2000);
+    };
+
     const hasMessages = messages.length > 0;
 
     return (
-        <div className="flex flex-col min-h-screen md:ml-[4rem] text-gray-800 font-sans overflow-hidden relative">
+        <div className="flex flex-col min-h-screen md:ml-[4rem] text-gray-800 font-sans overflow-hidden relative selection:bg-[#033ff6]/30 selection:text-indigo-900">
             {/* Radial Gradient Background from Bottom */}
             <div
                 className="absolute inset-0 z-0 pointer-events-none"
@@ -102,9 +101,10 @@ const Assistant = () => {
             <div className={`flex-1 flex flex-col w-full mx-auto px-4 ${hasMessages ? 'justify-between' : 'justify-center'} overflow-hidden relative z-10`}>
 
                 {/* Welcome Section - conditionally shown and centered */}
-                <div className={`flex flex-col items-center justify-center w-full transition-all duration-700 ease-in-out transform ${!hasMessages ? 'opacity-100 scale-100 max-h-[800px] pb-8' : 'opacity-0 scale-95 max-h-0 overflow-hidden'}`}>
-                    <div className="w-48 h-16 rounded-2xl bg-white/70 backdrop-blur-md flex items-center justify-center shadow-xl shadow-indigo-500/10 border border-white/60 mt-[-10vh]">
-                        <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-600">Your Logo</span>
+                <div className={`flex flex-col items-center justify-center w-full  transition-all duration-700 ease-in-out transform ${!hasMessages ? 'opacity-100 scale-100 max-h-[800px] pb-8' : 'opacity-0 scale-95 max-h-0 overflow-hidden'}`}>
+                    <div className="w-16 h-16 rounded-2xl bg-[#033ff6] backdrop-blur-md flex items-center justify-center shadow-xl shadow-indigo-500/10 border border-white/60 mt-[-10vh]">
+                        <img src={logo} alt="Logo" className="w-10 h-10 object-cover rounded-md" />
+                        {/* Rupiq.AI */}
                     </div>
 
                     <h2 className="text-xl md:text-xl font-semibold tracking-tight text-center text-gray-400 mt-6">
@@ -116,62 +116,58 @@ const Assistant = () => {
                     <h1 className="text-xl md:text-xl font-semibold tracking-tight text-center text-gray-400 mt-6">
                         I am available for your help!
                     </h1>
-
-                    {/* Suggestions Grid */}
-                    {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-3xl mt-8">
-                        {suggestions.map((item, index) => (
-                            <div
-                                key={index}
-                                className="group p-4 rounded-xl border border-gray-200 bg-white hover:bg-blue-50 hover:border-blue-200 hover:shadow-md cursor-pointer transition-all duration-300 ease-out flex flex-col gap-2"
-                                onClick={() => handleSuggestionClick(item.description)}
-                            >
-                                <div className="flex items-center gap-3 text-gray-700 font-medium group-hover:text-blue-700 transition-colors">
-                                    <div className="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center group-hover:bg-white transition-colors">
-                                        <FontAwesomeIcon icon={item.icon} className="text-gray-500 group-hover:text-blue-600 transition-colors" />
-                                    </div>
-                                    {item.title}
-                                </div>
-                                <div className="text-sm text-gray-500 group-hover:text-gray-600 transition-colors">
-                                    {item.description}
-                                </div>
-                            </div>
-                        ))}
-                    </div> */}
                 </div>
 
                 {/* Messages Area - shown when chat starts */}
-                <div className={`w-full max-w-4xl mx-auto flex flex-col overflow-y-auto transition-all duration-700 ${hasMessages ? 'flex-1 opacity-100 pt-8 pb-4 space-y-8' : 'opacity-0 h-0 overflow-hidden'}`}>
+                <div className={`w-[50%] max-w-4xl mx-auto flex flex-col overflow-y-auto transition-all duration-700 ${hasMessages ? 'flex-1 opacity-100 pt-8 pb-4 space-y-8' : 'opacity-0 h-0 overflow-hidden'}`}>
                     {messages.map((msg, idx) => (
-                        <div key={idx} className={`flex gap-4 md:gap-6 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                            {msg.role === 'assistant' && (
-                                <div className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0 rounded-full bg-blue-100 flex items-center justify-center border border-blue-200 mt-1 shadow-sm">
-                                    <FontAwesomeIcon icon={faWandMagicSparkles} className="text-blue-600 text-sm md:text-base" />
+                        <div key={idx} className={`flex gap-4 md:gap-6 ${msg.role === 'user' ? 'justify-end' : 'justify-start'} group`}>
+                            {/* {msg.role === 'assistant' && (
+                                <div className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0 rounded-full bg-[#033ff6]/70 backdrop-blur-md flex items-center justify-center border border-blue-200 mt-1 shadow-sm">
+                                   
+                                    Rupiq.AI
                                 </div>
-                            )}
-                            <div className={`max-w-[85%] md:max-w-[75%] rounded-2xl px-5 py-4 ${msg.role === 'user' ? 'bg-blue-600 text-white rounded-tr-none shadow-md' : 'bg-white border border-gray-200 text-gray-800 shadow-sm rounded-tl-none'}`}>
-                                {msg.role === 'user' ? (
-                                    <div className="whitespace-pre-wrap leading-relaxed text-[15px]">{msg.content}</div>
-                                ) : (
-                                    <div className="prose prose-sm md:prose-base prose-slate max-w-none prose-p:leading-relaxed prose-pre:bg-slate-800 prose-pre:text-slate-100 prose-code:text-blue-600 prose-code:bg-blue-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-a:text-blue-600">
-                                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                            {msg.content}
-                                        </ReactMarkdown>
-                                    </div>
-                                )}
+                            )} */}
+                            <div className={`flex flex-col gap-1 w-full max-w-[85%] md:max-w-[75%]`}>
+                                <div className={`${msg.role === 'user' ? 'bg-gray-100 text-gray-800 rounded-2xl px-5 py-2.5 inline-block w-fit ml-auto' : 'bg-transparent text-gray-800 py-2'}`}>
+                                    {msg.role === 'user' ? (
+                                        <div className="whitespace-pre-wrap leading-relaxed text-[15px]">{msg.content}</div>
+                                    ) : (
+                                        <div className="prose prose-sm md:prose-base prose-slate max-w-none prose-p:leading-relaxed prose-pre:bg-slate-800 prose-pre:text-slate-100 prose-code:text-blue-600 prose-code:bg-blue-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-a:text-blue-600 selection:bg-blue-300 selection:text-white">
+                                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                {msg.content}
+                                            </ReactMarkdown>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} opacity-0 group-hover:opacity-100 transition-opacity px-2`}>
+                                    <button
+                                        onClick={() => handleCopy(msg.content, idx)}
+                                        className="text-gray-400 hover:text-gray-600 transition-colors p-1 flex items-center gap-1 text-xs font-medium"
+                                        title="Copy message"
+                                    >
+                                        <FontAwesomeIcon icon={copiedIndex === idx ? faCheck : faCopy} className={copiedIndex === idx ? "text-green-500" : ""} />
+                                        {copiedIndex === idx ? <span className="text-green-500">Copied!</span> : <span>Copy</span>}
+                                    </button>
+                                </div>
                             </div>
                             {msg.role === 'user' && (
-                                <div className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0 rounded-full bg-gray-200 flex items-center justify-center border border-gray-300 mt-1 shadow-sm">
-                                    <FontAwesomeIcon icon={faUser} className="text-gray-500 text-sm md:text-base" />
+                                <div className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0 rounded-full bg-gray-200 flex items-center justify-center border border-gray-300 mt-1 shadow-sm overflow-hidden">
+                                    {userContext?.profilePictureUrl ? (
+                                        <img src={userContext.profilePictureUrl} alt="User" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <FontAwesomeIcon icon={faUser} className="text-gray-500 text-sm md:text-base" />
+                                    )}
                                 </div>
                             )}
                         </div>
                     ))}
                     {isLoading && (
                         <div className="flex gap-4 md:gap-6 justify-start">
-                            <div className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0 rounded-full bg-blue-100 flex items-center justify-center border border-blue-200 mt-1 shadow-sm">
-                                <FontAwesomeIcon icon={faWandMagicSparkles} className="text-blue-600 text-sm md:text-base animate-pulse" />
+                            <div className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0 rounded-full bg-[#033ff6] flex items-center justify-center border border-blue-200 mt-1 shadow-sm">
+                                <FontAwesomeIcon icon={faWandMagicSparkles} className="text-[#033ff6] text-sm md:text-base animate-pulse" />
                             </div>
-                            <div className="px-5 py-5 max-w-[85%] md:max-w-[75%] rounded-2xl bg-white border border-gray-200 text-gray-800 shadow-sm rounded-tl-none flex items-center gap-2">
+                            <div className="py-3 flex items-center gap-2">
                                 <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
                                 <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                                 <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
@@ -196,7 +192,7 @@ const Assistant = () => {
                         <button
                             onClick={() => handleSend()}
                             disabled={!inputText.trim() || isLoading}
-                            className="absolute right-3 bottom-3 w-8 h-8 flex items-center justify-center rounded-lg bg-blue-600 text-white disabled:bg-gray-100 disabled:text-gray-400 transition-colors hover:bg-blue-700 disabled:cursor-not-allowed shadow-sm"
+                            className="absolute right-3 bottom-3 w-8 h-8 flex items-center justify-center rounded-lg bg-[#033ff6] text-white disabled:bg-gray-100 disabled:text-gray-400 transition-colors hover:bg-blue-700 disabled:cursor-not-allowed shadow-sm"
                         >
                             <FontAwesomeIcon icon={faPaperPlane} className="text-sm" />
                         </button>

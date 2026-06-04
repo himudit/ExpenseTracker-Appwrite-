@@ -11,7 +11,7 @@ import NoTransactions from './NoTransactions';
 import CustomAreaChart from './CustomAreaChart';
 import SkeletonIncomeCard from '../skeleton/SkeletonIncomeCard';
 import { useSelector, useDispatch } from "react-redux";
-import { fetchUserProfile } from "../utils/userSlice";
+import { fetchUserProfile, setProfilePicture } from "../utils/userSlice";
 import SkeletonRecentCard from '../skeleton/SkeletonRecentCard';
 import SkeletonPieChart from '../skeleton/SkeletonPieChart';
 import AnimatedIncome from './AnimateNumbers';
@@ -90,6 +90,7 @@ function Home() {
         // console.log('Document updated successfully:', updatedDocument);
         const fileUrl = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${fileId}/view?project=${conf.appwriteProjectId}&mode=admin`;
         setProfilePictureUrl(fileUrl);
+        dispatch(setProfilePicture(fileUrl));
 
         setEditProfile(false);
         setOpenProfile(false);
@@ -114,6 +115,7 @@ function Home() {
 
           // console.log(fileUrl);
           setProfilePictureUrl(fileUrl);
+          dispatch(setProfilePicture(fileUrl));
         } catch {
           // console.error('Error uploading file:', error);
         }
@@ -128,7 +130,9 @@ function Home() {
       }
       try {
         const res = await databases.listDocuments(conf.appwriteDatabaseId, conf.appwriteCollection3Id, [Query.equal('user_id', userDetails.$id)]);
-        setProfilePictureUrl(`${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${res.documents[0].image_id}/view?project=${conf.appwriteProjectId}&mode=admin`);
+        const fetchedUrl = `${conf.appwriteUrl}/storage/buckets/${conf.appwriteBucketId}/files/${res.documents[0].image_id}/view?project=${conf.appwriteProjectId}&mode=admin`;
+        setProfilePictureUrl(fetchedUrl);
+        dispatch(setProfilePicture(fetchedUrl));
       } catch {
         // console.log(error);
       }
