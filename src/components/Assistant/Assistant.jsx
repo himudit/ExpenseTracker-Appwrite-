@@ -122,17 +122,13 @@ const Assistant = () => {
                 <div className={`w-[50%] max-w-4xl mx-auto flex flex-col overflow-y-auto transition-all duration-700 ${hasMessages ? 'flex-1 opacity-100 pt-8 pb-4 space-y-8' : 'opacity-0 h-0 overflow-hidden'}`}>
                     {messages.map((msg, idx) => (
                         <div key={idx} className={`flex gap-4 md:gap-6 ${msg.role === 'user' ? 'justify-end' : 'justify-start'} group`}>
-                            {/* {msg.role === 'assistant' && (
-                                <div className="w-8 h-8 md:w-10 md:h-10 flex-shrink-0 rounded-full bg-[#033ff6]/70 backdrop-blur-md flex items-center justify-center border border-blue-200 mt-1 shadow-sm">
-                                   
-                                    Rupiq.AI
-                                </div>
-                            )} */}
-                            <div className={`flex flex-col gap-1 w-full max-w-[85%] md:max-w-[75%]`}>
-                                <div className={`${msg.role === 'user' ? 'bg-gray-100 text-gray-800 rounded-2xl px-5 py-2.5 inline-block w-fit ml-auto' : 'bg-transparent text-gray-800 py-2'}`}>
+                            <div className={`flex flex-col gap-1 w-full ${msg.role === 'user' ? 'max-w-[85%] md:max-w-[75%]' : 'max-w-full'}`}>
+                                <div className={`${msg.role === 'user' ? 'bg-gray-100 text-gray-800 rounded-2xl px-5 py-2.5 inline-block w-fit ml-auto' : 'bg-transparent text-gray-800 py-2 w-full'}`}>
                                     {msg.role === 'user' ? (
+                                        // {/* Message of User */}
                                         <div className="whitespace-pre-wrap leading-relaxed text-[15px]">{msg.content}</div>
                                     ) : (
+                                        // {/* Message of AI */}
                                         <div className="prose prose-sm md:prose-base prose-slate max-w-none prose-p:leading-relaxed prose-pre:bg-slate-800 prose-pre:text-slate-100 prose-code:text-blue-600 prose-code:bg-blue-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-a:text-blue-600 selection:bg-blue-300 selection:text-white">
                                             <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                                 {msg.content}
@@ -178,7 +174,7 @@ const Assistant = () => {
                 </div>
 
                 {/* Input Area */}
-                <div className={`w-full transition-all duration-700 ease-in-out mx-auto ${!hasMessages ? 'max-w-3xl' : 'max-w-4xl'} pb-6 pt-2`}>
+                <div className={`w-[60%] transition-all duration-700 ease-in-out mx-auto ${!hasMessages ? 'max-w-3xl' : 'max-w-4xl'} pb-6 pt-2`}>
                     <div className="relative flex items-center w-full bg-white rounded-2xl shadow-lg shadow-gray-200/50 border border-gray-200 transition-colors overflow-hidden focus-within:ring-2 focus-within:ring-blue-100 focus-within:border-blue-300">
                         <textarea
                             value={inputText}
