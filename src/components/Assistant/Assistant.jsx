@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faUser, faCheck, faClone } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faUser, faCheck, faClone, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import logo from '../../../public/logo.png'
@@ -260,10 +260,10 @@ const Assistant = () => {
                                 {/* << AI AVATAR (Rupiq R icon) - shown on left of assistant messages */}
                                 {msg.role === 'assistant' && (
                                     <div
-                                        className="w-7 h-7 md:w-10 md:h-10 flex-shrink-0 bg-white flex items-center justify-center mt-1 overflow-hidden"
+                                        className="w-7 h-7 md:w-10 md:h-10 flex-shrink-0 bg-[#033ff6] flex items-center justify-center mt-1 overflow-hidden"
                                         style={sketchStyles.avatar}
                                     >
-                                        <img src={logo1} alt="Rupiq AI" className="w-7 h-7 object-cover" />
+                                        <img src={logo} alt="Rupiq AI" className="w-7 h-7 object-cover" />
                                     </div>
                                 )}
                                 <div className={`flex flex-col gap-1 w-full ${msg.role === 'user' ? 'max-w-[85%] md:max-w-[75%]' : 'max-w-full'}`}>
@@ -293,15 +293,33 @@ const Assistant = () => {
                                             </div>
                                         )}
                                     </div>
-                                    <div className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} opacity-0 group-hover:opacity-100 transition-opacity px-2`}>
+                                    <div className={`flex ${msg.role === 'user' ? 'justify-end opacity-0 ' : 'justify-start'} group-hover:opacity-100 transition-opacity px-2`}>
                                         <button
                                             onClick={() => handleCopy(msg.content, idx)}
                                             className="hover:text-gray-600 transition-colors p-1 flex items-center gap-1 text-xs"
                                             style={{ fontFamily: '"Comic Neue", cursive', fontWeight: 700, color: '#5A5A5A' }} // << COPY BUTTON TEXT COLOR
                                             title="Copy message"
                                         >
-                                            <FontAwesomeIcon icon={copiedIndex === idx ? faCheck : faClone} className={copiedIndex === idx ? "text-green-500" : ""} />
-                                            {copiedIndex === idx ? <span className="text-green-500">Copied!</span> : <span>Copy</span>}
+                                            <FontAwesomeIcon icon={copiedIndex === idx ? faCheck : faClone} className={copiedIndex === idx ? "text-green-500 w-4 h-4" : "text-gray-500 w-4 h-4"} />
+                                            {copiedIndex === idx ? <span className="text-green-500">Copied!</span> : <span></span>}
+                                        </button>
+                                        <button
+                                            onClick={() => handleCopy(msg.content, idx)}
+                                            className="hover:text-gray-600 transition-colors p-1 flex items-center gap-1 text-xs"
+                                            style={{ fontFamily: '"Comic Neue", cursive', fontWeight: 700, color: '#5A5A5A' }} // << COPY BUTTON TEXT COLOR
+                                            title="Copy message"
+                                        >
+                                            <FontAwesomeIcon icon={copiedIndex === idx ? faCheck : faThumbsUp} className={copiedIndex === idx ? "text-green-500 w-4 h-4" : "text-gray-500 w-4 h-4"} />
+                                            {copiedIndex === idx ? <span className="text-green-500">Liked!</span> : <span></span>}
+                                        </button>
+                                        <button
+                                            onClick={() => handleCopy(msg.content, idx)}
+                                            className="hover:text-gray-600 transition-colors p-1 flex items-center gap-1 text-xs"
+                                            style={{ fontFamily: '"Comic Neue", cursive', fontWeight: 700, color: '#5A5A5A' }} // << COPY BUTTON TEXT COLOR
+                                            title="Copy message"
+                                        >
+                                            <FontAwesomeIcon icon={copiedIndex === idx ? faCheck : faThumbsDown} className={copiedIndex === idx ? "text-green-500 w-4 h-4" : "text-gray-500 w-4 h-4"} />
+                                            {copiedIndex === idx ? <span className="text-green-500">Disliked!</span> : <span></span>}
                                         </button>
                                     </div>
                                 </div>
@@ -346,12 +364,28 @@ const Assistant = () => {
                     >
                         <textarea
                             value={inputText}
-                            onChange={(e) => setInputText(e.target.value)}
+                            onChange={(e) => {
+                                setInputText(e.target.value);
+
+                                e.target.style.height = "auto";
+
+                                const maxHeight = 200; // px
+                                const newHeight = Math.min(e.target.scrollHeight, maxHeight);
+
+                                e.target.style.height = `${newHeight}px`;
+                                e.target.style.overflowY =
+                                    e.target.scrollHeight > maxHeight ? "auto" : "hidden";
+                            }}
                             onKeyDown={handleKeyDown}
-                            placeholder="Type your message here... "
-                            className="w-full max-h-30 py-3 pl-4 pr-14 bg-transparent placeholder-gray-400 resize-none outline-none overflow-y-auto text-base leading-relaxed"
-                            rows="1"
-                            style={{ minHeight: '40px', fontFamily: '"Comic Neue", cursive', color: '#2A2A2A', fontWeight: 400 }} // << INPUT TEXT COLOR
+                            placeholder="Type your message here..."
+                            className="w-full py-3 pl-4 pr-14 bg-transparent placeholder-gray-400 resize-none outline-none overflow-hidden text-base leading-relaxed"
+                            rows={1}
+                            style={{
+                                minHeight: "40px",
+                                fontFamily: '"Comic Neue", cursive',
+                                color: "#2A2A2A",
+                                fontWeight: 400,
+                            }}
                         />
                         <button
                             onClick={() => handleSend()}
