@@ -12,12 +12,21 @@ import { motion, AnimatePresence } from 'framer-motion';
 // Modern text transition animation loader component
 const TextTransitionLoader = () => {
     const loadingTexts = [
-        "Thinking...",
-        "Analyzing your expenses...",
-        "Crunching the numbers...",
-        "Generating insights...",
-        "Just a moment...",
-        "Structuring response..."
+        "Scanning your transactions...",
+        "Running expense analysis...",
+        "Calculating spending patterns...",
+        "Identifying cost drivers...",
+        "Mapping your cash flow...",
+        "Reconciling the numbers...",
+        "Detecting spending anomalies...",
+        "Forecasting budget trends...",
+        "Categorizing expenditures...",
+        "Auditing your finances...",
+        "Processing financial data...",
+        "Extracting spending insights...",
+        "Benchmarking your expenses...",
+        "Optimizing budget breakdown...",
+        "Parsing transaction history...",
     ];
     const [index, setIndex] = useState(0);
 
@@ -137,9 +146,9 @@ const Assistant = () => {
         }
     };
 
-    const handleSuggestionClick = (description) => {
-        handleSend(description);
-    };
+    // const handleSuggestionClick = (description) => {
+    //     handleSend(description);
+    // };
 
     const handleCopy = (content, idx) => {
         navigator.clipboard.writeText(content);
@@ -173,7 +182,7 @@ const Assistant = () => {
         aiBubble: {
             background: '#FFFFFF',
             border: '2px solid #8A8A8A',        // << BORDER COLOR (darkened)
-            borderRadius: '12px 12px 12px 3px',  // << BORDER RADIUS (reduced)
+            borderRadius: '3px 12px 12px 12px',  // << BORDER RADIUS (reduced)
             boxShadow: '2px 2px 0px #DCDCDC',    // << SHADOW (reduced)
             fontFamily: '"Comic Neue", cursive',
         },
@@ -207,7 +216,7 @@ const Assistant = () => {
 
     return (
         <div
-            className="flex flex-col h-screen md:ml-[4rem] overflow-hidden relative selection:bg-[#033ff6]/30 selection:text-indigo-900"
+            className="flex flex-col h-screen md:ml-[4rem] overflow-hidden relative  selection:text-white selection:bg-indigo-500"
             style={sketchStyles.container}
         >
             <SketchFilter />
@@ -248,7 +257,7 @@ const Assistant = () => {
                         className="text-lg md:text-xl font-normal text-center mt-3"
                         style={{ fontFamily: '"Comic Neue", cursive', fontStyle: 'italic', color: '#6A6A6A' }}
                     >
-                        I'm here whenever you need me!
+                        Im here whenever you need me!
                     </h2>
                 </div>
 
@@ -284,7 +293,7 @@ const Assistant = () => {
                                             // {/* Message of AI */}
                                             // << AI MESSAGE TEXT COLOR
                                             <div
-                                                className="prose prose-sm md:prose-base max-w-none prose-p:leading-relaxed prose-pre:bg-slate-800 prose-pre:text-slate-100 prose-code:text-blue-600 prose-code:bg-blue-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-a:text-blue-600 selection:bg-blue-300 selection:text-white"
+                                                className="prose prose-sm md:prose-base max-w-none prose-p:leading-relaxed prose-pre:bg-slate-800 prose-pre:text-slate-100 prose-code:text-blue-600 prose-code:bg-blue-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-a:text-blue-600   selection:text-white selection:bg-indigo-500"
                                                 style={{ fontFamily: '"Comic Neue", cursive', color: '#2A2A2A' }}
                                             >
                                                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
@@ -303,10 +312,10 @@ const Assistant = () => {
                                             <FontAwesomeIcon icon={copiedIndex === idx ? faCheck : faClone} className={copiedIndex === idx ? "text-green-500 w-4 h-4" : "text-gray-500 w-4 h-4"} />
                                             {copiedIndex === idx ? <span className="text-green-500">Copied!</span> : <span></span>}
                                         </button>
-                                        <button
+                                        {/* <button
                                             onClick={() => handleCopy(msg.content, idx)}
                                             className="hover:text-gray-600 transition-colors p-1 flex items-center gap-1 text-xs"
-                                            style={{ fontFamily: '"Comic Neue", cursive', fontWeight: 700, color: '#5A5A5A' }} // << COPY BUTTON TEXT COLOR
+                                            style={{ fontFamily: '"Comic Neue", cursive', fontWeight: 700, color: '#5A5A5A' }} 
                                             title="Copy message"
                                         >
                                             <FontAwesomeIcon icon={copiedIndex === idx ? faCheck : faThumbsUp} className={copiedIndex === idx ? "text-green-500 w-4 h-4" : "text-gray-500 w-4 h-4"} />
@@ -315,12 +324,12 @@ const Assistant = () => {
                                         <button
                                             onClick={() => handleCopy(msg.content, idx)}
                                             className="hover:text-gray-600 transition-colors p-1 flex items-center gap-1 text-xs"
-                                            style={{ fontFamily: '"Comic Neue", cursive', fontWeight: 700, color: '#5A5A5A' }} // << COPY BUTTON TEXT COLOR
+                                            style={{ fontFamily: '"Comic Neue", cursive', fontWeight: 700, color: '#5A5A5A' }} 
                                             title="Copy message"
                                         >
                                             <FontAwesomeIcon icon={copiedIndex === idx ? faCheck : faThumbsDown} className={copiedIndex === idx ? "text-green-500 w-4 h-4" : "text-gray-500 w-4 h-4"} />
                                             {copiedIndex === idx ? <span className="text-green-500">Disliked!</span> : <span></span>}
-                                        </button>
+                                        </button> */}
                                     </div>
                                 </div>
                                 {/* << USER AVATAR - shown on right of user messages */}
