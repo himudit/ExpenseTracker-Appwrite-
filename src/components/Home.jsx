@@ -740,23 +740,23 @@ function Home() {
 
                 <div className='flex justify-between w-full'>
                   {leftT ? (
-                    <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={LeftArrowT}>
+                    <button className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={LeftArrowT}>
                       <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
-                    </div>
+                    </button>
                   ) : (
-                    <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                    <button className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
                       <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
-                    </div>
+                    </button>
                   )}
 
                   {rightT && endingIndex >= 0 ? (
-                    <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={RightArrowT}>
+                    <button className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={RightArrowT}>
                       <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
-                    </div>
+                    </button>
                   ) : (
-                    <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                    <button className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
                       <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
-                    </div>
+                    </button>
                   )}
                 </div>
               </div>
@@ -904,23 +904,23 @@ function Home() {
 
                   <div className='flex justify-between m-2 mt-[4rem] w-full'>
                     {leftC ? (
-                      <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer z-[999] relative' onClick={LeftArrowC}>
+                      <button className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer z-[999] relative' onClick={LeftArrowC}>
                         <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
-                      </div>
+                      </button>
                     ) : (
-                      <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                      <button className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
                         <FontAwesomeIcon icon={faChevronLeft} style={{ color: "black" }} />
-                      </div>
+                      </button>
                     )}
 
                     {rightC ? (
-                      <div className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={RightArrowC}>
+                      <button className='bg-gray-400 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer' onClick={RightArrowC}>
                         <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
-                      </div>
+                      </button>
                     ) : (
-                      <div className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
+                      <button className='bg-gray-200 w-7 h-7 flex items-center justify-center rounded-md border border-gray-500 cursor-pointer'>
                         <FontAwesomeIcon icon={faChevronRight} style={{ color: "black" }} />
-                      </div>
+                      </button>
                     )}
                   </div>
                 </div>
