@@ -12,17 +12,19 @@ function Expense() {
     const divRef = useRef(null);
 
     // for animation
-    // first
-    const [isSubmitting, setIsSubmitting] = useState(false);
     const [animation1, setanimation1] = useState(false);
     const [animation2, setanimation2] = useState(false);
+
+    // submission lock (was used but never declared before — fixed)
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     // for amount
     const [amount, setAmount] = useState('');
 
     const handleInputChange = (event) => {
         const value = event.target.value;
-        if (!isNaN(value)) {
+        // allow empty, or a non-negative number with at most one decimal point
+        if (value === '' || /^\d*\.?\d*$/.test(value)) {
             setAmount(value);
         }
     };
@@ -50,23 +52,17 @@ function Expense() {
         setIsOpen((prev) => (!prev));
     };
 
-    // for Date
+    // for Date (display only — actual save uses a fresh timestamp at submit time)
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth() + 1;
     const day = now.getDate();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-    const seconds = now.getSeconds();
     const formattedDate = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
     const fD = new Date(formattedDate).toLocaleDateString('en-GB', {
         day: '2-digit',
         month: 'short',
         year: '2-digit'
     });
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    const formattedDateTime = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}
-    ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
     // for getting Account
     const [userId, setUserId] = useState(null);
@@ -77,17 +73,15 @@ function Expense() {
                 const response = await account.get();
                 setUserId(response.$id);
             } catch (error) {
-                // console.error('Failed to get user:', error);
+                console.error('Failed to get user:', error);
             }
         };
         getUser();
     }, []);
 
-    // for bucket2
+    // for bucket2/bucket3 uploads
     const [fileName, setFileName] = useState(null);
     const fileInputRef = useRef(null);
-    const fileId = uuidv4();
-    const [recieptUrl, setRecieptUrl] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -109,270 +103,169 @@ function Expense() {
         setChoice('Expense');
     };
 
+    // Recurring Transaction
+    const [isRecurring, setIsRecurring] = useState(false);
+    const [interval, setInterval] = useState('');
+
     // adding New in collections
     const addNew = async () => {
         if (!userId) return;
-        // console.log('User ID being queried:', userId);
-        if (amount === "0" || amount === "") {
-            alert("Amount cannot be zero!");
+        if (!amount || Number(amount) <= 0) {
+            alert("Amount must be greater than zero!");
             return;
         }
+        if (isRecurring && !interval) {
+            alert("Please select a recurring interval!");
+            return;
+        }
+        if (isSubmitting) return; // guard against double taps
+
+        setIsSubmitting(true);
         setanimation1(true);
 
-        if (isRecurring === true) {
-            try {
+        try {
+            const submitTime = new Date();
+            const y = submitTime.getFullYear();
+            const m = (submitTime.getMonth() + 1).toString().padStart(2, '0');
+            const d = submitTime.getDate().toString().padStart(2, '0');
+            const h = submitTime.getHours().toString().padStart(2, '0');
+            const min = submitTime.getMinutes().toString().padStart(2, '0');
+            const s = submitTime.getSeconds().toString().padStart(2, '0');
+            const formattedDateTime = `${y}-${m}-${d} ${h}:${min}:${s}`;
+
+            // fresh id per submission — avoids collisions with previously uploaded files
+            const currentFileId = uuidv4();
+
+            if (isRecurring) {
                 const payload = {
                     userid: userId,
                     amount: parseInt(amount),
                     type: choice.toLowerCase(),
                     category: selectedCategory.text.toLowerCase(),
                     frequency: interval.toLowerCase(),
-                    startDate: new Date(new Date()).toISOString(),
+                    startDate: submitTime.toISOString(),
                     endDate: null,
                     isActive: true,
                 };
-                // console.log(payload);
-                const response = await databases.createDocument(
+                await databases.createDocument(
                     conf.appwriteDatabaseId,
                     conf.appwriteCollection7Id,
                     uuidv4(),
                     payload
                 );
-
-                // console.log("Recurring transaction created:", response);
-                // Optional: show toast / reset form / navigate
-            } catch (error) {
-                // console.error("Error creating recurring transaction:", error);
-                // Optional: show error message to user
             }
-        }
 
-        if (choice == 'Income') {
-            // checking collection6(categoryIncome)
-            const res = await databases.listDocuments(
-                conf.appwriteDatabaseId,
-                conf.appwriteCollection6Id,
-                [
-                    Query.equal('userid', userId)
-                ]
-            )
-            if (res.total > 0) {
-                // console.log('Entry exists');
+            if (choice === 'Income') {
+                const res = await databases.listDocuments(
+                    conf.appwriteDatabaseId,
+                    conf.appwriteCollection6Id,
+                    [Query.equal('userid', userId)]
+                );
 
-                // for bucket 3
                 if (selectedFile) {
-                    await storage.createFile(conf.appwriteBucket3Id, fileId, selectedFile);
+                    const recieptResponse = await storage.createFile(conf.appwriteBucket3Id, currentFileId, selectedFile);
+                    console.log(recieptResponse);
                 }
 
-                // for collection 5
                 const income = {
                     userid: String(userId),
                     IncomeAmount: Number(amount),
                     Category: String(selectedCategory.text),
                     Date: String(formattedDateTime),
-                    if(selectedFile) {
-                        fileId
-                    }
-                }
-                const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection5Id, uuidv4(), income)
-                promise.then(() => {
-                    const item = selectedCategory.text;
+                };
+                await databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection5Id, uuidv4(), income);
+
+                if (res.total > 0) {
                     const document = res.documents[0];
                     const documentId = document.$id;
-                    const value = document[selectedCategory.text];
+                    const value = document[selectedCategory.text] ?? 0;
                     const updatedData = {
                         [selectedCategory.text]: value + Number(amount),
                     };
-                    const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection6Id, documentId, updatedData);
-
-                    promise4.then(() => {
-                        // console.log("Done");
-                        setIsSubmitting(true);
-                        setanimation1(false);
-                        setanimation2(true);
-                        setTimeout(() => {
-                            setanimation2(false);
-                            setIsSubmitting(false);
-                        }, 1000);
-
-                    })
-                })
-            } else {
-                // console.log('Entry does not exist');
-
-                // for bucket 3
-                if (selectedFile) {
-                    await storage.createFile(conf.appwriteBucket3Id, fileId, selectedFile);
-                }
-                // for collection 5
-                const income = {
-                    userid: String(userId),
-                    IncomeAmount: Number(amount),
-                    Category: String(selectedCategory.text),
-                    Date: String(formattedDateTime),
-                    if(selectedFile) {
-                        fileId
+                    await databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection6Id, documentId, updatedData);
+                } else {
+                    const data = {
+                        userid: String(userId),
+                        others: Number(0),
+                        Salary: Number(0),
+                        Sold: Number(0),
+                    };
+                    if (income.Category in data) {
+                        data[income.Category] = income.IncomeAmount;
                     }
+                    await databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection6Id, uuidv4(), data);
                 }
-                const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection5Id, uuidv4(), income)
+            } else {
+                const res = await databases.listDocuments(
+                    conf.appwriteDatabaseId,
+                    conf.appwriteCollection4Id,
+                    [Query.equal('userid', userId)]
+                );
 
-                // for collection6
-                const data = {
-                    userid: String(userId),
-                    others: Number(0),
-                    Salary: Number(0),
-                    Sold: Number(0),
-                }
-                if (income.Category in data) {
-                    data[income.Category] = income.IncomeAmount;
-                }
-
-                const promise4 = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection6Id, uuidv4(), data);
-                promise4.then(() => {
-                    // console.log("Done");
-                    setanimation1(false);
-                    setIsSubmitting(true);
-                    setanimation2(true);
-                    setTimeout(() => {
-                        setanimation2(false);
-                        setIsSubmitting(false);
-                    }, 1000);
-                })
-            }
-        }
-        else {
-            // checking collection4(categoryExpense)
-            const res = await databases.listDocuments(
-                conf.appwriteDatabaseId,
-                conf.appwriteCollection4Id,
-                [
-                    Query.equal('userid', userId)
-                ]
-            )
-            if (res.total > 0) {
-                // console.log('Entry exists');
-
-                // for bucket 2
                 if (selectedFile) {
-                    await storage.createFile(conf.appwriteBucket2Id, fileId, selectedFile);
+                    const recieptResponse = await storage.createFile(conf.appwriteBucket2Id, currentFileId, selectedFile);
+                    console.log(recieptResponse);
                 }
 
-                // for collection 2
                 const expense = {
                     userid: String(userId),
                     ExpenseAmount: Number(amount),
                     Category: String(selectedCategory.text),
                     Date: String(formattedDateTime),
-                    if(selectedFile) {
-                        fileId
-                    }
+                };
+                await databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense);
 
-                }
-                const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
-                promise.then(() => {
-                    const item = selectedCategory.text;
+                if (res.total > 0) {
                     const document = res.documents[0];
                     const documentId = document.$id;
-                    if (selectedCategory.text === 'Food') {
-                        const value = document.Food;
-                        const updatedData = {
-                            Food: value + Number(amount),
-                        };
-                        const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
-                        promise.then(() => {
-                            // console.log("Done");
-                            setanimation1(false);
-                            setIsSubmitting(true);
-                            setanimation2(true);
-                            setTimeout(() => {
-                                setanimation2(false);
-                                setIsSubmitting(false);
-                            }, 1000);
-
-                        })
-
-                    } else {
-                        const value = document[selectedCategory.text];
-                        const updatedData = {
-                            [selectedCategory.text]: value + Number(amount),
-                        };
-                        const promise4 = databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
-
-                        promise4.then(() => {
-                            // console.log("Done");
-                            setanimation1(false);
-                            setanimation2(true);
-                            setIsSubmitting(true);
-                            setTimeout(() => {
-                                setanimation2(false);
-                                setIsSubmitting(false);
-                            }, 1000);
-
-                        })
-                    }
-                })
-            } else {
-                // console.log('Entry does not exist');
-
-                // for bucket 2
-                if (selectedFile) {
-                    await storage.createFile(conf.appwriteBucket2Id, fileId, selectedFile);
-                }
-                // for collection 2
-                const expense = {
-                    userid: String(userId),
-                    ExpenseAmount: Number(amount),
-                    Category: String(selectedCategory.text),
-                    Date: String(formattedDateTime),
-                    if(selectedFile) {
-                        fileId
-                    }
-                }
-                const promise = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection2Id, uuidv4(), expense)
-
-                // for collection4
-                const data = {
-                    userid: String(userId),
-                    others: Number(0),
-                    Food: Number(0),
-                    Shopping: Number(0),
-                    Travelling: Number(0),
-                    Entertainment: Number(0),
-                    Medical: Number(0),
-                    Bills: Number(0),
-                    Rent: Number(0),
-                    Taxes: Number(0),
-                    Investments: Number(0),
-                }
-                if (selectedCategory.text === 'Food') {
-                    data['Food'] = expense.ExpenseAmount;
+                    const value = document[selectedCategory.text] ?? 0;
+                    const updatedData = {
+                        [selectedCategory.text]: value + Number(amount),
+                    };
+                    await databases.updateDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, documentId, updatedData);
                 } else {
+                    const data = {
+                        userid: String(userId),
+                        others: Number(0),
+                        Food: Number(0),
+                        Shopping: Number(0),
+                        Travelling: Number(0),
+                        Entertainment: Number(0),
+                        Medical: Number(0),
+                        Bills: Number(0),
+                        Rent: Number(0),
+                        Taxes: Number(0),
+                        Investments: Number(0),
+                    };
                     if (expense.Category in data) {
                         data[expense.Category] = expense.ExpenseAmount;
                     }
+                    await databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, uuidv4(), data);
                 }
-                const promise4 = databases.createDocument(conf.appwriteDatabaseId, conf.appwriteCollection4Id, uuidv4(), data);
-                promise4.then(() => {
-                    // console.log("Done");
-                    setanimation1(false);
-                    setanimation2(true);
-                    setIsSubmitting(true);
-                    setTimeout(() => {
-                        setanimation2(false);
-                        setIsSubmitting(false);
-                    }, 1000);
-                })
             }
+
+            setanimation1(false);
+            setanimation2(true);
+            setTimeout(() => {
+                setanimation2(false);
+            }, 1000);
+        } catch (error) {
+            console.error("Error saving transaction:", error);
+            alert("Something went wrong while saving. Please try again.");
+            setanimation1(false);
+        } finally {
+            setIsSubmitting(false);
         }
-    }
+    };
+
     const cancelAll = () => {
         setAmount('');
         setSelectedCategory({ icon: faEllipsis, text: 'others', col: '#94969B' });
+        setSelectedFile(null);
+        setFileName(null);
+        setIsRecurring(false);
+        setInterval('');
     }
-
-    // Recurring Transaction
-    const [isRecurring, setIsRecurring] = useState(false);
-    const [interval, setInterval] = useState('');
 
     return (
         <>
@@ -380,7 +273,6 @@ function Expense() {
                 className={`flex flex-wrap justify-center h-screen md:ml-[7rem] bg-gradient-to-r items-center`}
                 style={{ filter: (animation1 || animation2) ? "blur(1px)" : "none" }}
             >
-
                 {/* first div */}
                 <div className="w-full h-[95%] max-w-md bg-white rounded-lg shadow-2xl flex flex-col mr-6  bg-white/30  border border-white/50  p-6">
                     <div className="p-4 border-b">
@@ -417,7 +309,7 @@ function Expense() {
                                 <div className="flex text-[0.7rem]">Amount</div>
                                 <div className="flex">
                                     <div className='text-[1.5rem]'><FontAwesomeIcon icon={faIndianRupee} />
-                                        <input type='text' className='bg-transparent border-none focus:outline-none' onChange={handleInputChange} value={amount} placeholder="0"></input></div>
+                                        <input type='text' inputMode='decimal' className='bg-transparent border-none focus:outline-none' onChange={handleInputChange} value={amount} placeholder="0"></input></div>
                                 </div>
                             </div>
                         </div>
@@ -496,7 +388,6 @@ function Expense() {
                                     </div>
                                     <div className='cursor-pointer' onClick={handleIconClick}><FontAwesomeIcon icon={faChevronRight} /></div>
                                 </div>
-                                {/* here */}
                                 {isOpen && (
                                     <div ref={divRef} className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4 h-[16rem] bg-gray-200 rounded shadow-md mt-2">
                                         <div onClick={() => settingCategory(faEllipsis, 'others', 'black')} className="flex items-center justify-center cursor-pointer"><div className='bg-gray-300 text-center text-black rounded-full w-8 h-8 flex items-center justify-center'><FontAwesomeIcon icon={faEllipsis} color='#94969B' /> </div>others</div>
@@ -546,12 +437,15 @@ function Expense() {
                             )}
                         </div>
                     </div>
-                    <div className='flex justify-between m-2 w-full' onClick={cancelAll}>
-                        <div className='p-2 cursor-pointer'>
+                    <div className='flex justify-between m-2 w-full'>
+                        <div className='p-2 cursor-pointer' onClick={cancelAll}>
                             <FontAwesomeIcon icon={faXmark} /> Cancel
                         </div>
-                        <div className='ml-[-4rem] p-2 cursor-pointer' onClick={addNew}>
-                            <FontAwesomeIcon icon={faCheck} /> Save
+                        <div
+                            className={`ml-[-4rem] p-2 ${isSubmitting ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+                            onClick={isSubmitting ? undefined : addNew}
+                        >
+                            <FontAwesomeIcon icon={faCheck} /> {isSubmitting ? 'Saving...' : 'Save'}
                         </div>
                     </div>
 
@@ -579,7 +473,6 @@ function Expense() {
             {
                 (animation1 || animation2) && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                        {/* <div className="flex-grow overflow-y-auto p-4"> */}
                         {animation1 ? <div> {animation1 && <LottieLoader />}</div> : <div className="w-[30rem] h-[30rem]">{animation2 && <LottieAnimation />}</div>}
                     </div>
                 )
